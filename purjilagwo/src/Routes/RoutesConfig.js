@@ -11,22 +11,32 @@ export const routevalues = [
   {
     path: '/login',
     element: <Login />,
+    showHeader: true,
+    showFooter: true,
   },
   {
     path: '/',
     element: <Home />,
+    showHeader: true,
+    showFooter: true,
   },
   {
     path: '/doctorsdetails/:id',
     element: <DoctorDetails />,
+    showHeader: true,
+    showFooter: true,
   },
   {
     path: '/doctorlist/:location',
     element: <DoctorList />,
+    showHeader: true,
+    showFooter: true,
   },
   {
     path: '/homeDashhboard',
     element: <HomeDashboard />,
+    showHeader: false,
+    showFooter: false,
   },
 ];
 

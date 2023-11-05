@@ -20,32 +20,18 @@
 // export default App;
 
 
-import React from 'react';
+import React ,{Suspense}from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom'; // Note the updated imports
-
 import Header from './components/Header';
-import Home from './screens/homeScreen/Home';
 import Footer from './components/Footer';
-import Login from './screens/loginScreen/Login';
-import DoctorDetails from './screens/doctorInformationScreen/DoctorsDetails';
-import DoctorList from './screens/doctorInformationScreen/DoctorList';
-import HomeDashboard from './screens/dashBoardScreens/HomeDashboard';
+import { routevalues } from './Routes/RoutesConfig'; 
+import Routing from './Routes/Routes';
 
 function App() {
   return (
     <div className="App">
-        <Header />
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/doctorsdetails/:id" element={<DoctorDetails />} /> 
-          <Route path="/doctorlist/:location" element={<DoctorList />} />
-          <Route path="/homeDashhboard" element={<HomeDashboard />} />
-          
-        </Routes>
-        <Footer />
-
+      <Routing/>
     </div>
   );
 }

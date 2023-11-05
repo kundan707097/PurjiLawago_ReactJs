@@ -1,26 +1,30 @@
 import React, { Suspense } from 'react';
 import '../App.css';
-import { Route, Routes } from 'react-router-dom'; // Note the updated imports
-
+import { Route, Routes,useLocation  } from 'react-router-dom'; 
 import Header from '../components/Header';
-import Footer from './components/Footer';
-import { routes } from '../Routes/RoutesConfig';
+import Footer from '../components/Footer';
+import { routevalues } from '../Routes/RoutesConfig';
 
 function Routing() {
+  const location = useLocation();
+  const currentRoute = routevalues.find((route) => location.pathname === route.path);
+  console.log('Current Route:', currentRoute);
+
   return (
     <div className="App">
-        <Header />
+        {currentRoute && currentRoute.showHeader && <Header />}
         <Routes>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Routes>
-            {routes.map((route, index) => (
-              <Route key={index} path={route.path} element={route.element} />
-            ))}
-          </Routes>
-        </Suspense>
+        {routevalues.map((route, index) => (
+          <Route key={index} path={route.path} element={
+            <Suspense fallback={<div>Loading...</div>}>
+              {route.element}
+            </Suspense>
+          } />
+        ))}
           
         </Routes>
-        <Footer />
+        {currentRoute && currentRoute.showFooter && <Footer />}
+
     </div>
   );
 }
