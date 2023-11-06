@@ -4,9 +4,9 @@ import { useParams } from 'react-router-dom';
 function DoctorList() {
   const { location } = useParams();
   const [doctors, setDoctors] = useState([]);
-
+debugger;
   useEffect(() => {
-    fetch(`https://localhost:7264/DoctorsInformation/Location?filterBasedOnLocation=${location}`)
+    fetch(`https://localhost:44324/DoctorsInformation/Location?filterBasedOnLocation=${location}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -20,7 +20,10 @@ function DoctorList() {
           throw new Error('Data is not an array');
         }
       })
-      .catch((error) => console.error('Error fetching doctors:', error));
+      .catch((error) => {
+      debugger;
+      console.error('Error fetching doctors:', error)
+  });
   }, [location]);
 
   return (

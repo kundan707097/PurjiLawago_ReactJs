@@ -185,7 +185,7 @@ $("#doctorsName").on("input", function() {
         }
       }
     }); 
-  
+    //const goTopBtn = document.querySelector('.back_to_top');
     // Back to Top button
     function trackScroll() {
         const scrolled = window.pageYOffset;
@@ -209,35 +209,7 @@ $("#doctorsName").on("input", function() {
     const goTopBtn = document.querySelector('.back_to_top');
   
     window.addEventListener('scroll', trackScroll);
-    goTopBtn.addEventListener('click', backToTop);
-  
-    // Autocomplete
-    const availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
-  
-    $("#tags").autocomplete({
-      source: availableTags
-    });
+    if (goTopBtn) {
+      goTopBtn.addEventListener('click', backToTop);
+    }
   });
