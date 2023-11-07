@@ -11,9 +11,9 @@ function Footer() {
                             <h4>Find Us</h4>
                             <p>Lorem ipsum dolor sit amet, consectet adipisicing elit. Saepe porro neque a nam nulla quos atque.</p>
                             <ul className="list-unstyled">
-                                <li><i className="fa fa-map-marker"></i>795 South Park Avenue, CA 94107</li>
-                                <li><i className="fa fa-envelope"></i>enquery@domain.com</li>
-                                <li><i className="fa fa-phone"></i>+1 908 875 7678</li>
+                                <li><i className="fa fa-map-marker"></i>Baishakhi Siwan, Bihar (841226)</li>
+                                <li><i className="fa fa-envelope"></i>purjilagawo@gmail.com</li>
+                                <li><i className="fa fa-phone"></i>8955035026</li>
                             </ul>
                         </div>
                     </div>

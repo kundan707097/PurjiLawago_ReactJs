@@ -67,6 +67,7 @@ const Login = () => {
 
 
   const onSubmit = async (data) => {
+    debugger
     if (activeTab === "register") {
       handleRegistration(data);
     } else {

@@ -1,0 +1,177 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box
+}
+
+p {
+    margin: unset
+}
+
+.bold {
+    font-weight: 700
+}
+
+.doctors-wrapper {
+    background: hsl(0deg, 0%, 96%);
+    min-height: 100vh;
+    overflow: hidden;
+
+    .doctors-container {
+        width: min(1320px, 100%);
+        margin: 1rem auto 0;
+        background: white;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        padding: 1rem;
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0 2.5rem;
+            width: 100%;
+
+            .search-location {
+                width: min(100%, 500px);
+                border: 1px solid hsl(0deg, 0%, 75%)
+            }
+
+            .search-doctor {
+                width: min(100%, 500px);
+                border-top: 1px solid hsl(0deg, 0%, 75%);
+                border-right: 1px solid hsl(0deg, 0%, 75%);
+                border-bottom: 1px solid hsl(0deg, 0%, 75%);
+            }
+
+            img {
+                width: 16px;
+                margin-left: 16px;
+            }
+
+            input {
+                height: 40px;
+                border: none;
+                margin-left: 16px;
+                font-size: 14px;
+                font-family: Montserrat, sans-serif
+            }
+
+            .search-result {
+                margin-left: 1rem
+            }
+        }
+        
+        .doctors-list {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 1rem;
+
+            .doc-card {
+                padding: 1rem;
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+                width: calc(50% - 1rem);
+    
+                .block1 {
+                    display: flex;
+                    gap: 1rem;
+                    align-items: flex-start;
+    
+                    .left-col {
+                        .dp {
+                            width: 100px;
+                            aspect-ratio: 1;
+                            border-radius: 50%;
+                            border: 2px solid #066DDA;
+                            overflow: hidden;
+        
+                            img {
+                                width: 100%
+                            }
+                        }
+                    }
+    
+                    .right-col {                    
+                        h2 {
+                            font-size: 16px
+                        }
+                        
+                        p {
+                            font-size: 14px
+                        }
+    
+                        .price {
+                            font-size: 14px;
+                            font-weight: 700
+                        }
+                    }
+                }
+    
+                .block2 {
+                    margin-top: 1rem;
+    
+                    & > div {
+                        display: flex;
+                        align-items: center;
+    
+                        .img {
+                            width: 50px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+    
+                            img {
+                                height: 24px
+                            }
+        
+                            p {
+                                font-size: 12px
+                            }
+                        }
+                    }
+                }
+    
+                .btn-container {
+                    margin-top: 1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+    
+                    button {
+                        padding: .5rem 1rem;
+                        background: #066DDA;
+                        color: white;
+                        font-family: Montserrat, sans-serif;
+                        border: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1260px) {
+    .doctors-wrapper .doctors-container .search-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .5rem;
+
+        .search-doctor {
+            border: 1px solid hsl(0, 0%, 75%);
+        }
+
+        .search-result {
+            margin: unset
+        }
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .doctors-wrapper .doctors-container .doctors-list {
+        display: block;
+
+        .doc-card {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+    }
+}

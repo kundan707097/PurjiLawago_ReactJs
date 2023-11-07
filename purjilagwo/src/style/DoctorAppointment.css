@@ -1,0 +1,104 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+p {
+  margin: unset;
+}
+
+.docApp-wrapper {
+  background: hsl(0, 0%, 96%);
+  padding: 1px 0;
+  margin: -1px 0;
+}
+.docApp-wrapper main {
+  width: min(720px, 100%);
+  margin: 1rem auto;
+  padding: 1rem;
+  background: white;
+}
+.docApp-wrapper main h2 {
+  margin-bottom: 1rem;
+}
+.docApp-wrapper main .doc-card {
+  display: flex;
+  align-items: stretch;
+  gap: 1rem;
+}
+.docApp-wrapper main .doc-card .main-left-col {
+  display: flex;
+  gap: 1rem;
+}
+.docApp-wrapper main .doc-card .main-left-col .left-col .dp {
+  max-width: 100px;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid hsl(0, 0%, 90%);
+}
+.docApp-wrapper main .doc-card .main-left-col .left-col .dp img {
+  width: 100%;
+}
+.docApp-wrapper main .doc-card .main-left-col .right-col h2 {
+  font-size: 16px;
+}
+.docApp-wrapper main .doc-card .main-left-col .right-col p, .docApp-wrapper main .doc-card .main-left-col .right-col a {
+  font-size: 14px;
+}
+.docApp-wrapper main .doc-card .main-left-col .right-col .doc-details {
+  margin-bottom: 1rem;
+}
+.docApp-wrapper main .doc-card .right-col-2 {
+  border-left: 1px solid hsl(0, 0%, 90%);
+  padding: 0 0 0 1rem;
+  flex-shrink: 0;
+}
+.docApp-wrapper main .doc-card .right-col-2 div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 14px;
+}
+.docApp-wrapper main .doc-card .right-col-2 img {
+  width: 16px;
+}
+.docApp-wrapper main .doc-card .right-col-2 a {
+  font-size: 14px;
+}
+.docApp-wrapper main .mobile-no {
+  margin-top: 1rem;
+}
+.docApp-wrapper main .mobile-no .label {
+  font-size: 14px;
+}
+.docApp-wrapper main .mobile-no input {
+  width: 100%;
+}
+.docApp-wrapper main .mobile-no .info {
+  margin: 1rem 0 1rem;
+}
+.docApp-wrapper main .mobile-no .info p {
+  font-size: 12px;
+  line-height: 1.25em;
+}
+.docApp-wrapper main .mobile-no button {
+  width: 100%;
+  height: 36px;
+  background: #008FD5;
+  color: white;
+  border: none;
+}
+
+@media screen and (max-width: 768px) {
+  .docApp-wrapper main .doc-card {
+    display: block;
+  }
+  .docApp-wrapper main .doc-card .right-col-2 {
+    border: unset;
+    padding: unset;
+    margin-top: 1rem;
+  }
+}/*# sourceMappingURL=DoctorAppointment.css.map */

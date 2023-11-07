@@ -1,12 +1,12 @@
 
 import React, { lazy } from 'react';
-
+import Home from '../screens/homeScreen/Home';
+import ProtectedRoute from "./ProtectedRoute";
 const Login = lazy(() => import('../screens/loginScreen/Login'));
-const Home = lazy(() => import('../screens/homeScreen/Home'));
 const DoctorDetails = lazy(() => import('../screens/doctorInformationScreen/DoctorsDetails'));
 const DoctorList = lazy(() => import('../screens/doctorInformationScreen/DoctorList'));
 const HomeDashboard = lazy(() => import('../screens/dashBoardScreens/HomeDashboard'));
-
+const DoctorAppointment = lazy(() => import('../screens/doctorInformationScreen/DoctorAppointment'));
 export const routevalues = [
   {
     path: '/login',
@@ -34,9 +34,17 @@ export const routevalues = [
   },
   {
     path: '/homeDashhboard',
-    element: <HomeDashboard />,
+    element: <ProtectedRoute>
+       <HomeDashboard />
+     </ProtectedRoute>,
     showHeader: false,
     showFooter: false,
+  },
+  {
+    path: '/doctorAppointment',
+    element: <DoctorAppointment />,
+    showHeader: true,
+    showFooter: true,
   },
 ];
 

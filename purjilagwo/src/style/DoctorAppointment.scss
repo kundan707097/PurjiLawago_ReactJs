@@ -1,0 +1,127 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+p {
+    margin: unset
+}
+
+.docApp-wrapper {
+    background: hsl(0deg, 0%, 96%);
+    padding: 1px 0;
+    margin: -1px 0;
+
+    main {
+        width: min(720px, 100%);
+        margin: 1rem auto;
+        padding: 1rem;
+        background: white;
+
+        h2 {
+            margin-bottom: 1rem
+        }
+
+        .doc-card {
+            display: flex;
+            align-items: stretch;
+            gap: 1rem;
+
+            .main-left-col {
+                display: flex;
+                gap: 1rem;
+
+                .left-col .dp {
+                    max-width: 100px;
+                    width: 100%;
+                    aspect-ratio: 1;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    border: 1px solid hsl(0, 0%, 90%);
+    
+                    img {
+                        width: 100%
+                    }
+                }
+    
+                .right-col {
+    
+                    h2 {
+                        font-size: 16px
+                    }
+    
+                    p, a {
+                        font-size: 14px
+                    }
+    
+                    .doc-details {
+                        margin-bottom: 1rem
+                    }
+                }
+            }
+
+            .right-col-2 {
+                border-left: 1px solid hsl(0, 0%, 90%);
+                padding: 0 0 0 1rem;
+                flex-shrink: 0;
+
+                div {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    font-size: 14px
+                }
+
+                img {
+                    width: 16px
+                }
+
+                a {
+                    font-size: 14px
+                }
+            }
+        }
+
+        .mobile-no {
+            margin-top: 1rem;
+
+            .label {
+                font-size: 14px
+            }
+
+            input {
+                width: 100%
+            }
+
+            .info {
+                margin: 1rem 0 1rem;
+
+                p {
+                    font-size: 12px;
+                    line-height: 1.25em
+                }
+            }
+
+            button {
+                width: 100%;
+                height: 36px;
+                background: #008FD5;
+                color: white;
+                border: none
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .docApp-wrapper  main .doc-card {
+        display: block;
+
+        .right-col-2 {
+            border: unset;
+            padding: unset;
+            margin-top: 1rem
+        }
+    }
+}
