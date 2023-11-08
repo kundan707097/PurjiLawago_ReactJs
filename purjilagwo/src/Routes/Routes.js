@@ -1,9 +1,11 @@
 import React, { Suspense } from 'react';
 import '../App.css';
-import { Route, Routes,useLocation  } from 'react-router-dom'; 
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import { routevalues } from '../Routes/RoutesConfig';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { routevalues } from './PublicRoute';
+import { privateRoutes } from '../Routes/PrivateRoutes';
+import commonroutes from './CommonRoute';
+import {ProtectedRoute ,PublicRoute,CommonRoute} from '../Routes/ProtectedRoute';
+import NotFound from '../screens/proxy/NotFound';
 
 function Routing() {
   const location = useLocation();
@@ -12,18 +14,36 @@ function Routing() {
 
   return (
     <div className="App">
-        {currentRoute && currentRoute.showHeader && <Header />}
-        <Routes>
-        {routevalues.map((route, index) => (
+      <Routes>
+      <Route path="*" element={<NotFound />} />
+      {routevalues.map((route, index) => (
           <Route key={index} path={route.path} element={
             <Suspense fallback={<div>Loading...</div>}>
+              <PublicRoute>
               {route.element}
+              </PublicRoute>
             </Suspense>
           } />
         ))}
-          
-        </Routes>
-        {currentRoute && currentRoute.showFooter && <Footer />}
+         {commonroutes.map((route, index) => (
+          <Route key={index} path={route.path} element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <CommonRoute>
+              {route.element}
+              </CommonRoute>
+            </Suspense>
+          } />
+        ))}
+        {privateRoutes.map((route, index) => (
+          <Route key={index} path={route.path} element={
+            <Suspense fallback={<div>Loading...</div>}>
+            <ProtectedRoute>
+              {route.element}
+            </ProtectedRoute>
+          </Suspense>
+          } />
+        ))}  
+      </Routes>
 
     </div>
   );

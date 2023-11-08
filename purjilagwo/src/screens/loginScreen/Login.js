@@ -10,7 +10,7 @@ import { Register, LoginValue } from "../../models/Index";
 const Login = () => {
   const [activeTab, setActiveTab] = useState("login");
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
-  const [isDoctor, setIsDoctor] = useState(true);
+  const [isDoctor, setIsDoctor] = useState(false);
   const [registrationError, setRegistrationError] = useState(null);
   const [inputValues, setInputValues] = useState({
     mobileNumber: '',
@@ -29,6 +29,7 @@ const Login = () => {
   };
 
   const toggleDoctorStatus = () => {
+    debugger
     setIsDoctor(!isDoctor);
   };
 
@@ -85,10 +86,12 @@ const Login = () => {
 
   const handleRegistration = async (formData) => {
     try {
+     
       const value = Object.keys(Register).reduce((result, key) => {
         result[key] = formData[key];
         return result;
       }, {});
+      value.isDocotrsOrPatiets=isDoctor;
       let response = await RegisterService.register(value);
       if (response !== true) {
         throw Error("Network response was not ok");
@@ -116,7 +119,7 @@ const Login = () => {
     const response = await LoginService.Login(value);
     if(response!==undefined){
     localStorage.setItem("token", response);
-    navigate("/homeDashhboard")
+    navigate("/")
     }
     else{
       throw Error("Network response was not ok");
@@ -124,6 +127,7 @@ const Login = () => {
   };
 
   return (
+    <>
     <div className="login-form">
       <ul className="nav nav-pills nav-justified" id="ex1" role="tablist">
         <li className="nav-item" role="presentation">
@@ -204,7 +208,7 @@ const Login = () => {
         >
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-outline mb-4">
-              <p>{isDoctor ? "Are You a Doctor?" : ""}<a href="#" onClick={toggleDoctorStatus}>{isDoctor ? "Register Here" : "Not a Doctor ?"}</a></p>
+              <p>{isDoctor ?  "" :"Are You a Doctor?" }<a href="#" onClick={toggleDoctorStatus}>{isDoctor ?  "Not a Doctor ?" :"Register Here"}</a></p>
               <label className="form-label" htmlFor="registerFirstName">
                 First Name
               </label>
@@ -350,6 +354,7 @@ const Login = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

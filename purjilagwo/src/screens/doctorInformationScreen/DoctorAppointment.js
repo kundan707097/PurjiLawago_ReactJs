@@ -3,6 +3,7 @@ import '../../style/DoctorAppointment.css'
 
  function DoctorAppointment() {
   return (
+    <>
     <div className="docApp-wrapper">
       <main>
         <h2>In-clinic appointment</h2>
@@ -68,6 +69,7 @@ import '../../style/DoctorAppointment.css'
         </div>
       </main>
     </div>
+    </>
   )
 }
 export default DoctorAppointment

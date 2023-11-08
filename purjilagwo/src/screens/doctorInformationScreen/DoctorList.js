@@ -3,6 +3,7 @@ import '../../style/DoctorList.css'
 
 function Doctors() {
   return (
+    <>
     <div class="doctors-wrapper">
         <div className="doctors-container">
             <div className="search-bar">
@@ -333,6 +334,7 @@ function Doctors() {
             </div>
         </div>
     </div>
+    </>
   )
 }
 

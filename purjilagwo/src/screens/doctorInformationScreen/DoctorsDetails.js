@@ -1,8 +1,10 @@
 import React from 'react'
 import '../../style/DoctorsDetails.css'
 
+
 export default function Doctor() {
   return (
+    <>
     <div className="doctor-wrapper">
       <div class="doc-flex">
         <div className="main-col">
@@ -463,5 +465,7 @@ export default function Doctor() {
         </div>
       </div>
     </div>
+
+    </>
   )
 }

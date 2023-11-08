@@ -5,9 +5,12 @@ import BookAppointment from "../../components/Home/BookAppointment";
 import ServiceForYou from "../../components/Home/ServiceForYou";
 
 
+
 function Home() {
   return (
     <>
+    
+
         <section  className="section mainBannerArea">
             <div  className="container">
                 <div  className="row">
@@ -55,6 +58,7 @@ function Home() {
         <Department/>
         <BookAppointment/>
         <ServiceForYou/>
+
 
     </>  
   );

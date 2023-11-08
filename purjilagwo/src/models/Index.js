@@ -5,6 +5,7 @@ export const Register = {
     email: '',
     password: '',
     confirmPassword: '',
+    isDocotrsOrPatiets:false,
   };
 
   export const LoginValue = {

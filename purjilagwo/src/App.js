@@ -25,7 +25,7 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom'; // Note the updated imports
 import Header from './components/Header';
 import Footer from './components/Footer';
-import { routevalues } from './Routes/RoutesConfig'; 
+import { routevalues } from './Routes/PublicRoute'; 
 import Routing from './Routes/Routes';
 
 function App() {
