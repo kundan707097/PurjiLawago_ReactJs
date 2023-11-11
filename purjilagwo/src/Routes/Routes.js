@@ -10,7 +10,6 @@ import NotFound from '../screens/proxy/NotFound';
 function Routing() {
   const location = useLocation();
   const currentRoute = routevalues.find((route) => location.pathname === route.path);
-  console.log('Current Route:', currentRoute);
 
   return (
     <div className="App">
