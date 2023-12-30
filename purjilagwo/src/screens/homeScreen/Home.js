@@ -10,6 +10,7 @@ function Home() {
 
     const [locationData, setLocationData] = useState([]);
     const [searchLocation, setSearchLocation] = useState('');
+    const [searchName, setSearchName] = useState('');
 
     useEffect(() => {
         debugger
@@ -32,11 +33,17 @@ function Home() {
     const filteredLocations = locationData.filter((location) =>
         location.city.toLowerCase().includes(searchLocation.toLowerCase())
     );
+    const filteredName = locationData.filter((location) =>
+    location.first_Name.toLowerCase().includes(searchName.toLowerCase())
+);
 
-    const handleSelect = (selectedLocation) => {
+    const handleDoctorListSelect = (selectedLocation) => {
         window.location.href = `/doctorlist/${selectedLocation}`;
     };
 
+    const handledoctorNameSelect = (selectedLocation) => {
+        window.location.href = `/doctorsdetails/${selectedLocation}`;
+    };
 
     return (
         <>
@@ -68,7 +75,7 @@ function Home() {
                                             onInput={(e) => {
                                                 setSearchLocation(e.target.value);
                                                 if (filteredLocations.some((location) => location.city === e.target.value)) {
-                                                    handleSelect(e.target.value);
+                                                    handleDoctorListSelect(e.target.value);
                                                 }
                                             }}
                                         />
@@ -76,7 +83,7 @@ function Home() {
                                             <datalist id="locationList">
                                                 {filteredLocations.map((location) => (
                                                     <option
-                                                        key={location.id}
+                                                        key={`${location.id}location`}
                                                         value={location.city}
 
                                                     />
@@ -85,7 +92,39 @@ function Home() {
                                         )}
                                     </div>
                                     <span className="input-group-text"><i className="fa-solid fa-magnifying-glass"></i></span>
-                                    <input id="doctorsName" type="text" className="form-control" placeholder="Search" aria-label="" />
+                                    <div>
+                                        <input
+                                            id="doctorsName"
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Search"
+                                            aria-label=""
+                                            list="doctorsNameList"
+                                            value={searchName}
+                                            onInput={(e) => {
+                                                setSearchName(e.target.value);
+                                                debugger;
+                                                const arrayOfWords = e.target.value.split(" ");
+                                                if (filteredName.some((name) => name.first_Name === arrayOfWords[0])) {
+                                                    debugger
+                                                    handledoctorNameSelect(filteredName[0].id);
+                                                }
+                                            }}
+                                        />
+                                        {searchName.length >= 3 && (
+                                            <datalist id="doctorsNameList">
+                                                {filteredName.map((name) => (
+                                                    <option
+                                                        key={`${name.id}doctor`}
+                                                        value={`${name.first_Name} ${name.last_Name} - ${name.speciality}`}
+
+                                                    />
+                                                ))}
+                                            </datalist>
+                                        )}
+                                    </div>
+                                  
+
                                 </div>
                             </div>
                         </div>
@@ -106,7 +145,7 @@ function Home() {
                                 </div>
                             </div>
                             <div className="col-xl-6 col-lg-12 col-md-12">
-                                <video className="border media-with-dots-without-shadow" width="" autoplay="" loop="" muted="" playsinline=""><source src="https://ik.imgkit.net/ikmedia/video-api/Dynamically_resize_video_lgTM6FGbJo.mp4?tr=w-1000" type="video/mp4" />Your browser does not support the video tag.</video>
+                                <video className="border media-with-dots-without-shadow" width="" autoPlay="" loop="" muted="" playsInline=""><source src="https://ik.imgkit.net/ikmedia/video-api/Dynamically_resize_video_lgTM6FGbJo.mp4?tr=w-1000" type="video/mp4" />Your browser does not support the video tag.</video>
                             </div>
                         </div>
                     </div>

@@ -1,14 +1,15 @@
 import React from "react";
 
 function BookAppointmentCard(props){
+    debugger;
     return(
         <>
-            <div class="item">
-                <div class="card">
-                    <img src={props.imgsrc} class="card-img-top" alt=""/>
-                    <div class="card-body">
-                        <h5 class="card-title"><a href={props.link}>{props.department}</a></h5>
-                        <p class="card-text">{props.disc}</p>
+            <div className="item">
+                <div className="card">
+                    <img src={props.imgsrc} className="card-img-top" alt=""/>
+                    <div className="card-body">
+                        <h5 className="card-title"><a href={props.link}>{props.department}</a></h5>
+                        <p className="card-text">{props.disc}</p>
                     </div>
                 </div>
             </div>                     

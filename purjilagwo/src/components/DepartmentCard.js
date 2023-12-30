@@ -6,7 +6,7 @@ function DepartmentCard(props){
             <div class="col-lg-4 col-md-6">
                 <div class="single_department_section">
                     <div class="department_bg bg1">
-                        <a href={props.link} tabindex="-1">
+                        <a href={props.link} tabIndex="-1">
                             <span class="LazyLoad is-visible">
                                 <img src={props.imgsrc} alt="Period doubts or Pregnancy" class="card_img"/>
                             </span>
