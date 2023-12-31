@@ -99,7 +99,7 @@ function Home() {
                                             className="form-control"
                                             placeholder="Search"
                                             aria-label=""
-                                            list="doctorsNameList"
+                                            list="doctorsList"
                                             value={searchName}
                                             onInput={(e) => {
                                                 setSearchName(e.target.value);
@@ -112,7 +112,7 @@ function Home() {
                                             }}
                                         />
                                         {searchName.length >= 3 && (
-                                            <datalist id="doctorsNameList">
+                                            <datalist id="doctorsList">
                                                 {filteredName.map((name) => (
                                                     <option
                                                         key={`${name.id}doctor`}
