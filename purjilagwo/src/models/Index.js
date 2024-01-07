@@ -9,6 +9,6 @@ export const Register = {
   };
 
   export const LoginValue = {
-    email: '',
+    emailOrPhoneNumber: '',
     password: '',
   };

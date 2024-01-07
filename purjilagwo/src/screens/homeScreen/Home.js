@@ -4,8 +4,6 @@ import Department from "../../components/Home/Departments";
 import BookAppointment from "../../components/Home/BookAppointment";
 import ServiceForYou from "../../components/Home/ServiceForYou";
 
-
-
 function Home() {
 
     const [locationData, setLocationData] = useState([]);
@@ -31,11 +29,30 @@ function Home() {
     }, []);
 
     const filteredLocations = locationData.filter((location) =>
-        location.city.toLowerCase().includes(searchLocation.toLowerCase())
+    (location.city || '').toLowerCase().includes(searchLocation.toLowerCase())
     );
+    const filteredLocationsData = locationData.filter((location) => {
+      const lowercasedSearchName = searchName.toLowerCase();
+      const lowercasedFirstName = (location.city || '').toLowerCase();
+      if (lowercasedFirstName.includes(lowercasedSearchName)) {
+        location.nonRepetitiveFirstName = lowercasedFirstName;
+        return true;
+      }
+      return false;
+    });
+
     const filteredName = locationData.filter((location) =>
-    location.first_Name.toLowerCase().includes(searchName.toLowerCase())
-);
+    (location.first_Name || '').toLowerCase().includes(searchName.toLowerCase())
+    );
+    const filteredNameData = locationData.filter((location) => {
+      const lowercasedSearchName = searchName.toLowerCase();
+      const lowercasedFirstName = (location.first_Name || '').toLowerCase();
+      if (lowercasedFirstName.includes(lowercasedSearchName)) {
+        location.nonRepetitiveFirstName = lowercasedFirstName;
+        return true;
+      }
+      return false;
+    });
 
     const handleDoctorListSelect = (selectedLocation) => {
         window.location.href = `/doctorlist/${selectedLocation}`;
@@ -81,7 +98,7 @@ function Home() {
                                         />
                                         {searchLocation.length >= 3 && (
                                             <datalist id="locationList">
-                                                {filteredLocations.map((location) => (
+                                                {filteredLocationsData.map((location) => (
                                                     <option
                                                         key={`${location.id}location`}
                                                         value={location.city}
@@ -113,7 +130,7 @@ function Home() {
                                         />
                                         {searchName.length >= 3 && (
                                             <datalist id="doctorsList">
-                                                {filteredName.map((name) => (
+                                                {filteredNameData.map((name) => (
                                                     <option
                                                         key={`${name.id}doctor`}
                                                         value={`${name.first_Name} ${name.last_Name} - ${name.speciality}`}

@@ -1,70 +1,62 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
 import {useNavigate} from "react-router-dom"
-import * as yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
 import LoginService from "../../services/Login.services";
 import RegisterService from "../../services/register.service";
 import { Register, LoginValue } from "../../models/Index";
 
-const Login = () => {
-  const [activeTab, setActiveTab] = useState("login");
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+const LoginForm = () => {
+  const [activeTab, setActiveTab] = useState('login');
   const [isDoctor, setIsDoctor] = useState(false);
-  const [registrationError, setRegistrationError] = useState(null);
   const [inputValues, setInputValues] = useState({
+    fullName: '',
     mobileNumber: '',
-    first_Name: '',
-    last_Name: '',
-    email: '',
-    registeredemail: '',
+    emailOrPhoneNumber: '',
+    loginPassword: '',
     password: '',
-    registeredpassword: '',
-    confirmPassword: '',
   });
   const navigate = useNavigate(); 
+
+  const validationSchema = (activeTab = 'login') => {
+    return yup.object().shape({
+      emailOrPhoneNumber: activeTab === 'login'
+        ? yup.string().required('Email or Phone Number is required')
+        : yup.string(),
+      loginPassword: activeTab === 'login'
+        ? yup.string().required('Password is required')
+        : yup.string(),
+      fullName: activeTab === 'register'
+        ? yup.string().required('Full Name is required')
+        : yup.string(),
+      mobileNumber: activeTab === 'register'
+        ? yup.string().matches(/^[0-9]{10}$/, 'Invalid phone number').required('Phone Number is required')
+        : yup.string(),
+      password: activeTab === 'register'
+        ? yup.string().required('Password is required')
+        : yup.string(),
+    });
+  };
+
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+    resolver: yupResolver(validationSchema(activeTab)),
+  });
 
   const toggleTab = (tab) => {
     setActiveTab(tab);
   };
 
-  const toggleDoctorStatus = () => {
-    debugger
-    setIsDoctor(!isDoctor);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    setInputValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
+
+    setValue(name, value, { shouldValidate: true });
   };
-
-  const validationSchema = (activeTab = "login") => {
-    return yup.object().shape({
-      mobileNumber: activeTab === "register"
-        ? yup.string().matches(/[0-9]{10}/, "Invalid mobile number").required("Mobile number is required")
-        : yup.string(),
-      first_Name: activeTab === "register"
-        ? yup.string().required("First Name is required")
-        : yup.string(),
-      last_Name: activeTab === "register"
-        ? yup.string().required("Last Name is required")
-        : yup.string(),
-      registeredemail: activeTab === "login"
-        ? yup.string().email("Invalid email").required("Email is required") : yup.string(),
-      email: activeTab === "register"
-        ? yup.string().email("Invalid email").required("Email is required") : yup.string(),
-      password: activeTab === "register"
-        ? yup.string().required("Password is required")
-        : yup.string(),
-      registeredpassword: activeTab === "login"
-        ? yup.string().required("Password is required")
-        : yup.string(),
-      confirmPassword: activeTab === "register"
-        ? yup.string().oneOf([yup.ref("password"), null], "Passwords must match").required("Confirm Password is required")
-        : yup.string(),
-    });
-  };
-
-  const validationResolver = yupResolver(validationSchema(activeTab));
-
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm({
-    resolver: validationResolver
-  });
 
 
   const onSubmit = async (data) => {
@@ -75,47 +67,11 @@ const Login = () => {
       handleLogin(data);
     }
   };
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setValue(name, value, { shouldValidate: true });
-    setInputValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
-  };
-
-  const handleRegistration = async (formData) => {
-    try {
-     
-      const value = Object.keys(Register).reduce((result, key) => {
-        result[key] = formData[key];
-        return result;
-      }, {});
-      value.isDocotrsOrPatiets=isDoctor;
-      let response = await RegisterService.register(value);
-      if (response !== true) {
-        throw Error("Network response was not ok");
-      }
-      else {
-        setRegistrationSuccess(true);
-        setRegistrationError(null);
-        setActiveTab("login");
-        setValue('registeredemail', formData.email, { shouldValidate: true });
-        setValue('registeredpassword', formData.password, { shouldValidate: true });
-      }
-
-    }
-    catch (ex) {
-      setRegistrationError("Registration Error: " + ex.message);
-      setRegistrationSuccess(false);
-    }
-
-  };
 
   const handleLogin = async (loginData) => {
     let value =  LoginValue;
-    value.email = loginData.registeredemail;
-    value.password = loginData.registeredpassword;
+    value.emailOrPhoneNumber = loginData.emailOrPhoneNumber;
+    value.password = loginData.loginPassword;
     const response = await LoginService.Login(value);
     if(response!==undefined){
     localStorage.setItem("token", response);
@@ -125,237 +81,224 @@ const Login = () => {
       throw Error("Network response was not ok");
     }
   };
+  const handleRegistration = async (formData) => {
+    try {
+     let name=formData.fullName.split();
+      const value = Register;
+      value.first_Name=name[0];
+      value.last_Name=name[1];
+      value.password=formData.password;
+      value.confirmPassword=formData.password
+      value.isDocotrsOrPatiets=isDoctor;
+      let response = await RegisterService.register(value);
+      if (response !== true) {
+        throw Error("Network response was not ok");
+      }
+      else {
+        setActiveTab("login");
+        setValue('registeredemail', formData.email, { shouldValidate: true });
+        setValue('registeredpassword', formData.password, { shouldValidate: true });
+      }
+
+    }
+    catch (ex) {
+    }
+
+  };
+  const toggleDoctorStatus = () => {
+    setIsDoctor(!isDoctor);
+  }
 
   return (
-    <>
-    <div className="login-form">
-      <ul className="nav nav-pills nav-justified" id="ex1" role="tablist">
-        <li className="nav-item" role="presentation">
-          <button
-            className={`nav-link btn ${activeTab === "login" ? "active" : ""}`}
-            onClick={() => toggleTab("login")}
-          >
-            Login
-          </button>
-        </li>
-        <li className="nav-item" role="presentation">
-          <button
-            className={`nav-link btn ${activeTab === "register" ? "active" : ""}`}
-            onClick={() => toggleTab("register")}
-          >
-            Register
-          </button>
-        </li>
-      </ul>
+    <section className="vh-100">
+      <div className="container py-5 h-100">
+        <div className="row d-flex align-items-center justify-content-center h-100">
+          <div className="col-md-8 col-lg-7 col-xl-6">
+            <img
+             src="/images/doctorImage.png"
+              className="img-fluid"
+              alt="Phone image"
+            />
+          </div>
+          <div className="col-md-7 col-lg-4 col-xl-4 offset-xl-1">
+            <div>
+              {/* Pills navs */}
+              <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                <li className="nav-item" role="presentation">
+                  <a
+                    className={`nav-link ${activeTab === 'login' ? 'active' : ''}`}
+                    id="tab-login"
+                    data-mdb-toggle="pill"
+                    href="#pills-login"
+                    role="tab"
+                    aria-controls="pills-login"
+                    aria-selected={activeTab === 'login'}
+                    onClick={() => toggleTab('login')}
+                  >
+                    Login
+                  </a>
+                </li>
+                <li className="nav-item" role="presentation">
+                  <a
+                    className={`nav-link ${activeTab === 'register' ? 'active' : ''}`}
+                    id="tab-register"
+                    data-mdb-toggle="pill"
+                    href="#pills-register"
+                    role="tab"
+                    aria-controls="pills-register"
+                    aria-selected={activeTab === 'register'}
+                    onClick={() => toggleTab('register')}
+                  >
+                    Register
+                  </a>
+                </li>
+              </ul>
+              {/* Pills navs */}
 
-      <div className="tab-content mt-3">
-        <div
-          className={`tab-pane fade ${activeTab === "login" ? "show active" : ""}`}
-          id="pills-login"
-          role="tabpanel"
-        >
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="registerEmail">
-                Email
-              </label>
-              <input
-                type="email"
-                id="registeredemail"
-                name="email"
-                value={inputValues.registeredemail}
-                className={`form-control ${errors.registeredemail ? "is-invalid" : ""}`}
-                {...register("registeredemail")}
-                onChange={handleInputChange}
+              {/* Pills content */}
+              <div className="tab-content">
+                <div
+                  className={`tab-pane fade show ${activeTab === 'login' ? 'active' : ''}`}
+                  id="pills-login"
+                  role="tabpanel"
+                  aria-labelledby="tab-login"
+                >
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="text-center mb-3">
+                      <p>Sign in with:</p>
+                      <button type="button" className="btn btn-link btn-floating mx-1">
+                        <i className="fab fa-facebook-f"></i>
+                      </button>
 
-              />
-              {errors.registeredemail && (
-                <div className="invalid-feedback">{errors.registeredemail.message}</div>
-              )}
-            </div>
+                      <button type="button" className="btn btn-link btn-floating mx-1">
+                        <i className="fab fa-google"></i>
+                      </button>
 
-            <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="loginPassword">
-                Password
-              </label>
-              <input
-                type="password"
-                id="loginPassword"
-                name="registeredpassword"
-                className={`form-control ${errors.registeredpassword ? "is-invalid" : ""}`}
-                value={inputValues.registeredpassword}
-                {...register("registeredpassword")}
-                disabled={activeTab === "register"}
-                onChange={handleInputChange}
+                      <button type="button" className="btn btn-link btn-floating mx-1">
+                        <i className="fab fa-twitter"></i>
+                      </button>
 
-              />
-              {errors.registeredpassword && (
-                <div className="invalid-feedback">{errors.registeredpassword.message}</div>
-              )}
-            </div>
+                      <button type="button" className="btn btn-link btn-floating mx-1">
+                        <i className="fab fa-github"></i>
+                      </button>
+                    </div>
 
-            <button type="submit" className="btn btn-primary btn-block mb-4">
-              Sign in
-            </button>
-          </form>
-        </div>
+                    <p className="text-center">or:</p>
 
-        <div
-          className={`tab-pane fade ${activeTab === "register" ? "show active" : ""
-            }`}
-          id="pills-register"
-          role="tabpanel"
-        >
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-outline mb-4">
-              <p>{isDoctor ?  "" :"Are You a Doctor?" }<a href="#" onClick={toggleDoctorStatus}>{isDoctor ?  "Not a Doctor ?" :"Register Here"}</a></p>
-              <label className="form-label" htmlFor="registerFirstName">
-                First Name
-              </label>
-              <input
-                type="text"
-                id="registerFirstName"
-                name="first_Name"
-                className={`form-control ${errors.first_Name ? "is-invalid" : ""}`}
-                {...register("first_Name")}
-                value={inputValues.first_Name}
-                onChange={handleInputChange}
+                    {/* Email input */}
+                    <div className="form-outline mb-4">
+                      <label className="form-label" htmlFor="emailOrPhoneNumber">
+                        Email or Phone Number
+                      </label>
+                      <input
+                        type="text"
+                        id="emailOrPhoneNumber"
+                        value={inputValues.emailOrPhoneNumber}
+                        className={`form-control ${errors.emailOrPhoneNumber ? 'is-invalid' : ''}`}
+                        {...register('emailOrPhoneNumber')}
+                        onChange={handleInputChange}
+                      />
+                      {errors.emailOrPhoneNumber && (
+                        <div className="invalid-feedback">{errors.emailOrPhoneNumber.message}</div>
+                      )}
+                    </div>
 
-              />
-              {errors.first_Name && (
-                <div className="invalid-feedback">{errors.first_Name.message}</div>
-              )}
-            </div>
+                    {/* Password input */}
+                    <div className="form-outline mb-4">
+                      <label className="form-label" htmlFor="loginPassword">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        id="loginPassword"
+                        value={inputValues.loginPassword}
+                        className={`form-control ${errors.loginPassword ? 'is-invalid' : ''}`}
+                        {...register('loginPassword')}
+                        onChange={handleInputChange}
+                      />
+                      {errors.loginPassword && (
+                        <div className="invalid-feedback">{errors.loginPassword.message}</div>
+                      )}
+                    </div>
 
-            <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="registerLastName">
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="registerLastName"
-                name="last_Name"
-                className={`form-control ${errors.last_Name ? "is-invalid" : ""}`}
-                {...register("last_Name")}
-                value={inputValues.last_Name}
-                onChange={handleInputChange}
+                    <button type="submit" className="btn btn-primary btn-block mb-3">
+                    Log In
+                    </button>
+                  </form>
+                </div>
 
-              />
-              {errors.last_Name && (
-                <div className="invalid-feedback">{errors.last_Name.message}</div>
-              )}
-            </div>
+                <div
+                  className={`tab-pane fade ${activeTab === 'register' ? 'show active' : ''}`}
+                  id="pills-register"
+                  role="tabpanel"
+                  aria-labelledby="tab-register"
+                >
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="form-outline mb-4">
+                    <p>{isDoctor ?  "" :"Are You a Doctor?" }<a href="#" onClick={toggleDoctorStatus}>{isDoctor ?  "Not a Doctor ?" :"Register Here"}</a></p>
+                      <label className="form-label" htmlFor="fullName">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        id="fullName"
+                        value={inputValues.fullName}
+                        className={`form-control ${errors.fullName ? 'is-invalid' : ''}`}
+                        {...register('fullName')}
+                        onChange={handleInputChange}
+                      />
+                      {errors.fullName && (
+                        <div className="invalid-feedback">{errors.fullName.message}</div>
+                      )}
+                    </div>
 
-            <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="registerEmail">
-                Email
-              </label>
-              <input
-                type="email"
-                id="registerEmail"
-                name="email"
-                className={`form-control ${errors.email ? "is-invalid" : ""}`}
-                value={inputValues.email}
-                {...register("email")}
-                onChange={handleInputChange}
 
-              />
-              {errors.email && (
-                <div className="invalid-feedback">{errors.email.message}</div>
-              )}
-            </div>
+                    <div className="form-outline mb-4">
+                      <label className="form-label" htmlFor="registermobileNumber">
+                        Phone Number
+                      </label>
+                      <input
+                        type="text"
+                        id="registermobileNumber"
+                        value={inputValues.mobileNumber}
+                        className={`form-control ${errors.mobileNumber ? 'is-invalid' : ''}`}
+                        {...register('mobileNumber')}
+                        onChange={handleInputChange}
+                      />
+                      {errors.mobileNumber && (
+                        <div className="invalid-feedback">{errors.mobileNumber.message}</div>
+                      )}
+                    </div>
 
-            <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="registerMobile">
-                Mobile Number
-              </label>
-              <input
-                type="text"
-                id="registerMobile"
-                name="mobileNumber"
-                className={`form-control ${errors.mobileNumber ? "is-invalid" : ""}`}
-                {...register("mobileNumber")}
-                value={inputValues.mobileNumber}
-                pattern="[0-9]{10}"
-                onChange={handleInputChange}
+                    <div className="form-outline mb-4">
+                      <label className="form-label" htmlFor="registerPassword">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        id="registerPassword"
+                        value={inputValues.password}
+                        className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+                        {...register('password')}
+                        onChange={handleInputChange}
+                      />
+                      {errors.password && (
+                        <div className="invalid-feedback">{errors.password.message}</div>
+                      )}
+                    </div>                
 
-              />
-              {errors.mobileNumber && (
-                <div className="invalid-feedback">{errors.mobileNumber.message}</div>
-              )}
-            </div>
-
-            <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="registerPassword">
-                Password
-              </label>
-              <input
-                type="password"
-                id="registerPassword"
-                name="password"
-                className={`form-control ${errors.password ? "is-invalid" : ""}`}
-                value={inputValues.password}
-                {...register("password")}
-                onChange={handleInputChange}
-
-              />
-              {errors.password && (
-                <div className="invalid-feedback">{errors.password.message}</div>
-              )}
-            </div>
-
-            <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="registerRepeatPassword">
-                Repeat password
-              </label>
-              <input
-                type="password"
-                id="registerRepeatPassword"
-                name="confirmPassword"
-                className={`form-control ${errors.confirmPassword ? "is-invalid" : ""}`}
-                value={inputValues.confirmPassword}
-                {...register("confirmPassword")}
-                onChange={handleInputChange}
-
-              />
-              {errors.confirmPassword && (
-                <div className="invalid-feedback">{errors.confirmPassword.message}</div>
-              )}
-            </div>
-
-            <div className="form-check d-flex justify-content-center mb-4">
-              <input
-                className="form-check-input me-2"
-                type="checkbox"
-                id="registerCheck"
-                checked
-                aria-describedby="registerCheckHelpText"
-
-              />
-              <label className="form-check-label" htmlFor="registerCheck">
-                I have read and agree to the terms
-              </label>
-            </div>
-
-            <button type="submit" className="btn btn-primary btn-block mb-4">
-              Send OTP
-            </button>
-            {registrationSuccess && (
-              <div className="alert alert-success" role="alert">
-                Registration is successful! Please log in.
+                    <button type="submit" className="btn btn-primary btn-block mb-3">
+                      Sign up
+                    </button>
+                  </form>
+                </div>
               </div>
-            )}
-            {registrationError && (
-              <div className="alert alert-danger" role="alert">
-                {registrationError}
-              </div>
-            )}
-          </form>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    </>
+    </section>
   );
 };
 
-export default Login;
+export default LoginForm;

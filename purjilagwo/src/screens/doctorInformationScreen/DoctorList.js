@@ -10,9 +10,6 @@ function Doctors() {
     const [doctorName, setDoctorName] = useState(null);
 
 
-
-
-
     useEffect(() => {
         (async () => {
             try {

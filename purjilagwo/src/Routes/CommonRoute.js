@@ -18,6 +18,10 @@ export const commonroutes = [
     element: <DoctorList />,
   },
   {
+    path: '/doctorlist',
+    element: <DoctorList />,
+  },
+  {
     path: '/doctorAppointment',
     element: <DoctorAppointment />,
   },
