@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function Header() {
 
     const [token, setToken] = useState(null);
-    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const navigate= useNavigate();
 
@@ -17,19 +17,19 @@ function Header() {
             setToken(storedToken);
 
             // Retrieve email and phone number from local storage
-            const storedEmail = localStorage.getItem('email');
+            const storedName = localStorage.getItem('fullName');
             const storedPhoneNumber = localStorage.getItem('phoneNumber');
 
-            if (storedEmail && storedPhoneNumber) {
-                setEmail(storedEmail);
+            if (storedName && storedPhoneNumber) {
+                setName(storedName);
                 setPhoneNumber(storedPhoneNumber);
             }
         }
     }, []);
     const handleLogout = () => {
         localStorage.removeItem('token');
-        localStorage.removeItem('email');
-        localStorage.removeItem('phonenumber');
+        localStorage.removeItem('fullName');
+        localStorage.removeItem('phoneNumber');
 
         if (window.location.pathname === '/') {
             // Reload the page
@@ -112,7 +112,7 @@ function Header() {
                                                         height="30"
                                                     />
                                                     <div>
-                                                        <span>{email}</span>
+                                                        <span>{name}</span>
                                                         <span className="phone-number">{phoneNumber}</span>
                                                     </div>
                                                 </div>

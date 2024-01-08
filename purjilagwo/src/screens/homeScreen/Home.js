@@ -42,11 +42,11 @@ function Home() {
     });
 
     const filteredName = locationData.filter((location) =>
-    (location.first_Name || '').toLowerCase().includes(searchName.toLowerCase())
+    (location.user_Name || '').toLowerCase().includes(searchName.toLowerCase())
     );
     const filteredNameData = locationData.filter((location) => {
       const lowercasedSearchName = searchName.toLowerCase();
-      const lowercasedFirstName = (location.first_Name || '').toLowerCase();
+      const lowercasedFirstName = (location.user_Name || '').toLowerCase();
       if (lowercasedFirstName.includes(lowercasedSearchName)) {
         location.nonRepetitiveFirstName = lowercasedFirstName;
         return true;
@@ -122,7 +122,7 @@ function Home() {
                                                 setSearchName(e.target.value);
                                                 debugger;
                                                 const arrayOfWords = e.target.value.split(" ");
-                                                if (filteredName.some((name) => name.first_Name === arrayOfWords[0])) {
+                                                if (filteredName.some((name) => name.user_Name === e.target.value)) {
                                                     debugger
                                                     handledoctorNameSelect(filteredName[0].id);
                                                 }
@@ -133,7 +133,7 @@ function Home() {
                                                 {filteredNameData.map((name) => (
                                                     <option
                                                         key={`${name.id}doctor`}
-                                                        value={`${name.first_Name} ${name.last_Name} - ${name.speciality}`}
+                                                        value={`${name.user_Name}`}
 
                                                     />
                                                 ))}

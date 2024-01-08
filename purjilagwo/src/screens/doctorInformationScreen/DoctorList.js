@@ -13,9 +13,14 @@ function Doctors() {
     useEffect(() => {
         (async () => {
             try {
-                debugger
-                debugger;
-                const response = await DoctorService.DocInfoOnLocation(location);
+                let response=null;
+                if(location){
+                response = await DoctorService.DocInfoOnLocation(location);
+                }
+                else{
+                    response = await DoctorService.AllDocInfo();
+                }
+
                 if (response !== undefined) {
                     debugger;
                     setDoctorInfo(response);
@@ -57,6 +62,10 @@ function Doctors() {
         // Perform actions with the doctorId and other data
         console.log(`Book consultation for doctor with ID: ${doctorId}`);
         // You can navigate to another page, show a modal, etc.
+    };
+    
+    const handleDoctorListClick = (doctorId) => {
+        window.location.href = `/doctorsdetails/${doctorId}`;
     };
 
     return (
@@ -114,8 +123,8 @@ function Doctors() {
                                     onInput={(e) => {
                                         setDoctorName(e.target.value);
                                         const arrayOfWords = e.target.value.split(" ");
-                                        const matchingLocation = filteredLocations.find((data) => data.first_Name === arrayOfWords[0] && data.speciality === arrayOfWords[3]);
-
+                                        const matchingLocation = filteredLocations.find((data) => data.user_Name === e.target.value);
+                                        debugger;
                                         if (matchingLocation) {
                                             debugger;
                                             handledoctorNameSelect(matchingLocation.id);
@@ -128,7 +137,7 @@ function Doctors() {
                                     <datalist id="doctorList">
                                         {filteredDoctInfo.map((data) => (
                                             <option key={`${data.id}data`}
-                                                value={`${data.first_Name} ${data.last_Name} - ${data.speciality}`} />
+                                                value={`${data.user_Name}`} />
                                         ))}
                                     </datalist>
                                 )}
@@ -147,7 +156,7 @@ function Doctors() {
                             // If doctorInfo has data, map through it
                             doctorInfo.map((doctor) => (
                                 <div className="doc-card">
-                                    <div className="block1">
+                                    <div className="block1" onClick={() => handleDoctorListClick(doctor.id)}>
                                         <div className="left-col">
                                             <div className="dp">
                                                 <img src="../images/doc-1.jpg" alt="" />
@@ -155,7 +164,7 @@ function Doctors() {
                                         </div>
 
                                         <div className="right-col">
-                                            <h2>Dr.{doctor?.first_Name} {doctor?.last_Name}</h2>
+                                            <h2>{doctor?.user_Name} </h2>
                                             <p>{doctor?.speciality}</p>
                                             <p> {doctor?.experience} experience</p>
                                             <p className="edu"> {doctor?.education}</p>

@@ -1,10 +1,7 @@
 export const Register = {
     mobileNumber: '',
-    first_Name: '',
-    last_Name: '',
-    email: '',
+    user_Name: '',
     password: '',
-    confirmPassword: '',
     isDocotrsOrPatiets:false,
   };
 

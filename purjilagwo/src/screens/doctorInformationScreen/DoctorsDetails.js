@@ -47,7 +47,7 @@ export default function Doctor() {
                 </div>
                 <div className="doc-col-2">
                   <div className="text-content">
-                    <h2 className="doc-name">Dr. {doctorData?.first_Name} {doctorData.last_Name}</h2>
+                    <h2 className="doc-name">{doctorData?.user_Name} </h2>
                     <p className="doc-details">{doctorData?.education}</p>
                     <p className="doc-exp">24 Years Experience Overall  (17 years as specialist)</p>
                     <p className="doc-desc">{doctorData?.description} </p>
@@ -181,7 +181,7 @@ export default function Doctor() {
                 </div>
 
                 <div className="stories-tab" style={{ display: activeTab === 2 ? 'block' : 'none' }}>
-                  <h2>Patient stories for Dr.{doctorData?.first_Name} {doctorData.last_Name}</h2>
+                  <h2>Patient stories for {doctorData?.user_Name}</h2>
                   <p className="desc">These are patient’s opinions and do not necessarily reflect the doctor’s medical capabilities. <a href="#">Read more</a></p>
 
                   <div className="topbar">
@@ -208,7 +208,7 @@ export default function Doctor() {
                       </div>
                       <p className="time">3 years ago</p>
                       <p className="story-content">
-                        Due to allergic condition of the scalp, I wanted to consult the best dermatologist. That is when I found Dr.{doctorData?.first_Name} {doctorData.last_Name} through Practo. I am extremely gratified with her consultation. The given treatment was a great relief. After a deep analysis, she explained the condition evidently. She has given the follow-up date as well. I will definitely continue my further treatment with her.
+                        Due to allergic condition of the scalp, I wanted to consult the best dermatologist. That is when I found {doctorData?.user_Name} through Practo. I am extremely gratified with her consultation. The given treatment was a great relief. After a deep analysis, she explained the condition evidently. She has given the follow-up date as well. I will definitely continue my further treatment with her.
                       </p>
 
                       <div className="recommending-doc">
@@ -232,7 +232,7 @@ export default function Doctor() {
                       </div>
                       <p className="time">1 month ago</p>
                       <p className="story-content">
-                        After completing three of my sessions, things are going well. I am happy about the progressive treatment. Dr.{doctorData?.first_Name} {doctorData.last_Name} is very considerate. She has given all the needful advice. But the waiting period is really bothersome. My consultation has been delayed for an hour sometimes. If the schedules can be arranged carefully, this might be avoided. Otherwise, everything is perfect.
+                        After completing three of my sessions, things are going well. I am happy about the progressive treatment. {doctorData?.user_Name}  is very considerate. She has given all the needful advice. But the waiting period is really bothersome. My consultation has been delayed for an hour sometimes. If the schedules can be arranged carefully, this might be avoided. Otherwise, everything is perfect.
                       </p>
 
                       <div className="recommending-doc">
@@ -256,7 +256,7 @@ export default function Doctor() {
                       </div>
                       <p className="time">3 years ago</p>
                       <p className="story-content">
-                        Due to allergic condition of the scalp, I wanted to consult the best dermatologist. That is when I found Dr.{doctorData?.first_Name} {doctorData.last_Name} through Practo. I am extremely gratified with her consultation. The given treatment was a great relief. After a deep analysis, she explained the condition evidently. She has given the follow-up date as well. I will definitely continue my further treatment with her.
+                        Due to allergic condition of the scalp, I wanted to consult the best dermatologist. That is when I found {doctorData?.user_Name}  through Practo. I am extremely gratified with her consultation. The given treatment was a great relief. After a deep analysis, she explained the condition evidently. She has given the follow-up date as well. I will definitely continue my further treatment with her.
                       </p>
 
                       <div className="recommending-doc">
@@ -280,7 +280,7 @@ export default function Doctor() {
                       </div>
                       <p className="time">1 month ago</p>
                       <p className="story-content">
-                        After completing three of my sessions, things are going well. I am happy about the progressive treatment. Dr.{doctorData?.first_Name} {doctorData.last_Name} is very considerate. She has given all the needful advice. But the waiting period is really bothersome. My consultation has been delayed for an hour sometimes. If the schedules can be arranged carefully, this might be avoided. Otherwise, everything is perfect.
+                        After completing three of my sessions, things are going well. I am happy about the progressive treatment. {doctorData?.user_Name}  is very considerate. She has given all the needful advice. But the waiting period is really bothersome. My consultation has been delayed for an hour sometimes. If the schedules can be arranged carefully, this might be avoided. Otherwise, everything is perfect.
                       </p>
 
                       <div className="recommending-doc">
@@ -300,28 +300,28 @@ export default function Doctor() {
 
                   <div className="qna-container">
                     <div className="qna">
-                      <p className="question">Q: Where does Dr.{doctorData?.first_Name} {doctorData.last_Name} practice?</p>
-                      <p className="answer"><span class="fw-b">A: </span>Dr.{doctorData?.first_Name} {doctorData.last_Name}  practices at Manipal Hospital - Jayanagar 9 Block</p>
+                      <p className="question">Q: Where does {doctorData?.user_Name}  practice?</p>
+                      <p className="answer"><span class="fw-b">A: </span>{doctorData?.user_Name}   practices at Manipal Hospital - Jayanagar 9 Block</p>
                     </div>
 
                     <div className="qna">
-                      <p className="question">Q: How can I take Dr.{doctorData?.first_Name} {doctorData.last_Name} appointment?</p>
-                      <p className="answer"><span class="fw-b">A: </span>You can take <a href="javascript:void(0)">Dr.{doctorData?.first_Name} {doctorData.last_Name}</a> appointment online through Practo for in-clinic visit with the doctor.</p>
+                      <p className="question">Q: How can I take {doctorData?.user_Name} appointment?</p>
+                      <p className="answer"><span class="fw-b">A: </span>You can take <a href="javascript:void(0)">{doctorData?.user_Name}</a> appointment online through Practo for in-clinic visit with the doctor.</p>
                     </div>
 
                     <div className="qna">
-                      <p className="question">Q: Why do patients visit Dr.{doctorData?.first_Name} {doctorData.last_Name}?</p>
-                      <p className="answer"><span class="fw-b">A: </span>Patients frequently visit Dr.{doctorData?.first_Name} {doctorData.last_Name} Sharma for PRP Hair Transplantation, Hair Weaving & Bonding, Sun Burn Treatment. To see more reasons visit the <a href="javascript:void(0)">doctor's profile</a> on Practo.</p>
+                      <p className="question">Q: Why do patients visit {doctorData?.user_Name}?</p>
+                      <p className="answer"><span class="fw-b">A: </span>Patients frequently visit {doctorData?.user_Name}  for PRP Hair Transplantation, Hair Weaving & Bonding, Sun Burn Treatment. To see more reasons visit the <a href="javascript:void(0)">doctor's profile</a> on Practo.</p>
                     </div>
 
                     <div className="qna">
-                      <p className="question">Q: What do patients say about Dr.{doctorData?.first_Name} {doctorData.last_Name}?</p>
-                      <p className="answer"><span class="fw-b">A: </span>Dr.{doctorData?.first_Name} {doctorData.last_Name} has been recommended by 74 patients and has recieved stories from 27 patients. You can <a href="javascript:void(0)">read detailed patient stories</a> of the doctor on Practo.</p>
+                      <p className="question">Q: What do patients say about {doctorData?.user_Name}?</p>
+                      <p className="answer"><span class="fw-b">A: </span>{doctorData?.user_Name} has been recommended by 74 patients and has recieved stories from 27 patients. You can <a href="javascript:void(0)">read detailed patient stories</a> of the doctor on Practo.</p>
                     </div>
 
                     <div className="qna">
-                      <p className="question">Q: What is Dr.{doctorData?.first_Name} {doctorData.last_Name} education qualification?</p>
-                      <p className="answer"><span class="fw-b">A: </span>Dr.{doctorData?.first_Name} {doctorData.last_Name} has the following qualifications - MBBS, DNB - Dermatology, Venereology & Leprosy. You can <a href="javascript:void(0)">book the doctor</a> through the doctor's profile on Practo.</p>
+                      <p className="question">Q: What is {doctorData?.user_Name} education qualification?</p>
+                      <p className="answer"><span class="fw-b">A: </span>{doctorData?.user_Name} has the following qualifications - MBBS, DNB - Dermatology, Venereology & Leprosy. You can <a href="javascript:void(0)">book the doctor</a> through the doctor's profile on Practo.</p>
                     </div>
                   </div>
                 </div>

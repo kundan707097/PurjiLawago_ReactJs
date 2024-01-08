@@ -49,12 +49,10 @@ const LoginForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
     setInputValues((prevValues) => ({
       ...prevValues,
       [name]: value,
     }));
-
     setValue(name, value, { shouldValidate: true });
   };
 
@@ -70,11 +68,14 @@ const LoginForm = () => {
 
   const handleLogin = async (loginData) => {
     let value =  LoginValue;
+    debugger;
     value.emailOrPhoneNumber = loginData.emailOrPhoneNumber;
     value.password = loginData.loginPassword;
     const response = await LoginService.Login(value);
     if(response!==undefined){
-    localStorage.setItem("token", response);
+    localStorage.setItem("token", response.token);
+    localStorage.setItem("fullName", response.fullName);
+    localStorage.setItem("phoneNumber", response.phoneNumber);
     navigate("/")
     }
     else{
@@ -83,12 +84,10 @@ const LoginForm = () => {
   };
   const handleRegistration = async (formData) => {
     try {
-     let name=formData.fullName.split();
       const value = Register;
-      value.first_Name=name[0];
-      value.last_Name=name[1];
+      value.user_Name=formData.fullName
       value.password=formData.password;
-      value.confirmPassword=formData.password
+      value.mobileNumber=formData.mobileNumber;
       value.isDocotrsOrPatiets=isDoctor;
       let response = await RegisterService.register(value);
       if (response !== true) {
@@ -237,7 +236,7 @@ const LoginForm = () => {
                     <div className="form-outline mb-4">
                     <p>{isDoctor ?  "" :"Are You a Doctor?" }<a href="#" onClick={toggleDoctorStatus}>{isDoctor ?  "Not a Doctor ?" :"Register Here"}</a></p>
                       <label className="form-label" htmlFor="fullName">
-                        First Name
+                        Full Name
                       </label>
                       <input
                         type="text"
