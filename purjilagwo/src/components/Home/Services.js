@@ -2,6 +2,7 @@ import React, { } from "react";
 import Card from "../Card";
 import ServicesData from "../ServicesData";
 
+
 function servicesCard(val) {
     return (
         <Card
@@ -33,6 +34,7 @@ function Services() {
                     </div>
                 </div>
             </section>
+
         </>
     )
 }

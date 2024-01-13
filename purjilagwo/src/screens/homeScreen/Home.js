@@ -3,12 +3,28 @@ import Services from "../../components/Home/Services";
 import Department from "../../components/Home/Departments";
 import BookAppointment from "../../components/Home/BookAppointment";
 import ServiceForYou from "../../components/Home/ServiceForYou";
+import Navbar from "../../components/Navbar";
+import Service from '../../components/Home/Service';
+import TopDoctors from '../../components/Home/TopDoctors';
+import { Box, Button, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { HealthCross, Phone, Stethoscope } from '@carbon/icons-react';
+import MedicationIcon from '@mui/icons-material/Medication';
+import MinorCrashIcon from '@mui/icons-material/MinorCrash';
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import CountUp from 'react-countup';
+import ScrollTrigger from 'react-scroll-trigger';
+import Landing from '../../components/Home/Landing';
+
 
 function Home() {
 
     const [locationData, setLocationData] = useState([]);
     const [searchLocation, setSearchLocation] = useState('');
     const [searchName, setSearchName] = useState('');
+    const [counterOn, setCounterOn] = useState(false);
 
     useEffect(() => {
         debugger
@@ -42,6 +58,7 @@ function Home() {
     });
 
     const filteredName = locationData.filter((location) =>
+<<<<<<< Updated upstream
     (location.user_Name || '').toLowerCase().includes(searchName.toLowerCase())
     );
     const filteredNameData = locationData.filter((location) => {
@@ -53,6 +70,10 @@ function Home() {
       }
       return false;
     });
+=======
+        location.first_Name.toLowerCase().includes(searchName.toLowerCase())
+    );
+>>>>>>> Stashed changes
 
     const handleDoctorListSelect = (selectedLocation) => {
         window.location.href = `/doctorlist/${selectedLocation}`;
@@ -65,8 +86,10 @@ function Home() {
     return (
         <>
 
+            {/* <Navbar /> */}
 
-            <section className="section mainBannerArea">
+
+            {/* <section className="section mainBannerArea">
                 <div className="container">
                     <div className="row">
                         <div className="col-xl-6 col-lg-8 col-md-12">
@@ -150,8 +173,10 @@ function Home() {
                         </div>
                     </div>
                 </div>
-            </section>
-            <section className="section introVido_area spt0">
+            </section> */}
+
+
+            {/* <section className="section introVido_area spt0">
                 <div className="container">
                     <div className="introVideoWrap">
                         <div className="row">
@@ -167,12 +192,100 @@ function Home() {
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
 
-            <Services />
-            <Department />
-            <BookAppointment />
-            <ServiceForYou />
+            {/* <Services /> */}
+            {/* <Department /> */}
+            {/* <BookAppointment /> */}
+            {/* <ServiceForYou /> */}
+
+
+
+            <Landing />
+
+            <Box sx={{ backgroundColor: "#42A5F5", padding: "20px", display: "flex", justifyContent: "space-evenly", flexDirection: { xs :"column" ,sm: "row"}}}>
+                <Box sx={{ margin: "10px", color: "white", textAlign: "center" }}>
+                    <HealthAndSafetyIcon style={{ backgroundColor: "white", padding: "10px", borderRadius: "100px", color: "black", fontSize: "50px" }} />
+                    <Typography sx={{ my: "10px", fontWeight: 600 }}>Best Treatment</Typography>
+                    <Typography sx={{ fontSize: "13px" }}>Experience the Pinnacle of Care.</Typography>
+                    <Typography sx={{ fontSize: "13px" }}>Discover the Best Treament Options.</Typography>
+                </Box>
+                <Box sx={{ margin: "10px", color: "white", textAlign: "center" }}>
+                    <MinorCrashIcon style={{ backgroundColor: "white", padding: "10px", fontSize: "50px", borderRadius: "100px", color: "black" }} />
+                    <Typography sx={{ my: "10px", fontWeight: 600 }}>Emergency Help</Typography>
+                    <Typography sx={{ fontSize: "13px" }}>Urgent Help, Right When You Need it.</Typography>
+                    <Typography sx={{ fontSize: "13px" }}>27-7 Emergency Assistance.</Typography>
+                </Box>
+                <Box sx={{ margin: "10px", color: "white", textAlign: "center" }}>
+                    <Stethoscope size={50} style={{ backgroundColor: "white", padding: "10px", borderRadius: "100px", color: "black" }} />
+                    <Typography sx={{ my: "10px", fontWeight: 600 }}>Qualified Doctors</Typography>
+                    <Typography sx={{ fontSize: "13px" }}>Expertise You Can Trust.</Typography>
+                    <Typography sx={{ fontSize: "13px" }}>Meet Our Qualified Doctors Today.</Typography>
+                </Box>
+                <Box sx={{ margin: "10px", color: "white", textAlign: "center" }}>
+                    <MedicationIcon style={{ backgroundColor: "white", borderRadius: "100px", color: "black", fontSize: "50px", padding: "10px" }} />
+                    <Typography sx={{ my: "10px", fontWeight: 600 }}>Top Medical Staff</Typography>
+                    <Typography sx={{ fontSize: "13px" }}>Discover Our Dedicated Medical Team.</Typography>
+                    <Typography sx={{ fontSize: "13px" }}>Your Wellness Journey Begins Now.</Typography>
+                </Box>
+
+
+            </Box>
+
+            <Service />
+
+            <TopDoctors />
+
+            <ScrollTrigger onEnter={() => setCounterOn(true)} onExit={() => setCounterOn(false)}>
+                
+            <Box sx={{ backgroundColor: "#42A5F5", padding: "20px", display: "flex", justifyContent: "space-evenly", flexDirection: { xs :"column" ,sm: "row"} }}>
+                <Box sx={{ margin: "10px", color: "white", textAlign: "center" }}>
+                    {/* <HealthAndSafetyIcon style={{ backgroundColor: "white", padding: "10px", borderRadius: "100px", color: "black", fontSize: "50px" }} /> */}
+                    {counterOn && (<>
+                    <Box style={{fontSize: "40px"}} >
+                    <CountUp start={0}  end={1000} duration={3} delay={0} style={{marginRight: "4px"}} />
+                    <span>+</span>
+                    </Box>
+                    </>)}
+                    
+                    <Typography sx={{ my: "10px", fontWeight: 800, fontSize: "30px" }}>Active Visitors</Typography>
+                </Box>
+                <Box sx={{ margin: "10px", color: "white", textAlign: "center" }}>
+                    {/* <HealthAndSafetyIcon style={{ backgroundColor: "white", padding: "10px", borderRadius: "100px", color: "black", fontSize: "50px" }} /> */}
+                    {counterOn && (<>
+                    <Box style={{fontSize: "40px"}} >
+                    <CountUp start={0}  end={500} duration={2} delay={0} style={{marginRight: "4px"}} />
+                    <span>+</span>
+                    </Box>
+                    </>)}
+                    
+                    <Typography sx={{ my: "10px", fontWeight: 800, fontSize: "30px" }}>Doctors</Typography>
+                </Box>
+                <Box sx={{ margin: "10px", color: "white", textAlign: "center" }}>
+                    {/* <HealthAndSafetyIcon style={{ backgroundColor: "white", padding: "10px", borderRadius: "100px", color: "black", fontSize: "50px" }} /> */}
+                    {counterOn && (<>
+                    <Box style={{fontSize: "40px"}} >
+                    <CountUp start={0}  end={10000} duration={4} delay={0} style={{marginRight: "4px"}} />
+                    <span>+</span>
+                    </Box>
+                    </>)}
+                    
+                    <Typography sx={{ my: "10px", fontWeight: 800, fontSize: "30px" }}>Patient Treated</Typography>
+                </Box>
+
+
+
+            </Box>
+
+            </ScrollTrigger>
+
+            <a href="tel:+6205316232">
+
+                <Fab color="primary" aria-label="add" sx={{ position: "fixed", bottom: "20px", right: "20px", backgroundColor: "#42A5F5" }}>
+
+                    <Phone />
+                </Fab>
+            </a>
 
 
         </>

@@ -52,8 +52,8 @@ function Header() {
 
     return (
         <>
-            <header className="pageHeader">
-                <nav className="navbar navbar-expand-lg navbar-light navbar-white bg-white" aria-label="Eighth navbar example">
+            <header className="pageHeader"   >
+                <nav className="navbar navbar-expand-lg navbar-light navbar-white bg-white" aria-label="Eighth navbar example" style={{zIndex: 999}}>
                     <div className="container">
                         <a className="navbar-brand" onClick={ handleLogoClick} ><img src="/images/logo.png" alt="Logo" className="" /></a>
                         <button className="navbar-toggler" type="button"  data-bs-toggle="collapse" data-bs-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
@@ -138,6 +138,7 @@ function Header() {
                                             name="Practo login"
                                             event="Nav Bar:Interacted:Practo login"
                                             className="btn btn-sm btn-outline-primary"
+                                            style={{borderRadius: "12px",  padding: "5px 20px", marginRight: "10px"}}
                                         >
                                             Login / Signup
                                         </a>

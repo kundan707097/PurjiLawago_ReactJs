@@ -43,6 +43,7 @@ function Department() {
                         <div className="col-lg-12 text-center"><button type="button" className="btn btn-outline-primary position-relative">View All Specialities</button></div>
                     </div>
                 </div>
+                
             </section>
         </>
     )

@@ -1,0 +1,43 @@
+.landing-img{
+    position: relative;
+    width: 120%;
+    right: 210px;
+    top: 40px;
+}
+
+input::placeholder {
+    color: #999; 
+    font-size: 13px;
+  }
+
+.specialities-img{
+  width: 4%;
+  height: 2%;
+}
+
+.landing-dropdown{
+  background-color: white;
+}
+.landing-dropdown:hover{
+  background-color: #F0F7FF;
+}
+
+
+@media screen and (max-width: 600px) {
+  .specialities-img{
+    width: 10%;
+    height: 8%;
+  }
+
+}
+
+
+@media screen and (max-width: 1200px) {
+    .landing-img{
+        position: relative;
+        width: 130%;
+        right: 205px;
+        top: 90px;
+    }
+  
+}
