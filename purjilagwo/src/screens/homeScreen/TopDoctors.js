@@ -1,13 +1,13 @@
 import { ChevronLeft, ChevronRight } from "@carbon/icons-react";
-import { Box, Button, Container, IconButton, Typography } from "@mui/material";
+import { Box, Container, IconButton, Typography } from "@mui/material";
 import React, { useState, useRef, useEffect } from "react";
-import TopDoctorsCard from "../TopDoctorsCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {  Navigation } from "swiper/modules";
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
+import TopDoctorsCard from "./TopDoctorsCard";
 
 const TopDoctors = () => {
   const swipeerRef = useRef(null);

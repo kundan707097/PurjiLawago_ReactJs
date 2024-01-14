@@ -1,17 +1,62 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import BG1 from "../../assets/image/front-view-nurses-team-hospital_23-2150796738.avif";
-import "./home.css";
+import "./Home.css";
 import { Location, Search } from "@carbon/icons-react";
 
 const Landing = () => {
   const [locationData, setLocationData] = useState([]);
   const [searchLocation, setSearchLocation] = useState("");
   const [searchName, setSearchName] = useState("");
+  const [isVisible, setIsVisible] = useState({
+    locationVisible: "true",
+    nameVisible: "true",
+  });
+  const locationSearchRef = useRef(null);
+  const nameSearchRef = useRef(null);
+
 
   useEffect(() => {
-    // debugger;
+    const handleClickOutside = (event) => {
+      if (locationSearchRef.current && !locationSearchRef.current.contains(event.target)) {
+        // Clicked outside the container
+        setIsVisible({locationVisible: false});
+      }
+      if (nameSearchRef.current && !nameSearchRef.current.contains(event.target)) {
+        // Clicked outside the container
+        setIsVisible({nameVisible: false});
+      }
+    };
+
+    // Add event listener on mount
+    document.addEventListener('click', handleClickOutside);
+
+    // Cleanup: remove event listener on unmount
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (nameSearchRef.current && !nameSearchRef.current.contains(event.target)) {
+        // Clicked outside the container
+        setIsVisible({nameVisible: false});
+      }
+    };
+
+    // Add event listener on mount
+    document.addEventListener('click', handleClickOutside);
+
+    // Cleanup: remove event listener on unmount
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    debugger;
     const fetchLocationInformation = async () => {
       try {
         const response = await fetch(
@@ -27,7 +72,7 @@ const Landing = () => {
       }
     };
 
-    // fetchLocationInformation();
+    fetchLocationInformation();
   }, []);
 
   const filteredLocations = locationData.filter((location) =>
@@ -154,6 +199,7 @@ const Landing = () => {
                 value={searchLocation}
                 onInput={(e) => {
                   setSearchLocation(e.target.value);
+                  setIsVisible({locationVisible: true});
                   if (
                     filteredLocations.some(
                       (location) => location.city === e.target.value
@@ -164,10 +210,10 @@ const Landing = () => {
                 }}
               />
 
-              {searchLocation.length >= 3 && (
-                // <datalist id="locationList">
+              { searchLocation.length >= 3 && (
                 <Box
                   sx={{
+                    display: isVisible.locationVisible ? 'block' : 'none',
                     position: "absolute",
                     backgroundColor: "white",
                     width: "100%",
@@ -175,6 +221,7 @@ const Landing = () => {
                     borderRadius: "10px",
                     py: "0.5rem",
                   }}
+                  ref={locationSearchRef} 
                 >
                   <Box>
                     {/*  put the map function here and remove the all the button and put the onclick on button */}
@@ -265,6 +312,7 @@ const Landing = () => {
                 value={searchName}
                 onInput={(e) => {
                   setSearchName(e.target.value);
+                  setIsVisible({nameVisible: true});
                   debugger;
                   const arrayOfWords = e.target.value.split(" ");
                   if (
@@ -281,6 +329,7 @@ const Landing = () => {
                 // <datalist id="locationList">
                 <Box
                   sx={{
+                    display: isVisible.nameVisible ? 'block' : 'none',
                     position: "absolute",
                     backgroundColor: "white",
                     width: {xs: "84.5%", sm: "89%", md: "62%"},
@@ -288,6 +337,7 @@ const Landing = () => {
                     borderRadius: "10px",
                     py: "0.5rem",
                   }}
+                  ref={locationSearchRef} 
                 >
                   <Box>
                     {/*  put the map function here and remove the all the button and put the onclick on button */}

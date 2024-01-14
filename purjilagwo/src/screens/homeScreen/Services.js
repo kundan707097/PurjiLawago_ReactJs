@@ -1,11 +1,11 @@
-import DepartmentCardData from "../DepartmentCardData";
+import DepartmentCardData from "../../components/DepartmentCardData";
 import Marquee from "react-fast-marquee";
-import { ServiceCard } from "../ServiceCard";
+import { ServiceCard } from "../../components/ServiceCard";
 import { Box, Button, Typography } from "@mui/material";
 import HealthCare from "../../assets/image/healthcare.png";
 import { Link } from "react-router-dom";
 
-const Service = () => {
+const Services = () => {
 
   function generateUniqueId(prefix = 'id') {
     const timestamp = Date.now().toString(36);
@@ -65,4 +65,4 @@ const Service = () => {
   );
 };
 
-export default Service;
+export default Services;

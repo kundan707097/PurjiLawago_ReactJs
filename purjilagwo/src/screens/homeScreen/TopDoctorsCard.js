@@ -3,7 +3,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Box, CardActionArea } from "@mui/material";
-import Hero from "../assets/image/bg-1.jpg";
+import Hero from "../../assets/image/bg-1.jpg";
 import { Link } from "react-router-dom";
 import {  StarFilled, LocationFilled } from "@carbon/icons-react";
 
