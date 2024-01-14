@@ -60,7 +60,7 @@ function Footer() {
                                 <li className="list-inline-item"><a href="">Blog</a></li>
                                 <li className="list-inline-item"><a href="">Contact</a></li>
                             </ul>
-                            <p>Copyright © 2023 | Designed With <i className="fa fa-heart"></i> by <a href="#" target="_blank">Sanjay</a></p>
+                            <p>Copyright © 2023 </p>
                             <ul className="social list-unstyled list-inline">
                                 <li className="list-inline-item"><a href=""><i className="fa-brands fa-facebook"></i></a></li>
                                 <li className="list-inline-item"><a href=""><i className="fa-brands fa-twitter"></i></a></li>
