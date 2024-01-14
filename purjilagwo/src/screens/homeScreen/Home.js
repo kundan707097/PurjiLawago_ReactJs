@@ -10,14 +10,12 @@ import Call from './Call';
 function Home() {
     return (
         <>
-
             <Landing />
             <InfoBanner />
             <Services />
             <TopDoctors />
             <LiveCounter />
             <Call />
-
         </>
     );
 }

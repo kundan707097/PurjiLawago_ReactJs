@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import BG1 from "../../assets/image/front-view-nurses-team-hospital_23-2150796738.avif";
 import "./Home.css";
 import { Location, Search } from "@carbon/icons-react";
+import DoctorService from '../../services/Doctor.services';
 
 const Landing = () => {
   const [locationData, setLocationData] = useState([]);
@@ -21,11 +22,11 @@ const Landing = () => {
     const handleClickOutside = (event) => {
       if (locationSearchRef.current && !locationSearchRef.current.contains(event.target)) {
         // Clicked outside the container
-        setIsVisible({locationVisible: false});
+        setIsVisible({ locationVisible: false });
       }
       if (nameSearchRef.current && !nameSearchRef.current.contains(event.target)) {
         // Clicked outside the container
-        setIsVisible({nameVisible: false});
+        setIsVisible({ nameVisible: false });
       }
     };
 
@@ -42,45 +43,42 @@ const Landing = () => {
     const handleClickOutside = (event) => {
       if (nameSearchRef.current && !nameSearchRef.current.contains(event.target)) {
         // Clicked outside the container
-        setIsVisible({nameVisible: false});
+        setIsVisible({ nameVisible: false });
       }
     };
 
     // Add event listener on mount
     document.addEventListener('click', handleClickOutside);
 
-    // Cleanup: remove event listener on unmount
+    // Cleanup: remove event listener on unmount 
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
 
   useEffect(() => {
-    debugger;
-    const fetchLocationInformation = async () => {
+
+    (async () => {
       try {
-        const response = await fetch(
-          "https://localhost:44324/DoctorsInformation"
-        );
-        const data = await response.json();
-
-        if (Array.isArray(data) && data.length > 0) {
-          setLocationData(data);
-        }
+            const fetchLocationInformation = await DoctorService.AllDocInfo()
+          if (fetchLocationInformation !== undefined) {
+              debugger;
+              setLocationData(fetchLocationInformation);
+          }
       } catch (error) {
-        console.error("Error fetching location information:", error);
+          console.error(`Error fetching doctor information: ${error.message}`);
       }
-    };
-
-    fetchLocationInformation();
+  })();
   }, []);
 
-  const filteredLocations = locationData.filter((location) =>
-    location.city.toLowerCase().includes(searchLocation.toLowerCase())
-  );
+  const filteredLocations = locationData.filter((location, index, self) =>
+  location.city &&
+  location.city.toLowerCase().includes(searchLocation.toLowerCase()) &&
+  self.findIndex((otherLocation) => otherLocation.city === location.city) === index
+);
   const filteredName = locationData.filter((location) =>
-    location.first_Name.toLowerCase().includes(searchName.toLowerCase())
-  );
+  location.user_Name && location.user_Name.toLowerCase().includes(searchName.toLowerCase())
+);
 
   const handleDoctorListSelect = (selectedLocation) => {
     window.location.href = `/doctorlist/${selectedLocation}`;
@@ -199,32 +197,27 @@ const Landing = () => {
                 value={searchLocation}
                 onInput={(e) => {
                   setSearchLocation(e.target.value);
-                  setIsVisible({locationVisible: true});
-                  if (
-                    filteredLocations.some(
-                      (location) => location.city === e.target.value
-                    )
-                  ) {
-                    handleDoctorListSelect(e.target.value);
-                  }
+                  setIsVisible({ locationVisible: true });
+
                 }}
               />
 
-              { searchLocation.length >= 3 && (
+              {searchLocation.length >= 3 &&filteredLocations.length > 0 && (
                 <Box
                   sx={{
                     display: isVisible.locationVisible ? 'block' : 'none',
                     position: "absolute",
                     backgroundColor: "white",
                     width: "100%",
-                    top: {xs: "130px", sm: "120px", md: "40px"},
+                    top: { xs: "130px", sm: "120px", md: "40px" },
                     borderRadius: "10px",
                     py: "0.5rem",
                   }}
-                  ref={locationSearchRef} 
+                  ref={locationSearchRef}
                 >
                   <Box>
                     {/*  put the map function here and remove the all the button and put the onclick on button */}
+                    {filteredLocations.map((location) => (
                     <button
                       style={{
                         padding: "10px",
@@ -234,59 +227,18 @@ const Landing = () => {
                         border: "none",
                       }}
                       className="landing-dropdown"
-                      // value={location.city}
-                    >
-                      Bihar
-                    </button>
-                    <button
-                      style={{
-                        padding: "10px",
-                        cursor: "pointer",
-                        width: "100%",
-                        textAlign: "left",
-                        border: "none",
+                      onClick={() => {
+                        setSearchLocation(location.city);
+                        setIsVisible({ locationVisible: false });
+                        handleDoctorListSelect(location.city);
                       }}
-                      className="landing-dropdown"
+                    // value={location.city}
                     >
-                      Chattighar
+                     {location.city}
                     </button>
-                    <button
-                      style={{
-                        padding: "10px",
-                        cursor: "pointer",
-                        width: "100%",
-                        textAlign: "left",
-                        border: "none",
-                      }}
-                      className="landing-dropdown"
-                    >
-                      London
-                    </button>
-                    <button
-                      style={{
-                        padding: "10px",
-                        cursor: "pointer",
-                        width: "100%",
-                        textAlign: "left",
-                        border: "none",
-                      }}
-                      className="landing-dropdown"
-                    >
-                      USa
-                    </button>
+                     ))}
                   </Box>
                 </Box>
-              )}
-
-              {searchLocation.length >= 3 && (
-                <datalist id="locationList">
-                  {filteredLocations.map((location) => (
-                    <option
-                      key={`${location.id}location`}
-                      value={location.city}
-                    />
-                  ))}
-                </datalist>
               )}
             </Box>
 
@@ -312,35 +264,26 @@ const Landing = () => {
                 value={searchName}
                 onInput={(e) => {
                   setSearchName(e.target.value);
-                  setIsVisible({nameVisible: true});
-                  debugger;
-                  const arrayOfWords = e.target.value.split(" ");
-                  if (
-                    filteredName.some(
-                      (name) => name.first_Name === arrayOfWords[0]
-                    )
-                  ) {
-                    debugger;
-                    handledoctorNameSelect(filteredName[0].id);
-                  }
+                  setIsVisible({ nameVisible: true });
                 }}
               />
-              {searchName.length >= 3 && (
+              {searchName.length >= 3 && filteredName.length > 0 && (
                 // <datalist id="locationList">
                 <Box
                   sx={{
                     display: isVisible.nameVisible ? 'block' : 'none',
                     position: "absolute",
                     backgroundColor: "white",
-                    width: {xs: "84.5%", sm: "89%", md: "62%"},
-                    top: {xs: "180px", sm: "160px", md: "50px"},
+                    width: { xs: "84.5%", sm: "89%", md: "62%" },
+                    top: { xs: "180px", sm: "160px", md: "50px" },
                     borderRadius: "10px",
                     py: "0.5rem",
                   }}
-                  ref={locationSearchRef} 
+                  ref={locationSearchRef}
                 >
                   <Box>
                     {/*  put the map function here and remove the all the button and put the onclick on button */}
+                    {filteredName.map((name) => (
                     <button
                       style={{
                         padding: "10px",
@@ -350,46 +293,17 @@ const Landing = () => {
                         border: "none",
                       }}
                       className="landing-dropdown"
-                      // value={location.city}
-                    >
-                      Bihar
-                    </button>
-                    <button
-                      style={{
-                        padding: "10px",
-                        cursor: "pointer",
-                        width: "100%",
-                        textAlign: "left",
-                        border: "none",
+                      onClick={() => {
+                        setSearchName(name.user_Name);
+                        setIsVisible({ nameVisible: false });
+                        handledoctorNameSelect(name.id);
                       }}
-                      className="landing-dropdown"
+                    // value={location.city}
                     >
-                      Chattighar
+                      {name.user_Name}
                     </button>
-                    <button
-                      style={{
-                        padding: "10px",
-                        cursor: "pointer",
-                        width: "100%",
-                        textAlign: "left",
-                        border: "none",
-                      }}
-                      className="landing-dropdown"
-                    >
-                      London
-                    </button>
-                    <button
-                      style={{
-                        padding: "10px",
-                        cursor: "pointer",
-                        width: "100%",
-                        textAlign: "left",
-                        border: "none",
-                      }}
-                      className="landing-dropdown"
-                    >
-                      USa
-                    </button>
+                      ))}
+                    
                   </Box>
                 </Box>
               )}

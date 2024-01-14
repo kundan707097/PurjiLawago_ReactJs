@@ -47,16 +47,24 @@ function Doctors() {
         // }
         window.location.href = `/doctorsdetails/${id}`;
     };
-    const filteredLocations = doctorInfo !== null
-        ? doctorInfo.filter((data) =>
-            data.city.toLowerCase().includes(location.toLowerCase())
-        )
-        : [];
-    const filteredDoctInfo = doctorInfo !== null
-        ? doctorInfo.filter((data) =>
-            data.city.toLowerCase().includes(location.toLowerCase())
-        )
-        : [];
+    // const filteredLocations = doctorInfo !== null
+    // ? doctorInfo.filter((data) =>
+    //     data.city && data.city.toLowerCase().includes(location.toLowerCase())
+    // )
+    // : [];
+
+    const filteredLocations =doctorInfo !== null? doctorInfo.filter((data, index, self) =>
+    data.city &&
+    data.city.toLowerCase().includes(location.toLowerCase()) &&
+    self.findIndex((otherLocation) => otherLocation.city === data.city) === index
+    )
+    : [];
+
+const filteredDoctInfo = doctorInfo !== null
+    ? doctorInfo.filter((data) =>
+        data.city && data.city.toLowerCase().includes(location.toLowerCase())
+    )
+    : [];
 
     const handleBookConsultation = (doctorId) => {
         // Perform actions with the doctorId and other data
