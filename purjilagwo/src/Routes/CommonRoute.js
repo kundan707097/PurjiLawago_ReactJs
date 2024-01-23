@@ -1,6 +1,9 @@
 
 import React, { lazy } from 'react';
 import Home from '../screens/homeScreen/Home';
+import VideoConsult from '../screens/videoconsult/VideoConsult';
+import Medicine from '../screens/medicine/Medicine';
+import LabTest from '../screens/labtest/LabTest';
 const DoctorDetails = lazy(() => import('../screens/doctorInformationScreen/DoctorsDetails'));
 const DoctorList = lazy(() => import('../screens/doctorInformationScreen/DoctorList'));
 const DoctorAppointment = lazy(() => import('../screens/doctorInformationScreen/DoctorAppointment'));
@@ -24,6 +27,18 @@ export const commonroutes = [
   {
     path: '/doctorAppointment',
     element: <DoctorAppointment />,
+  },
+  {
+    path: '/videoConsult',
+    element: <VideoConsult />,
+  },
+  {
+    path: '/medicine',
+    element: <Medicine />,
+  },
+  {
+    path: '/labTest',
+    element: <LabTest />,
   },
 ];
 

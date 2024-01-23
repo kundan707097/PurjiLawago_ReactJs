@@ -6,7 +6,7 @@ function Header() {
     const [token, setToken] = useState(null);
     const [name, setName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const navigate= useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Retrieve the token from local storage
@@ -34,45 +34,54 @@ function Header() {
         if (window.location.pathname === '/') {
             // Reload the page
             window.location.reload();
-          }
-          else{
-        navigate('/');
-          }
+        }
+        else {
+            navigate('/');
+        }
 
 
     };
     const handleLogoClick = () => {
         navigate('/');
-      };
-      const handleFindDocotr = () => {
+    };
+    const handleFindDocotr = () => {
         navigate('/doctorlist');
-      };
-    
+    };
+    const handleVideoConsult = () => {
+        navigate('/videoConsult');
+    };
+    const handleMedicine = () => {
+        navigate('/medicine');
+    };
+    const handleLabTest = () => {
+        navigate('/labTest');
+    };
+
 
 
     return (
         <>
             <header className="pageHeader"   >
-                <nav className="navbar navbar-expand-lg navbar-light navbar-white bg-white" aria-label="Eighth navbar example" style={{zIndex: 999}}>
+                <nav className="navbar navbar-expand-lg navbar-light navbar-white bg-white" aria-label="Eighth navbar example" style={{ zIndex: 999 }}>
                     <div className="container">
-                        <a className="navbar-brand" onClick={ handleLogoClick} ><img src="/images/logo.png" alt="Logo" className="" /></a>
-                        <button className="navbar-toggler" type="button"  data-bs-toggle="collapse" data-bs-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+                        <a className="navbar-brand" onClick={handleLogoClick} style={{ cursor: "pointer" }} ><img src="/images/logo.png" alt="Logo" className="" /></a>
+                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"></span>
                         </button>
 
                         <div className="collapse navbar-collapse" id="navbarsExample07">
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li className="nav-item">
-                                    <a className="nav-link active" aria-current="page" onClick={handleFindDocotr}>Find Doctor</a>
+                                    <a className="nav-link active" aria-current="page" onClick={handleFindDocotr} >Find Doctor</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="javascript:void(0)">Video Consult</a>
+                                    <a className="nav-link" onClick={handleVideoConsult}>Video Consult</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="javascript:void(0)">Medicine</a>
+                                    <a className="nav-link" onClick={handleMedicine}>Medicine</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href="javascript:void(0)">Lab Test</a>
+                                    <a className="nav-link" onClick={handleLabTest}>Lab Test</a>
                                 </li>
                                 <li className="nav-item dropdown">
                                     <a className="nav-link dropdown-toggle" href="javascript:void(0)" id="dropdown07" data-bs-toggle="dropdown" aria-expanded="false">Surgeries</a>
@@ -138,7 +147,7 @@ function Header() {
                                             name="Practo login"
                                             event="Nav Bar:Interacted:Practo login"
                                             className="btn btn-sm btn-outline-primary"
-                                            style={{borderRadius: "12px",  padding: "5px 20px", marginRight: "10px"}}
+                                            style={{ borderRadius: "12px", padding: "5px 20px", marginRight: "10px" }}
                                         >
                                             Login / Signup
                                         </a>

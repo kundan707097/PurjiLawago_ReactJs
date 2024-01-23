@@ -5,7 +5,6 @@ import InfoBanner from './InfoBanner';
 import Services from './Services';
 import TopDoctors from './TopDoctors';
 import LiveCounter from './LiveCounter';
-import Call from './Call';
 
 function Home() {
     return (
@@ -16,7 +15,6 @@ function Home() {
             <Services />
             <TopDoctors />
             <LiveCounter />
-            <Call />
 
         </>
     );

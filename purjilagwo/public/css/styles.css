@@ -100,6 +100,7 @@ textarea:focus {
 .pageHeader{
     border:1px solid #f0f0f5;
     box-shadow: 0 2px #f0f0f5;
+    z-index: 999;
 }
 .navbar-brand img {
   max-width: 60px;
@@ -107,6 +108,7 @@ textarea:focus {
 .nav-link {    
     color: #2d2d32;
     font-weight: 600;
+    cursor: pointer;
 }
 
 
@@ -756,10 +758,12 @@ footer {
     padding-right: 0.4rem;
     padding-left: .4rem;
     font-size: 14px;
+    cursor: pointer;
   }
   .nav-link {    
     padding: .5rem 0.5rem; 
     font-size: 14px;
+    cursor: pointer;
 }
 .mainBannerArea{padding-top:90px; padding-bottom: 90px;}
 .aboutVidoe {
@@ -822,6 +826,7 @@ h1 {
 @media screen and (max-width: 600px) {
   .rightNav .dropdown, .rightNav span {
     width: 100%;
+    z-index: 999;
 }
 .flex-sm-wrap{
   flex-wrap: wrap;
