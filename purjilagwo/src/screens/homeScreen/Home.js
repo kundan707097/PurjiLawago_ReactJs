@@ -10,7 +10,6 @@ import AppBanner from './AppBanner';
 function Home() {
     return (
         <>
-
             <Landing />
             <InfoBanner />
             <Services />

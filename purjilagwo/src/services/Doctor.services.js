@@ -35,8 +35,22 @@ const AllDocInfo = async (location) => {
     }
 };
 
+const AllDoctorsListInSpeciality =async (groupId) =>{
+    try{
+        const response =await axiosClient({
+            method: 'GET',
+            url: `https://localhost:44324/DoctorsGroup/groupId?groupId=${groupId}`,
+        });
+        return response.data;
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+}
+
 
 const DoctorService = {
-    DoctorInformation,DocInfoOnLocation,AllDocInfo
+    DoctorInformation,DocInfoOnLocation,AllDocInfo,AllDoctorsListInSpeciality
 };
 export default DoctorService;

@@ -13,11 +13,12 @@ import CardContent from '@mui/material/CardContent';
 import Footer from '../../components/Footer';
 
 function Doctors() {
+    const { groupId } = useParams();
     const { location: routeLocation } = useParams();
     const [location, setLocation] = useState(routeLocation || ''); // Initialize with the route location if available
     const [doctorInfo, setDoctorInfo] = useState(null);
     const [doctorName, setDoctorName] = useState(null);
-    const [isSticky, setIsSticky] = useState(false);
+    debugger;    const [isSticky, setIsSticky] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -43,18 +44,22 @@ function Doctors() {
     useEffect(() => {
         (async () => {
             try {
-                let response = null;
-                if (location) {
-                    response = await DoctorService.DocInfoOnLocation(location);
+                let response=null;
+                debugger;
+                if(groupId){
+                    response = await DoctorService.AllDoctorsListInSpeciality(groupId);
+                    debugger;
+                }
+                else if(location){
+                response = await DoctorService.DocInfoOnLocation(location);
                 }
                 else {
                     response = await DoctorService.AllDocInfo();
                 }
 
                 if (response !== undefined) {
-                    debugger;
                     setDoctorInfo(response);
-
+                    //.doctorsDetaiList
                 }
             } catch (error) {
                 console.error(`Error fetching doctor information: ${error.message}`);
@@ -77,16 +82,24 @@ function Doctors() {
         // }
         window.location.href = `/doctorsdetails/${id}`;
     };
-    const filteredLocations = doctorInfo !== null
-        ? doctorInfo.filter((data) =>
-            data.city.toLowerCase().includes(location.toLowerCase())
-        )
-        : [];
-    const filteredDoctInfo = doctorInfo !== null
-        ? doctorInfo.filter((data) =>
-            data.city.toLowerCase().includes(location.toLowerCase())
-        )
-        : [];
+    // const filteredLocations = doctorInfo !== null
+    // ? doctorInfo.filter((data) =>
+    //     data.city && data.city.toLowerCase().includes(location.toLowerCase())
+    // )
+    // : [];
+
+    const filteredLocations =doctorInfo !== null? doctorInfo.filter((data, index, self) =>
+    data.city &&
+    data.city.toLowerCase().includes(location.toLowerCase()) &&
+    self.findIndex((otherLocation) => otherLocation.city === data.city) === index
+    )
+    : [];
+
+const filteredDoctInfo = doctorInfo !== null
+    ? doctorInfo.filter((data) =>
+        data.city && data.city.toLowerCase().includes(location.toLowerCase())
+    )
+    : [];
 
     const handleBookConsultation = (doctorId) => {
         // Perform actions with the doctorId and other data
