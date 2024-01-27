@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../../style/DoctorList.css';
 import DoctorService from '../../services/Doctor.services';
-import DoctorsList from './DoctorsList';
-import { Box, Typography, Button, Container, Divider } from '@mui/material';
+import DoctorsListCard from './DoctorsListCard';
+import { Box, Typography, Button, Container } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { Location, LocationFilled, Search } from '@carbon/icons-react';
 import { CardActionArea } from '@mui/material';
@@ -397,21 +397,14 @@ function Doctors() {
 
                     ) : (
                         <>
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
-                            <DoctorsList />
+                        {/* Replace the card with the not found */}
+                            <DoctorsListCard />
+                            <DoctorsListCard />
+                            <DoctorsListCard />
+                            <DoctorsListCard />
+                            <DoctorsListCard />
+                            <DoctorsListCard />
+                            {/* <Typography>Not found</Typography> */}
                         </>
                     )}
 

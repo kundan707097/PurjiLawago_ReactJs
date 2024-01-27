@@ -5,6 +5,7 @@ import InfoBanner from './InfoBanner';
 import Services from './Services';
 import TopDoctors from './TopDoctors';
 import LiveCounter from './LiveCounter';
+import AppBanner from './AppBanner';
 
 function Home() {
     return (
@@ -14,6 +15,7 @@ function Home() {
             <InfoBanner />
             <Services />
             <TopDoctors />
+            <AppBanner />
             <LiveCounter />
 
         </>
