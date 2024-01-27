@@ -4,17 +4,23 @@ import '../../style/DoctorList.css';
 import DoctorService from '../../services/Doctor.services';
 
 function Doctors() {
+    const { groupId } = useParams();
     const { location: routeLocation } = useParams();
     const [location, setLocation] = useState(routeLocation || ''); // Initialize with the route location if available
     const [doctorInfo, setDoctorInfo] = useState(null);
     const [doctorName, setDoctorName] = useState(null);
-
+    debugger;
 
     useEffect(() => {
         (async () => {
             try {
                 let response=null;
-                if(location){
+                debugger;
+                if(groupId){
+                    response = await DoctorService.AllDoctorsListInSpeciality(groupId);
+                    debugger;
+                }
+                else if(location){
                 response = await DoctorService.DocInfoOnLocation(location);
                 }
                 else{
@@ -22,9 +28,8 @@ function Doctors() {
                 }
 
                 if (response !== undefined) {
-                    debugger;
                     setDoctorInfo(response);
-
+                    //.doctorsDetaiList
                 }
             } catch (error) {
                 console.error(`Error fetching doctor information: ${error.message}`);

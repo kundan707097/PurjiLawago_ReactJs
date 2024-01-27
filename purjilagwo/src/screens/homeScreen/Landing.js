@@ -88,6 +88,11 @@ const Landing = () => {
     window.location.href = `/doctorsdetails/${selectedLocation}`;
   };
 
+  const handleButtonClick = () => {
+    // Redirect to the DoctorList page
+    window.location.href = "/doctorlist";
+  };
+
   return (
     <>
       <Box display={"flex"} sx={{ backgroundColor: "#F0F7FF", zIndex: 12 }}>
@@ -131,6 +136,7 @@ const Landing = () => {
                 padding: "10px",
                 marginRight: { xs: "auto", sm: "10px" },
               }}
+              onClick={handleButtonClick}
             >
               <Link style={{ width: "100%", color: "white" }}>
                 Book Appointment with Doctors
