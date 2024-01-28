@@ -6,6 +6,7 @@ import { privateRoutes } from '../Routes/PrivateRoutes';
 import commonroutes from './CommonRoute';
 import {ProtectedRoute ,PublicRoute,CommonRoute} from '../Routes/ProtectedRoute';
 import NotFound from '../screens/proxy/NotFound';
+import Loading from '../components/Loading';
 
 function Routing() {
   const location = useLocation();
@@ -17,7 +18,7 @@ function Routing() {
       <Route path="*" element={<NotFound />} />
       {routevalues.map((route, index) => (
           <Route key={index} path={route.path} element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading />}>
               <PublicRoute>
               {route.element}
               </PublicRoute>
@@ -26,7 +27,7 @@ function Routing() {
         ))}
          {commonroutes.map((route, index) => (
           <Route key={index} path={route.path} element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading />}>
               <CommonRoute>
               {route.element}
               </CommonRoute>
@@ -35,7 +36,7 @@ function Routing() {
         ))}
         {privateRoutes.map((route, index) => (
           <Route key={index} path={route.path} element={
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loading />}>
             <ProtectedRoute>
               {route.element}
             </ProtectedRoute>
