@@ -18,7 +18,7 @@ function Doctors() {
     const [location, setLocation] = useState(routeLocation || ''); // Initialize with the route location if available
     const [doctorInfo, setDoctorInfo] = useState(null);
     const [doctorName, setDoctorName] = useState(null);
-    debugger;    const [isSticky, setIsSticky] = useState(false);
+       const [isSticky, setIsSticky] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -45,10 +45,10 @@ function Doctors() {
         (async () => {
             try {
                 let response=null;
-                debugger;
+                // debugger;
                 if(groupId){
                     response = await DoctorService.AllDoctorsListInSpeciality(groupId);
-                    debugger;
+                    // debugger;
                 }
                 else if(location){
                 response = await DoctorService.DocInfoOnLocation(location);
@@ -259,14 +259,14 @@ const filteredDoctInfo = doctorInfo !== null
             <Box sx={{ backgroundColor: "#F5F5F5", position: "absolute", width: "100%" }}>
 
                 <Box sx={{ backgroundColor: "white", borderBottom: "2px solid #E5EAF2", boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", py: isSticky ? "20px" : "30px", position: isSticky ? "sticky" : "static", top: "0px", zIndex: 999, transition: "padding 0.2s ease-in-out", width: "100%" }}>
-                    <Container sx={{ width: "70%", }} >
+                    <Container sx={{ width: {sx: "100%" ,md:"70%"} }} >
                         <Box
                             sx={{
                                 display: "flex",
                                 justifyContent: "space-evenly",
                                 boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)",
                                 border: "1px solid black",
-                                p: { xs: "30px", sm: "30px", md: "0" },
+                                px: { xs: "10px", md: "0" },
                                 zIndex: 1,
                                 backgroundColor: "white",
                                 flexDirection: { xs: "column", sm: "column", md: "row" },
@@ -368,7 +368,7 @@ const filteredDoctInfo = doctorInfo !== null
 
                     {doctorInfo && doctorInfo.length > 0 ? (
                         doctorInfo.map((doctor) => (
-                            <Card sx={{ maxWidth: 400, borderRadius: "12px", boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", mx: "1rem", backgroundColor: "white" }}  >
+                            <Card sx={{ width: 400, borderRadius: "12px", boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", border: "2px solid #E5EAF2", }}  >
                                 <CardActionArea sx={{ p: "20px" }} onClick={() => handleDoctorListClick(doctor.id)}>
                                     <Box sx={{ display: "flex", alignItems: "start", }}>
                                         <Avatar
@@ -376,7 +376,7 @@ const filteredDoctInfo = doctorInfo !== null
                                             src="../../images/doc-1.jpg"
                                             sx={{ width: 100, height: 100, border: "1px solid #42A5F5", mt: "1rem" }}
                                         />
-                                        <CardContent>
+                                        <CardContent sx={{height:140}}>
                                             <Typography variant="h5" component="div">
                                                 {doctor?.user_Name}
                                             </Typography>
@@ -389,7 +389,7 @@ const filteredDoctInfo = doctorInfo !== null
                                             <Typography variant="body2" color="text.secondary" lineHeight={1.5}>
                                                 {doctor?.education}
                                             </Typography>
-                                            <Typography variant="body2" color="text.secondary" lineHeight={1.5} fontWeight={800}>
+                                            <Typography variant="body2" color="text.secondary" lineHeight={1.5} fontWeight={600}>
                                                 Starts at ₹45000
                                             </Typography>
                                         </CardContent>
@@ -411,13 +411,11 @@ const filteredDoctInfo = doctorInfo !== null
                     ) : (
                         <>
                         {/* Replace the card with the not found */}
-                            <DoctorsListCard />
-                            <DoctorsListCard />
-                            <DoctorsListCard />
-                            <DoctorsListCard />
-                            <DoctorsListCard />
-                            <DoctorsListCard />
-                            {/* <Typography>Not found</Typography> */}
+
+                        <Box sx={{height: "40vh", }}> 
+                            <Typography >Not found</Typography>
+                        </Box>
+                            
                         </>
                     )}
 
