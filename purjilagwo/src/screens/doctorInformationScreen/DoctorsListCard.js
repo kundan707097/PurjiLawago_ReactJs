@@ -4,12 +4,12 @@ import CardContent from '@mui/material/CardContent';
 import { Box, Button, Typography } from "@mui/material";
 import { CardActionArea } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import {  LocationFilled } from '@carbon/icons-react';
+import { LocationFilled } from '@carbon/icons-react';
 
-const DoctorsList = () => {
+const DoctorsList = (props) => {
     return (
         <>
-            <Card sx={{ maxWidth: 400, boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", border: "2px solid #E5EAF2", }}  >
+            <Card sx={{ width: 400, boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", border: "2px solid #E5EAF2", }}  >
                 <CardActionArea sx={{ p: "20px" }}>
                     <Box sx={{ display: "flex", alignItems: "start", }}>
                         <Avatar
@@ -17,27 +17,27 @@ const DoctorsList = () => {
                             src="../../images/doc-1.jpg"
                             sx={{ width: 100, height: 100, border: "1px solid #42A5F5", mt: "1rem" }}
                         />
-                        <CardContent>
+                        <CardContent sx={{height:140}}>
                             <Typography variant="h5" component="div">
-                                Dr.Nandini Gupta
+                                {props.user_Name}
                             </Typography>
                             <Typography variant="body2" color="text.secondary" lineHeight={1.5}>
-                                Counselling specialist
+                                {props.speciality}
                             </Typography>
                             <Typography variant="body2" color="text.secondary" lineHeight={1.5}>
-                                25 years experience
+                                {props.experience} experience
                             </Typography>
                             <Typography variant="body2" color="text.secondary" lineHeight={1.5}>
-                                MBBS MD (General Medicine)
+                                {props.education}
                             </Typography>
-                            <Typography variant="body2" color="text.secondary" lineHeight={1.5} fontWeight={800}>
-                                Starts at ₹45000
+                            <Typography variant="body2" color="text.secondary" lineHeight={1.5} fontWeight={600}>
+                                Starts at ₹{props.fees}
                             </Typography>
                         </CardContent>
                     </Box>
                     <Box>
                         <Box sx={{ display: "flex", alignItems: "center", mb: "5px" }}><img src="../images/language.png" alt="" style={{ width: "2rem" }} /><Typography sx={{ ml: "10px", fontSize: "15px" }}>English, Hindi</Typography></Box>
-                        <Box sx={{ display: "flex", alignItems: "center", }}><LocationFilled color='#0A6BD2' size={20} /><Typography sx={{ ml: "21px", fontSize: "15px" }}>Patna, Bihar</Typography></Box>
+                        <Box sx={{ display: "flex", alignItems: "center", }}><LocationFilled color='#0A6BD2' size={20} /><Typography sx={{ ml: "21px", fontSize: "15px" }}>{props.address}</Typography></Box>
                     </Box>
                     <Button
                         variant="contained"
