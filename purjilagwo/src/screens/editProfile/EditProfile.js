@@ -383,7 +383,7 @@ function EditProfile() {
 
               <Box mx="2.4rem"></Box>
               <InputBox
-                id="name"
+                id="launguage"
                 title="Language"
                 type="dropdown"
                 required
