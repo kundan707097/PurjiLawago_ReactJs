@@ -105,6 +105,7 @@ function InputBox(props) {
               {props.title}
             </Typography>
             <input
+            id={props.id}
               type="text"
               style={{
                 border: "1px solid gray",
