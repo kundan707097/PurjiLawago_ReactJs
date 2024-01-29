@@ -8,6 +8,7 @@ export default function Doctor() {
   const [activeTab, setActiveTab] = useState(1);
   const [doctorData, setDoctorData] = useState(null);
 
+
   const handleTabClick = (tabNumber) => {
     setActiveTab(tabNumber);
   };
@@ -31,6 +32,8 @@ export default function Doctor() {
     })();
   }, [id]);
   console.log("doctorInformation",doctorData);
+
+ 
 
   return (
     <>
@@ -438,40 +441,48 @@ export default function Doctor() {
               <div className="sb-container">
                 <h3>Book an appointment for Consultation</h3>
 
-                <div className="day-nav">
-                  <div className="left-arrow arrow"></div>
+                    <div className="day-nav">
+                      <div className="left-arrow arrow"></div>
+                      {/* {renderDateSlots()} */}
+                      <div className="active">
+                        <p>Today</p>
+                        <p>8 slot available</p>
+                      </div>
 
-                  <div className="active">
-                    <p>Today</p>
-                    <p>8 slot available</p>
-                  </div>
+                      <div className="">
+                        <p>Tomorrow</p>
+                        <p>8 slot available</p>
+                      </div>
 
-                  <div className="">
-                    <p>Tomorrow</p>
-                    <p>8 slot available</p>
-                  </div>
+                      <div className="">
+                        <p>Thu, 2 Nov</p>
+                        <p>8 slot available</p>
+                      </div>
+                      <div className="">
+                        <p>Thu, 3 Nov</p>
+                        <p>8 slot available</p>
+                      </div>
+                      <div className="">
+                        <p>Thu, 4 Nov</p>
+                        <p>8 slot available</p>
+                      </div>
 
-                  <div className="">
-                    <p>Thu, 2 Nov</p>
-                    <p>8 slot available</p>
-                  </div>
+                      <div className="right-arrow arrow"></div>
+                    </div>
 
-                  <div className="right-arrow arrow"></div>
-                </div>
-
-                <h6>Evening</h6>
-                <div className="slot-container">
-                  <div className="slot">06:00 PM</div>
-                  <div className="slot">06:15 PM</div>
-                  <div className="slot">06:30 PM</div>
-                  <div className="slot">06:45 PM</div>
-                  <div className="slot">07:00 PM</div>
-                  <div className="slot">07:15 PM</div>
-                  <div className="slot">07:30 PM</div>
-                  <div className="slot">07:45 PM</div>
-                  <div className="slot">08:00 PM</div>
-                  <div className="slot">08:15 PM</div>
-                </div>
+                    <h6>Evening</h6>
+                    <div className="slot-container">
+                      <div className="slot">06:00 PM</div>
+                      <div className="slot">06:15 PM</div>
+                      <div className="slot">06:30 PM</div>
+                      <div className="slot">06:45 PM</div>
+                      <div className="slot">07:00 PM</div>
+                      <div className="slot">07:15 PM</div>
+                      <div className="slot">07:30 PM</div>
+                      <div className="slot">07:45 PM</div>
+                      <div className="slot">08:00 PM</div>
+                      <div className="slot">08:15 PM</div>
+                    </div>
 
                 <p className="add-info">
                   After you have submitted the appointment request, we might call to confirm the preferred appointment slot.

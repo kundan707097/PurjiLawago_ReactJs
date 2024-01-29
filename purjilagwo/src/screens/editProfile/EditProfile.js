@@ -7,20 +7,111 @@ import { SingleInputTimeRangeField } from "@mui/x-date-pickers-pro";
 import dayjs from "dayjs";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import ProfileUpdate from "../../services/Update.services";
 
 function EditProfile() {
+  debugger;
   const [value, setValue] = useState({
+    id: 116,
+    image:"",
     name: "",
+    phonenumber: "",
+    email: "",
+    gender: "",
+    dateofbirth: "",
+    education: "",
+    experience: "",
+    specialization: "",
+    description: "",
+    lunchTime: "",
+    availableTime: "",
+    consultantFee: "",
+    houseNoStreetArea: "",
+    colonyStreetLocality: "",
+    city: "",
+    state: "",
+    country: "",
+    days: "",
+    pincode: "",
+    extraphonenumbers: "",
+    language: "",
   });
+  const [day, setDays] = useState({
+    monday: false,
+    tuesday: false,
+    Wednesday: false,
+    thursday: false,
+    friday: false,
+    saturday: false,
+    sunday: false,
+  });
+  const [image, setImage] = useState(null);
+
+  const handleUpdateProfile = async () => {
+    debugger;
+    try {
+      const response = await ProfileUpdate.UpdateProfile(value);
+
+      if (response.ok) {
+        debugger;
+        const responseData = await response.json();
+        console.log('Profile updated successfully:', responseData);
+      } else {
+        console.error('Error updating profile:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
+  };
 
   const handleChange = (e) => {
-    setValue({ ...value, [e.target.id]: e.target.value });
+    debugger;
+    setValue((prevValue) => ({
+      ...prevValue,
+      [e.target.id]: e.target.value
+    }));
+
+    console.log(value);
+  };
+  const handleDayChange = (id) => {
+      setDays((prevDays) => ({
+        ...prevDays,
+        [id]: !prevDays[id], // Toggle the checkbox state
+      }));
+    const selectedDays = Object.keys(day).filter((key) => day[key]);
+    debugger;
+    setValue({
+      ...value,
+      days: selectedDays,
+    });
+
+  };
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    const reader = new FileReader();
+  
+    reader.onload = (upload) => {
+      debugger;
+      const base64Image = upload.target.result;
+      setImage(base64Image);
+  
+      // Update the 'image' property in the 'value' state with base64 format
+      setValue((prevValue) => ({
+        ...prevValue,
+        image: base64Image,
+      }));
+    };
+  
+    if (selectedImage) {
+      reader.readAsDataURL(selectedImage);
+      // You can also send the image to the backend here (as base64 or other format)
+    }
   };
 
   const genderArray = ["Male", "Female", "Other"];
   const languageArray = ["Hindi", "English", "Other"];
   const countryArray = ["India", "Other"];
-  const experienceArray = ["0-2 yrs", "2-4 yrs", "4-6 yrs", "6-8 yrs", "8-10 yrs", "10-12 yrs", "12-14 yrs", "14-16 yrs", "16-18yrs", "18-20 yrs", "20+ yrs" ];
+  const experienceArray = ["0-2 yrs", "2-4 yrs", "4-6 yrs", "6-8 yrs", "8-10 yrs", "10-12 yrs", "12-14 yrs", "14-16 yrs", "16-18yrs", "18-20 yrs", "20+ yrs"];
 
   return (
     <>
@@ -47,6 +138,8 @@ function EditProfile() {
                 boxShadow: "none",
                 px: 2
               }}
+
+              onClick={handleUpdateProfile}
             >
               Update
             </Button>
@@ -61,7 +154,7 @@ function EditProfile() {
               <Typography sx={{ fontSize: "12px", }}>Profile photo</Typography>
 
               <Box sx={{ display: "flex" }}>
-                <Avatar src="" sx={{ width: 100, height: 100 }} />
+              <Avatar src={image || ""} sx={{ width: 100, height: 100 }} />
                 <Box sx={{ ml: 2, mt: 2 }}>
                   <Typography sx={{ fontSize: "10px", width: "60%" }}>Pick a photo from your computer</Typography>
                   <Button sx={{ textTransform: "none" }} component="label">
@@ -70,7 +163,7 @@ function EditProfile() {
                       hidden
                       accept="image/png,image/jpg,image/svg,image/jpeg"
                       type="file"
-                      onChange={(e) => { }}
+                      onChange={handleImageChange} 
                     />
                   </Button>
                 </Box>
@@ -78,7 +171,7 @@ function EditProfile() {
             </Box>
 
             <InputBox
-              id="name"
+              id="name"  // Use "name" as the id
               title="Name"
               type="text"
               value={value.name}
@@ -101,25 +194,28 @@ function EditProfile() {
               }}
             >
               <InputBox
-                id="name"
+                id="phonenumber"
                 title="Phone number"
                 type="edit"
-                value={value.name}
-                to="/edit/phone"
+                value={value.phonenumber}
+              //to="/edit/phone"
               />
               <InputBox
-                id="name"
+                id="email"
                 title="Email"
                 type="edit"
-                value={value.name}
-                to="/edit/email"
+                value={value.email}
+              //to="/edit/email"
               />
               <InputBox
-                id="name"
+                id="gender"
                 title="Gender"
                 type="dropdown"
+                value={value.gender}
                 array={genderArray}
+                handleChange={handleChange}
               />
+
             </Box>
           </Box>
           <Box sx={{ borderBottom: "1px solid #dedede", pb: 5 }}>
@@ -131,10 +227,10 @@ function EditProfile() {
               }}
             >
               <InputBox
-                id="date"
+                id="dateofbirth"
                 title="Date of birth"
                 type="calender"
-                value={value.name}
+                value={value.dateofbirth}
                 handleChange={handleChange}
               />
             </Box>
@@ -159,14 +255,14 @@ function EditProfile() {
                 id="education"
                 title="Education"
                 type="text"
-                value={value.name}
+                value={value.education}
                 handleChange={handleChange}
               />
               <InputBox
                 id="experience"
                 title="Experience"
                 type="dropdown"
-                value={value.name}
+                value={value.experience}
                 handleChange={handleChange}
                 array={experienceArray}
               />
@@ -174,23 +270,23 @@ function EditProfile() {
                 id="specialization"
                 title="Specialization"
                 type="text"
-                value={value.name}
+                value={value.specialization}
                 handleChange={handleChange}
               />
 
             </Box>
           </Box>
-          <Box sx={{ borderBottom: "1px solid #dedede", pb: 5,display: "flex", justifyContent:{ xs: "center" ,lg: "start"},}}>
+          <Box sx={{ borderBottom: "1px solid #dedede", pb: 5, display: "flex", justifyContent: { xs: "center", lg: "start" }, }}>
             <Box
               sx={{
-                width: { xs: "16rem",md: "100%" ,lg: "80%" },
+                width: { xs: "16rem", md: "100%", lg: "80%" },
               }}
             >
               <InputBox
-                id="name"
+                id="description"
                 title="Description"
                 type="textarea"
-                value={value.name}
+                value={value.description}
                 handleChange={handleChange}
               />
             </Box>
@@ -198,68 +294,68 @@ function EditProfile() {
         </Container>
 
         {/* Container for Availability Details */}
-        
+
         <Container sx={{ backgroundColor: "white" }}>
           <Typography fontSize={"13px"} sx={{ pt: 4 }}>
             Availability
           </Typography>
-          <Box sx={{ pt: 2, display: "flex",justifyContent: {xs: "center", lg: "start"} }}>
+          <Box sx={{ pt: 2, display: "flex", justifyContent: { xs: "center", lg: "start" } }}>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                width: { xs: "16rem",md: "100%", lg: "80%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "start", md: "left" }
+                width: { xs: "16rem", md: "100%", lg: "80%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "start", md: "left" }
               }}
             >
               <InputBox
-                id="name"
+                id="monday"
                 label="Monday"
                 type="checkbox"
-                value={value.name}
-                handleChange={handleChange}
+                checked={day.monday}
+                handleChange={() => handleDayChange("monday")}
               />
               <InputBox
-                id="name"
+                id="tuesday"
                 label="Tuesday"
                 type="checkbox"
-                value={value.name}
-                handleChange={handleChange}
+                value={day.tuesday}
+                handleChange={() => handleDayChange("tuesday")}
               />
 
               <InputBox
-                id="name"
+                id="wednesday"
                 label="Wednesday"
                 type="checkbox"
-                value={value.name}
-                handleChange={handleChange}
+                value={day.Wednesday}
+                handleChange={() => handleDayChange("wednesday")}
               />
               <InputBox
-                id="name"
+                id="thursday"
                 label="Thursday"
                 type="checkbox"
-                value={value.name}
-                handleChange={handleChange}
+                value={day.thursday}
+                handleChange={() => handleDayChange("thursday")}
               />
               <InputBox
-                id="name"
+                id="friday"
                 label="Friday"
                 type="checkbox"
-                value={value.name}
-                handleChange={handleChange}
+                value={day.friday}
+                handleChange={() => handleDayChange("friday")}
               />
               <InputBox
-                id="name"
+                id="saturday"
                 label="Saturday"
                 type="checkbox"
-                value={value.name}
-                handleChange={handleChange}
+                value={day.saturday}
+                handleChange={() => handleDayChange("saturday")}
               />
               <InputBox
-                id="name"
+                id="sunday"
                 label="Sunday"
                 type="checkbox"
-                value={value.name}
-                handleChange={handleChange}
+                value={day.sunday}
+                handleChange={() => handleDayChange("sunday")}
               />
             </Box>
           </Box>
@@ -271,20 +367,24 @@ function EditProfile() {
               }}
             >
               <TimeRangePicker
-                id="name"
+                id="availableTime"
                 title="Available Time"
+                value={value.availableTime}
+                handleChange={handleChange}
               />
 
               <TimeRangePicker
-                id="name"
+                id="lunchTime"
                 title="Lunch Time"
+                value={value.lunchTime}
+                handleChange={handleChange}
               />
 
               <InputBox
-                id="name"
+                id="consultantFee"
                 title="Consultant Fee"
                 type="text"
-                value={value.name}
+                value={value.consultantFee}
                 handleChange={handleChange}
               />
             </Box>
@@ -306,24 +406,24 @@ function EditProfile() {
               }}
             >
               <InputBox
-                id="name"
+                id="houseNoStreetArea"
                 title="House No./ Street Name/ Area"
                 type="text"
-                value={value.name}
+                value={value.houseNoStreetArea}
                 handleChange={handleChange}
               />
               <InputBox
-                id="name"
+                id="colonyStreetLocality"
                 title="Colony / Street / Locality"
                 type="text"
-                value={value.name}
+                value={value.colonyStreetLocality}
                 handleChange={handleChange}
               />
               <InputBox
-                id="name"
+                id="city"
                 title="City"
                 type="text"
-                value={value.name}
+                value={value.city}
                 handleChange={handleChange}
               />
             </Box>
@@ -337,24 +437,26 @@ function EditProfile() {
               }}
             >
               <InputBox
-                id="name"
+                id="state"
                 title="State"
                 type="text"
-                value={value.name}
+                value={value.state}
                 handleChange={handleChange}
               />
               <InputBox
-                id="name"
+                id="country"
                 title="Country"
                 type="dropdown"
                 required
+                value={value.country}
+                handleChange={handleChange}
                 array={countryArray}
               />
               <InputBox
-                id="name"
+                id="pincode"
                 title="Pincode"
                 type="text"
-                value={value.name}
+                value={value.pincode}
                 handleChange={handleChange}
               />
             </Box>
@@ -374,20 +476,22 @@ function EditProfile() {
               }}
             >
               <InputBox
-                id="name"
+                id="extraphonenumbers"
                 title="Extra phone numbers"
                 type="text"
-                value={value.name}
+                value={value.extraphonenumbers}
                 handleChange={handleChange}
               />
 
               <Box mx="2.4rem"></Box>
               <InputBox
-                id="name"
+                id="language"
                 title="Language"
                 type="dropdown"
                 required
                 array={languageArray}
+                value={value.language}
+                handleChange={handleChange}
               />
             </Box>
           </Box>

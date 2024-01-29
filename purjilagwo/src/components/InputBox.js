@@ -106,6 +106,7 @@ function InputBox(props) {
             </Typography>
             <input
               type="text"
+              id={props.id}
               style={{
                 border: "1px solid gray",
                 fontSize: "14px",
@@ -136,6 +137,7 @@ function InputBox(props) {
                 borderRadius: "8px",
                 width: "100%",
               }}
+              id={props.id}
               onChange={props.handleChange}
             />
           </Box>
@@ -151,10 +153,14 @@ function InputBox(props) {
             >
               {props.title}
             </Typography>
-            <select className="dropdown-input">
+            <select
+              className="dropdown-input"
+              value={props.value}  // Set the value attribute to control the selected value
+              onChange={(e) => props.handleChange({ target: { id: props.id, value: e.target.value } })}
+            >
               {props.array &&
                 props.array.map((item) => {
-                  return <option value={item}>{item}</option>;
+                  return <option key={item} value={item}>{item}</option>;
                 })}
             </select>
           </Box>
@@ -163,8 +169,12 @@ function InputBox(props) {
     case "checkbox":
       return (
         <>
-          <FormGroup >
-            <FormControlLabel control={<Checkbox />} label={props.label}  />
+          <FormGroup>
+            <FormControlLabel
+              id={props.id}
+              control={<Checkbox checked={props.checked} onChange={props.handleChange} />}
+              label={props.label}
+            />
           </FormGroup>
         </>
       );
