@@ -11,6 +11,7 @@ import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Footer from '../../components/Footer';
+//import Loader  from "../../components/Loader";
 
 function Doctors() {
     const { groupId } = useParams();
@@ -18,7 +19,8 @@ function Doctors() {
     const [location, setLocation] = useState(routeLocation || ''); // Initialize with the route location if available
     const [doctorInfo, setDoctorInfo] = useState(null);
     const [doctorName, setDoctorName] = useState(null);
-       const [isSticky, setIsSticky] = useState(false);
+    const [isSticky, setIsSticky] = useState(false);
+    //const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -45,10 +47,8 @@ function Doctors() {
         (async () => {
             try {
                 let response=null;
-                // debugger;
                 if(groupId){
                     response = await DoctorService.AllDoctorsListInSpeciality(groupId);
-                    // debugger;
                 }
                 else if(location){
                 response = await DoctorService.DocInfoOnLocation(location);
@@ -60,6 +60,7 @@ function Doctors() {
                 if (response !== undefined) {
                     setDoctorInfo(response);
                     //.doctorsDetaiList
+                    //setLoading(false); 
                 }
             } catch (error) {
                 console.error(`Error fetching doctor information: ${error.message}`);
@@ -72,21 +73,8 @@ function Doctors() {
         setLocation(newLocation);
     };
     const handledoctorNameSelect = async (id) => {
-        //     const dataArray = [];
-        //    const response = await DoctorService.DoctorInformation(id);
-        //    if (response !== undefined) {
-        //     debugger;
-        //     dataArray.push(response);
-        //     debugger;
-        //     setDoctorInfo(dataArray);
-        // }
         window.location.href = `/doctorsdetails/${id}`;
     };
-    // const filteredLocations = doctorInfo !== null
-    // ? doctorInfo.filter((data) =>
-    //     data.city && data.city.toLowerCase().includes(location.toLowerCase())
-    // )
-    // : [];
 
     const filteredLocations =doctorInfo !== null? doctorInfo.filter((data, index, self) =>
     data.city &&
@@ -169,9 +157,8 @@ const filteredDoctInfo = doctorInfo !== null
                                         setDoctorName(e.target.value);
                                         const arrayOfWords = e.target.value.split(" ");
                                         const matchingLocation = filteredLocations.find((data) => data.user_Name === e.target.value);
-                                        debugger;
+                                        
                                         if (matchingLocation) {
-                                            debugger;
                                             handledoctorNameSelect(matchingLocation.id);
                                         }
                                     }}
@@ -334,9 +321,8 @@ const filteredDoctInfo = doctorInfo !== null
                                         setDoctorName(e.target.value);
                                         const arrayOfWords = e.target.value.split(" ");
                                         const matchingLocation = filteredLocations.find((data) => data.user_Name === e.target.value);
-                                        debugger;
+                                       
                                         if (matchingLocation) {
-                                            debugger;
                                             handledoctorNameSelect(matchingLocation.id);
                                         }
                                     }}

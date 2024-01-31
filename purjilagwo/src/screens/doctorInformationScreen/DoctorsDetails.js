@@ -67,16 +67,13 @@ export default function Doctor() {
   //this is for converting as date object into array
 
   useEffect(() => {
-    debugger;
-    if(doctorData !=null){
+    if (doctorData !== null && doctorData.timeSlots) {
       const array = Object.keys(doctorData.timeSlots);
-    setDateString(array);
-    for (let index = 0; index < array.length; index++) {
-      timeSlots[index] = new Date(array[index]);
+      setDateString(array);
+      const updatedTimeSlots = array.map(date => new Date(date));
+      setTimeSlots(updatedTimeSlots);
     }
-    }
-    
-  }, [])
+  }, [doctorData]);
 
   //This is for setting the current date as active
 
@@ -90,7 +87,6 @@ export default function Doctor() {
 
   useEffect(() => {
     (async () => {
-      debugger;
       if (id) {
         try {
           const response = await DoctorService.DoctorInformation(id);
@@ -122,19 +118,15 @@ export default function Doctor() {
   }
 
   function countSlot(i) {
-
     let count = 0;
-    if(doctorData!=null){
+    if (doctorData !== null && dateString[i] in doctorData.timeSlots) {
       for (let index = 0; index < doctorData.timeSlots[dateString[i]].length; index++) {
         if (doctorData.timeSlots[dateString[i]][index].isAvailable) {
           count++;
         }
       }
     }
-    
     return count;
-
-
   }
 
 
