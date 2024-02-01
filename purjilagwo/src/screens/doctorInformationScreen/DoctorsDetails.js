@@ -77,7 +77,7 @@ export default function Doctor() {
       const updatedTimeSlots = array.map(date => new Date(date));
       setTimeSlots(updatedTimeSlots);
     }
-  }, [doctorData]);
+  }, [doctorData, setDateString]);
 
   //This is for setting the current date as active
 
@@ -101,6 +101,7 @@ export default function Doctor() {
           console.log(response);
           if (response !== undefined) {
             setDoctorData(response); // uncomment this
+          
           }
         } catch (error) {
           console.error(`Error fetching doctor information: ${error.message}`);
@@ -254,11 +255,11 @@ export default function Doctor() {
                       {/* <Typography sx={{ mt: 2, fontSize: "15px", color: "black", ml: 3, fontWeight: 600 }}>Evening</Typography> */}
 
 
-                      {dateString.map((items, index) => {
+                      {dateString.length != 0 && dateString.map((items, index) => {
                         return (
                           <>
                             <CustomTabPanel value={value} index={index} key={index}>
-                              {doctorData.timeSlots[dateString[index]].length === 0 && (
+                              {doctorData.timeSlots[dateString[index]] != undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
                                 <>
                                   <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", pr: "24px" }}>
                                     <img src={Calender} alt="No Slot Available" width={50} />
@@ -277,7 +278,8 @@ export default function Doctor() {
                               )}
                               <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll" }}>
 
-                                {doctorData.timeSlots[dateString[index]].map((val, i) => {
+                                {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
+
                                   return (
                                     <>
                                       <Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={i}>{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
@@ -687,7 +689,7 @@ export default function Doctor() {
                       return (
                         <>
                           <CustomTabPanel value={value} index={index} key={index}>
-                            {doctorData.timeSlots[dateString[index]].length === 0 && (
+                            {doctorData.timeSlots[dateString[index]] != undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
                               <>
                                 <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", pr: "24px" }}>
                                   <img src={Calender} alt="No Slot Available" width={50} />
@@ -706,7 +708,7 @@ export default function Doctor() {
                             )}
                             <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll" }}>
 
-                              {doctorData.timeSlots[dateString[index]].map((val, i) => {
+                              {doctorData.timeSlots[dateString[index]] != undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
                                 return (
                                   <>
                                     <Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={i}>{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
