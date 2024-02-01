@@ -46,12 +46,12 @@ function Doctors() {
     useEffect(() => {
         (async () => {
             try {
-                let response=null;
-                if(groupId){
+                let response = null;
+                if (groupId) {
                     response = await DoctorService.AllDoctorsListInSpeciality(groupId);
                 }
-                else if(location){
-                response = await DoctorService.DocInfoOnLocation(location);
+                else if (location) {
+                    response = await DoctorService.DocInfoOnLocation(location);
                 }
                 else {
                     response = await DoctorService.AllDocInfo();
@@ -76,18 +76,18 @@ function Doctors() {
         window.location.href = `/doctorsdetails/${id}`;
     };
 
-    const filteredLocations =doctorInfo !== null? doctorInfo.filter((data, index, self) =>
-    data.city &&
-    data.city.toLowerCase().includes(location.toLowerCase()) &&
-    self.findIndex((otherLocation) => otherLocation.city === data.city) === index
+    const filteredLocations = doctorInfo !== null ? doctorInfo.filter((data, index, self) =>
+        data.city &&
+        data.city.toLowerCase().includes(location.toLowerCase()) &&
+        self.findIndex((otherLocation) => otherLocation.city === data.city) === index
     )
-    : [];
+        : [];
 
-const filteredDoctInfo = doctorInfo !== null
-    ? doctorInfo.filter((data) =>
-        data.city && data.city.toLowerCase().includes(location.toLowerCase())
-    )
-    : [];
+    const filteredDoctInfo = doctorInfo !== null
+        ? doctorInfo.filter((data) =>
+            data.city && data.city.toLowerCase().includes(location.toLowerCase())
+        )
+        : [];
 
     const handleBookConsultation = (doctorId) => {
         // Perform actions with the doctorId and other data
@@ -101,152 +101,10 @@ const filteredDoctInfo = doctorInfo !== null
 
     return (
         <>
-            {/* <div class="doctors-wrapper"> */}
-            {/* <div className="doctors-container"> */}
-
-            {/* Top bar */}
-            {/* <div className="search-bar">
-                        <div className="search-location">
-                            <div className="input-group">
-                                <span className="input-group-text">
-                                    <img src="../images/location.svg" alt="" />
-                                </span>
-                                <input
-                                    id="searchLocation"
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Location"
-                                    aria-label=""
-                                    list="locationList"
-                                    value={location}
-                                    onInput={(e) => {
-                                        const selectedValue = e.target.value;
-                                        setLocation(selectedValue);
-                                        const matchingLocation = filteredLocations.find((data) => data.city === selectedValue);
-
-                                        if (matchingLocation) {
-                                            // If there is a match, trigger the handleLocationChange function
-                                            handleLocationChange(selectedValue);
-                                        }
-                                    }}
-
-                                />
-                                {location.length >= 3 && (
-                                    <datalist id="locationList">
-                                        {filteredLocations.map((data) => (
-                                            <option key={`${data.id}location`} value={data.city} />
-                                        ))}
-                                    </datalist>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="search-doctor">
-                            <div className="input-group">
-                                <span className="input-group-text">
-                                    <img src="../../images/search.svg" alt="" />
-                                </span>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Search doctor"
-                                    aria-label=""
-                                    list="doctorList"
-                                    value={doctorName}
-                                    onInput={(e) => {
-                                        setDoctorName(e.target.value);
-                                        const arrayOfWords = e.target.value.split(" ");
-                                        const matchingLocation = filteredLocations.find((data) => data.user_Name === e.target.value);
-                                        
-                                        if (matchingLocation) {
-                                            handledoctorNameSelect(matchingLocation.id);
-                                        }
-                                    }}
-
-
-                                />
-                                {doctorName?.length >= 3 && (
-                                    <datalist id="doctorList">
-                                        {filteredDoctInfo.map((data) => (
-                                            <option key={`${data.id}data`}
-                                                value={`${data.user_Name}`} />
-                                        ))}
-                                    </datalist>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="search-result">
-                            <p>Location: <span className="bold">{location}</span></p>
-                            <p>Doctors available: <span className="bold">{doctorInfo && doctorInfo.length > 0 ? (
-                                doctorInfo.length) : (0)}</span></p>
-                        </div>
-                    </div> */}
-
-            {/* After fliter all the data are available */}
-
-            {/* <div className="doctors-list">
-
-                        {doctorInfo && doctorInfo.length > 0 ? (
-                            // If doctorInfo has data, map through it
-                            doctorInfo.map((doctor) => (
-                                <div className="doc-card">
-                                    <div className="block1" onClick={() => handleDoctorListClick(doctor.id)}>
-                                        <div className="left-col">
-                                            <div className="dp">
-                                                <img src="../images/doc-1.jpg" alt="" />
-                                            </div>
-                                        </div>
-
-                                        <div className="right-col">
-                                            <h2>{doctor?.user_Name} </h2>
-                                            <p>{doctor?.speciality}</p>
-                                            <p> {doctor?.experience} experience</p>
-                                            <p className="edu"> {doctor?.education}</p>
-                                            <p className="price">Starts at ₹4500</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="block2">
-                                        <div className="line1">
-                                            <div className="img">
-                                                <img src="../images/language.png" alt="" />
-                                            </div>
-                                            <p>English, Hindi</p>
-                                        </div>
-
-                                        <div className="line2">
-                                            <div className="img">
-                                                <img src="../images/address.svg" alt="" />
-                                            </div>
-                                            <p> {doctor?.doctor_Address}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="btn-container">
-                                        <button onClick={() => handleBookConsultation(doctor.id)} >Book Video Consult</button>
-                                        <button>Book Hospital Visit</button>
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            // If no data found
-                            <p>No data found.</p>
-                        )}
-
-
-
-                    </div> */}
-            {/* </div> */}
-
-
-
-            {/* </div> */}
-
             <Box sx={{ backgroundColor: "#F5F5F5", position: "absolute", width: "100%" }}>
 
                 <Box sx={{ backgroundColor: "white", borderBottom: "2px solid #E5EAF2", boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", py: isSticky ? "20px" : "30px", position: isSticky ? "sticky" : "static", top: "0px", zIndex: 999, transition: "padding 0.2s ease-in-out", width: "100%" }}>
-                    <Container sx={{ width: {sx: "100%" ,md:"70%"} }} >
+                    <Container sx={{ width: { sx: "100%", md: "70%" } }} >
                         <Box
                             sx={{
                                 display: "flex",
@@ -321,7 +179,7 @@ const filteredDoctInfo = doctorInfo !== null
                                         setDoctorName(e.target.value);
                                         const arrayOfWords = e.target.value.split(" ");
                                         const matchingLocation = filteredLocations.find((data) => data.user_Name === e.target.value);
-                                       
+
                                         if (matchingLocation) {
                                             handledoctorNameSelect(matchingLocation.id);
                                         }
@@ -337,9 +195,9 @@ const filteredDoctInfo = doctorInfo !== null
 
                             <Box sx={{ color: "black", mt: 1 }} >
                                 {/* <Typography >Location: <span>{location}</span> </Typography> */}
-                                <Typography sx={{fontSize: "14px", fontWeight: 600,color: "#409FEC"}} >Doctor available: <span >{doctorInfo && doctorInfo.length > 0 ? (
+                                <Typography sx={{ fontSize: "14px", fontWeight: 600, color: "#409FEC" }} >Doctor available: <span >{doctorInfo && doctorInfo.length > 0 ? (
                                     doctorInfo.length) : (0)}</span> </Typography>
-                                <Box sx={{height: "4px", width: "10%", backgroundColor: "#409FEC", mt: 1}}>
+                                <Box sx={{ height: "4px", width: "10%", backgroundColor: "#409FEC", mt: 1 }}>
 
                                 </Box>
                             </Box>
@@ -362,7 +220,7 @@ const filteredDoctInfo = doctorInfo !== null
                                             src="../../images/doc-1.jpg"
                                             sx={{ width: 100, height: 100, border: "1px solid #42A5F5", mt: "1rem" }}
                                         />
-                                        <CardContent sx={{height:140}}>
+                                        <CardContent sx={{ height: 140 }}>
                                             <Typography variant="h5" component="div">
                                                 {doctor?.user_Name}
                                             </Typography>
@@ -396,12 +254,12 @@ const filteredDoctInfo = doctorInfo !== null
 
                     ) : (
                         <>
-                        {/* Replace the card with the not found */}
+                            {/* Replace the card with the not found */}
 
-                        <Box sx={{height: "40vh", }}> 
-                            <Typography >Not found</Typography>
-                        </Box>
-                            
+                            <Box sx={{ height: "40vh", }}>
+                                <Typography >Not found</Typography>
+                            </Box>
+
                         </>
                     )}
 
