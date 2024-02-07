@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button, TabScrollButton, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TabScrollButton, Typography, Avatar } from '@mui/material';
 import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import '../../style/DoctorsDetails.css'
@@ -8,13 +8,16 @@ import DoctorService from '../../services/Doctor.services';
 import PropTypes from 'prop-types';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CallIcon from '@mui/icons-material/Call';
 import Calender from "../../assets/image/calender_cut.svg"
 import Loading from '../../components/Loading';
 import DataNotFound from '../../components/DataNotFound';
+import "../../components/style/InputBox.css"
+import CustomeButton from '../../components/Button';
+import { useSnackbar } from 'notistack';
+import { Checkmark } from "@carbon/icons-react";
 
-
-// remove this before using with actual data
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -56,6 +59,8 @@ export default function Doctor() {
   const [dateString, setDateString] = useState([]);
   const [loading, setLoading] = useState(false);
   const currentDate = new Date();
+  const [openSlot, setopenSlot] = useState(false);
+  const [details, setDetails] = useState(false); // useState for the details that we passing in the dialog box
 
 
   const handleTabClick = (tabNumber) => {
@@ -98,11 +103,11 @@ export default function Doctor() {
         setLoading(true);
         try {
           const response = await DoctorService.DoctorInformation(id);
-          console.log(response);
           if (response !== undefined) {
             setDoctorData(response); // uncomment this
-          
+
           }
+          //setDoctorData(data); // comment this
         } catch (error) {
           console.error(`Error fetching doctor information: ${error.message}`);
         }
@@ -113,7 +118,6 @@ export default function Doctor() {
       // For example, you can fetch data based on the ID
     })();
   }, [id]);
-  console.log("doctorInformation", doctorData);
 
   const handleLeft = () => {
     if (value > 0) {
@@ -140,6 +144,18 @@ export default function Doctor() {
       }
     }
     return count;
+  }
+
+  const handleSlotOpen = (name, address, time, date) => {
+    setopenSlot(true);
+    console.log(name, time, address,);
+    const det = {
+      name: name,
+      address: address,
+      time: time,
+      date: date
+    }
+    setDetails(det);
   }
 
   return (
@@ -255,7 +271,7 @@ export default function Doctor() {
                       {/* <Typography sx={{ mt: 2, fontSize: "15px", color: "black", ml: 3, fontWeight: 600 }}>Evening</Typography> */}
 
 
-                      {dateString.length != 0 && dateString.map((items, index) => {
+                      {dateString.length !== 0 && dateString.map((items, index) => {
                         return (
                           <>
                             <CustomTabPanel value={value} index={index} key={index}>
@@ -279,11 +295,10 @@ export default function Doctor() {
                               <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll" }}>
 
                                 {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
-
                                   return (
                                     <>
-                                      <Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={i}>{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
-                                      {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center" }} key={index}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
+                                      <Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index])} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
+                                      {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index])}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
                                     </>
                                   )
                                 })}
@@ -655,7 +670,7 @@ export default function Doctor() {
                                     items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Tomorrow</div>}
                                   {items.getDate() !== currentDate.getDate() && items.getDate() !== currentDate.getDate() + 1 && <div style={{ color: "black" }}>{items.toDateString().split(' ')[0]}, {items.toDateString().split(' ')[2]} {items.toDateString().split(' ')[1]}</div>}
 
-                                  <div style={{ marginTop: '5px', color: "black", fontSize: "8px", fontWeight: 800, color: "#01A400", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
+                                  <div style={{ marginTop: '5px', fontSize: "8px", fontWeight: 800, color: "#01A400", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
                                 </>
                               ]} sx={{ fontSize: "10px", p: 0, width: "100px", fontWeight: 500, }} {...a11yProps(index)} />
 
@@ -689,7 +704,7 @@ export default function Doctor() {
                       return (
                         <>
                           <CustomTabPanel value={value} index={index} key={index}>
-                            {doctorData.timeSlots[dateString[index]] != undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
+                            {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
                               <>
                                 <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", pr: "24px" }}>
                                   <img src={Calender} alt="No Slot Available" width={50} />
@@ -708,11 +723,11 @@ export default function Doctor() {
                             )}
                             <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll" }}>
 
-                              {doctorData.timeSlots[dateString[index]] != undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
+                              {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
                                 return (
                                   <>
-                                    <Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={i}>{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
-                                    {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center" }} key={index}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
+                                    <Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index])} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
+                                    {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index])}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
                                   </>
                                 )
                               })}
@@ -750,8 +765,284 @@ export default function Doctor() {
           )}
         </>
       )}
-
+      {details !== null && (<SlotBookDialog open={openSlot} onClose={() => setopenSlot(false)} details={details} />)}
 
     </>
   )
 }
+
+const SlotBookDialog = ({ open, onClose, details }) => {
+  const { id } = useParams();
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [disabled, setDisabled] = useState(true);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState();
+  const [otp, setOtp] = useState(new Array(6).fill(""));
+  const [openOtpBox, setOpenOtpBox] = useState(false);
+  const [date, setDate] = useState();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  //convert into date string  
+  useEffect(() => {
+    if (details != null && details.date != null) {
+      console.log(details.time)
+      const date = new Date(details.time);
+      setDate(`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`);
+    }
+
+  }, [details])
+
+  // Function for continue button
+  const handleContinue = async () => {
+    if (phone.length !== 10) {
+      enqueueSnackbar('Please enter a valid phone number', { variant: 'error' });
+      return;
+    }
+    if (name.length === 0 || name.trim() === '') {
+      enqueueSnackbar('Please enter a name', { variant: 'error' });
+      return;
+    }
+    const booking_data = {
+      patient_name: name,
+      pateint_phone: phone,
+      doctor_id: id,
+      doctor_name: details.name,
+      doctor_address: details.address,
+      fee: "600", // hard coded for now
+      slot_time: details.time
+    }
+
+    try {
+      const response = await DoctorService.BookSlot(booking_data);
+      if (!response.IsSuccess) {
+        enqueueSnackbar(response.ErrorMessage, { variant: 'error' });
+        return;
+      } else {
+        enqueueSnackbar('Otp is sent on you phone number', { variant: 'success' });
+        setDisabled(true);
+        setOpenOtpBox(true);
+      }
+    } catch (error) {
+      console.log(error)
+      enqueueSnackbar('Something went wrong', { variant: 'error' });
+    }
+
+    // Action for continue
+  }
+
+  const handleInput = (e) => {
+    if (e.target.value.length === 10) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+    setOpenOtpBox(false);
+  }
+
+  const handleChangeOtp = (element, index) => {
+    if (isNaN(element.value)) return false;
+
+    setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);
+
+    //Focus next input
+    if (element.nextSibling) {
+      element.nextSibling.focus();
+    }
+  };
+
+  // Function for verify otp
+
+  const handleVerifyOtp = async () => {
+    console.log(otp.join(''))
+
+    const otp_Data = {
+      phone: phone,
+      otp: otp.join('')
+    }
+    try {
+      const response = await DoctorService.VerifyOtp(otp_Data);
+      if (!response.IsSuccess) {
+        enqueueSnackbar(response.ErrorMessage, { variant: 'error' });
+        return;
+      } else {
+        setName('');
+        setPhone('');
+        setOtp(new Array(6).fill(""));
+        setOpenOtpBox(false);
+        onClose();
+        setConfirmOpen(true);
+        setTimeout(() => {
+          setConfirmOpen(false);
+        }, 3000);
+      }
+    } catch (error) {
+      console.log(error)
+      enqueueSnackbar('Something went wrong', { variant: 'error' });
+    }
+
+    // After success fullly verify put all the code 
+
+  }
+
+  return (
+    <>
+      <Dialog open={open} maxWidth="md" fullWidth sx={{ textAlign: "center" }} onClose={() => onClose()} aria-describedby="alert-dialog-slide-description" keepMounted>
+        <DialogTitle fontSize={19} lineHeight={1} fontWeight={600}>Book Slot</DialogTitle>
+
+        <DialogContent >
+          <Box sx={{ display: "flex", width: "100%", mt: 1, flexDirection: {xs: "column", sm: "row"} }}>
+            {/* Box for Doctor Details */}
+            <Box sx={{ width: {xs: "100%", sm: "50%"} }}>
+              <Paper elevation={10} sx={{ mb: 2 }}>
+                <Typography sx={{ fontWeight: 600, fontSize: 15, textAlign: "left", borderLeft: "3px solid #199FD9", pl: "1rem", lineHeight: 2.5, borderRadius: "4px", color: "black" }}>
+                  In-clinic Appointment
+                </Typography>
+              </Paper>
+              <Paper elevation={10} sx={{ px: "1rem", py: 3, }}>
+                {/* Doctor Details */}
+                {/* <Box sx={{ px: "1rem", py: 3,  }}> */}
+                <Box sx={{ display: "flex", textAlign: "left", alignItems: "center", }}>
+                  <Typography width="50%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>
+                    Name
+                  </Typography>
+                  <span style={{ marginRight: "2rem" }}>:</span>
+                  <Typography width="100%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>{details.name}</Typography>
+                </Box>
+                <Box sx={{ display: "flex", textAlign: "left", }}>
+                  <Typography width="50%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>
+                    Location
+                  </Typography>
+                  <span style={{ marginRight: "2rem" }}>:</span>
+                  <Typography width="100%" sx={{ color: "black", fontSize: 15, pr: 1, lineHeight: 2 }}>{details.address}</Typography>
+                </Box>
+                <Box sx={{ display: "flex", textAlign: "left", }}>
+                  <Typography width="50%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>
+                    Consultant fee
+                  </Typography>
+                  <span style={{ marginRight: "2rem" }}>:</span>
+                  <Typography width="100%" sx={{ color: "black", fontSize: 15, pr: 1, lineHeight: 2 }}>₹600</Typography>
+                </Box>
+
+                <Box sx={{ display: "flex", textAlign: "left", mt: 2, justifyContent: "space-between" }}>
+                  <Typography sx={{ color: "black", fontSize: 16, lineHeight: 2 }}>
+                    On {date}
+                  </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center" }}><AccessTimeIcon sx={{ fontSize: "23px", color: "gray" }} /><Typography sx={{ color: "black", fontSize: 15, pl: 1, lineHeight: 2 }}>At {details.time != null && details.time.split('T')[1]}</Typography></Box>
+                </Box>
+              </Paper>
+
+            </Box>
+
+            {/* Box for verification and pateint details */}
+            <Box sx={{width: {xs: "100%", sm: "50%"}, textAlign: "left", ml: {xs: 0, sm:4}, mt: {xs: 4, sm:0}, }}>
+              <Box>
+                <Typography sx={{ color: "black", fontSize: "15px" }} className='required'>Pateint Name</Typography>
+                <input type="text" name="" id="" style={{ width: "100%", marginTop: 4, padding: 6, border: "1px solid gray", fontSize: "14px" }} placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} />
+              </Box>
+              <Box sx={{ mt: 2 }}>
+                <Typography sx={{ color: "black", fontSize: "15px" }} className='required'>Phone No.</Typography>
+                <input type="number" name="" id="" style={{ width: "100%", marginTop: 4, padding: 6, border: "1px solid gray", textDecoration: "none", fontSize: "14px" }} placeholder='Mobile Number' onInput={handleInput} value={phone} onChange={(e) => setPhone(e.target.value)} />
+              </Box>
+              <Box sx={{ mt: 1, mb: 2 }}>
+                <Typography sx={{ color: "black", fontSize: "12px" }} >You will receive an OTP shortly.</Typography>
+                <Typography sx={{ color: "black", fontSize: "12px" }} >We will send appointment-related communications on this number.</Typography>
+              </Box>
+              <CustomeButton title={"Continue"} onClick={handleContinue} disabled={disabled} />
+
+              {openOtpBox && (
+                <>
+                  <Box sx={{ display: "flex", justifyContent: "center", transitionDuration: "100ms" }}>
+
+                    {otp.map((data, index) => {
+                      return (
+                        <input
+                          className="otp-field"
+                          type="text"
+                          name="otp"
+                          maxLength="1"
+                          key={index}
+                          value={data}
+                          onChange={e => handleChangeOtp(e.target, index)}
+                          onFocus={e => e.target.select()}
+                        />
+                      );
+                    })}
+
+                  </Box>
+                  <CustomeButton title={"Verify otp"} onClick={handleVerifyOtp} />
+                </>
+              )}
+
+
+              {/* <Box sx={{ display: "flex", width: "100%", justifyContent: "space-around" }}>
+              <Box sx={{width: "100%", mr:1}}>
+                <CustomeButton title={"Verify Otp"} onClick={handleVerifyOtp} />
+
+              </Box>
+              <Box sx={{width: "100%", ml:1}}>
+              <CustomeButton title={"Verify Otp"} onClick={handleVerifyOtp} />
+                
+              </Box>
+            </Box> */}
+
+            </Box>
+          </Box>
+
+        </DialogContent>
+
+        <DialogActions sx={{ paddingRight: "25px", paddingBottom: "25px" }}>
+          <Button
+            variant="contained"
+            style={{ backgroundColor: "grey" }}
+            sx={{
+              mt: "10px",
+              textTransform: "none",
+              borderRadius: "10px",
+              width: "8rem",
+            }}
+            onClick={onClose}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Conformation Dialog box */}
+
+      <Dialog open={confirmOpen} maxWidth="xs" fullWidth sx={{ textAlign: "center" }} onClose={() => setConfirmOpen(false)} aria-describedby="alert-dialog-slide-description" keepMounted>
+
+        <DialogContent sx={{ pt: 4, pb: 0 }}>
+          <Box sx={{ display: "flex", width: "100%", flexDirection: "column", justifyContent: "center", alignItems: "center", }}>
+            <Avatar sx={{ bgcolor: "rgb(39,174,96)", width: 60, height: 60, }}>
+              <Checkmark size={50} />
+            </Avatar>
+            <Typography sx={{ fontSize: "20px", fontWeight: 600, mt: 2, color: "black" }}>Slot has been Booked</Typography>
+          </Box>
+
+        </DialogContent>
+
+        <DialogActions sx={{ paddingBottom: "25px" }}>
+          <Button
+            variant="contained"
+            style={{ backgroundColor: "grey" }}
+            sx={{
+              mt: "10px",
+              textTransform: "none",
+              borderRadius: "10px",
+              width: "8rem",
+              mx: "auto"
+            }}
+            onClick={() => setConfirmOpen(false)}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+
+  )
+}
+
+
