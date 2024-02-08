@@ -49,8 +49,38 @@ const AllDoctorsListInSpeciality =async (groupId) =>{
     }
 }
 
+const BookSlot =async (slotData) =>{
+    try{
+        const response = await axiosClient({
+            method: 'POST',
+            url: `BookSlot`, // Give your API endpoint
+            data: JSON.stringify(slotData),
+        });
+        return response.data;
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+}
+
+const VerifyOtp =async (otpData) =>{
+    try{
+        const response = await axiosClient({
+            method: 'POST',
+            url: `VerifyOtp`, // Give your API endpoint
+            data: JSON.stringify(otpData),
+        });
+        return response.data;
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+}
+
 
 const DoctorService = {
-    DoctorInformation,DocInfoOnLocation,AllDocInfo,AllDoctorsListInSpeciality
+    DoctorInformation,DocInfoOnLocation,AllDocInfo,AllDoctorsListInSpeciality, BookSlot, VerifyOtp
 };
 export default DoctorService;

@@ -1,6 +1,6 @@
 
 import { Box, Button, Container, Typography, Avatar, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputBox from "../../components/InputBox";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { SingleInputTimeRangeField } from "@mui/x-date-pickers-pro";
@@ -10,7 +10,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import ProfileUpdate from "../../services/Update.services";
 
 function EditProfile() {
-  debugger;
+  // debugger;
   const [value, setValue] = useState({
     id: 116,
     image:"",
@@ -46,9 +46,19 @@ function EditProfile() {
     sunday: false,
   });
   const [image, setImage] = useState(null);
+  const [lunchTime, setLunchTime] = useState(() => [
+    dayjs('2022-04-17T11:30'),
+    dayjs('2022-04-17T19:30'),
+  ])
+  const [availableTime, setAvailableTime] = useState(() => [
+    dayjs('2022-04-17T11:30'),
+    dayjs('2022-04-17T19:30'),
+  ])
 
   const handleUpdateProfile = async () => {
     debugger;
+    value.lunchTime = lunchTime[0].format('HH:mm') + " - " + lunchTime[1].format('HH:mm');
+    value.availableTime = availableTime[0].format('HH:mm') + " - " + availableTime[1].format('HH:mm');
     try {
       const response = await ProfileUpdate.UpdateProfile(value);
 
@@ -369,15 +379,15 @@ function EditProfile() {
               <TimeRangePicker
                 id="availableTime"
                 title="Available Time"
-                value={value.availableTime}
-                handleChange={handleChange}
+                time={lunchTime}
+                setTime={setLunchTime}
               />
 
               <TimeRangePicker
                 id="lunchTime"
                 title="Lunch Time"
-                value={value.lunchTime}
-                handleChange={handleChange}
+                time={availableTime}
+                setTime={setAvailableTime}
               />
 
               <InputBox
@@ -509,9 +519,18 @@ const TimeRangePicker = (props) => {
     dayjs('2022-04-17T18:30'),
   ]);
 
-  //Take this as reference while sending to db
-  console.log(value[0].format('HH:mm'))
-  console.log(value[1].format('HH:mm'))
+
+  useEffect(() => {
+    if(props.time){
+      setValue(props.time)
+    }
+  }, [props.time])
+  
+
+  const handleSet = () =>{
+    props.setTime(value)
+    setOpen(false)
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -537,6 +556,7 @@ const TimeRangePicker = (props) => {
             cursor: "pointer"
           }}
           onClick={() => setOpen(true)}
+          value={value[0].format('HH:mm') + " - " + value[1].format('HH:mm')}
         />
       </Box>
       <Dialog onClose={handleClose} open={open} maxWidth="xs" fullWidth>
@@ -556,7 +576,7 @@ const TimeRangePicker = (props) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Close</Button>
-          <Button autoFocus>
+          <Button autoFocus onClick={handleSet}>
             Set
           </Button>
         </DialogActions>

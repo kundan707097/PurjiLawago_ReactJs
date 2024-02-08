@@ -27,12 +27,60 @@ import { Route, Routes } from 'react-router-dom'; // Note the updated imports
 import Footer from './components/Footer';
 import { routevalues } from './Routes/PublicRoute'; 
 import Routing from './Routes/Routes';
+import { SnackbarProvider, closeSnackbar, MaterialDesignContent } from "notistack";
+import {  ListItemButton, ListItemIcon, styled,  } from "@mui/material";
+import { Close } from "@carbon/icons-react";
+
+const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
+  "&.notistack-MuiContent-success": {
+    width: "100%",
+    backgroundColor: "white",
+    color: "green",
+    borderLeft: "4px solid green",
+    
+  },
+  "&.notistack-MuiContent-error": {
+    width: "100%",
+    backgroundColor: "white",
+    color: "red",
+    borderLeft: "4px solid red",
+  },
+  "&.notistack-MuiContent-info": {
+    width: "100%",
+    backgroundColor: "white",
+    color: "#2196f3",
+    borderLeft: "4px solid #2196f3",
+  },
+}));
 
 function App() {
   return (
+    <SnackbarProvider
+    Components={{
+      success: StyledMaterialDesignContent,
+      error: StyledMaterialDesignContent,
+      info: StyledMaterialDesignContent,
+    }}
+      maxSnack={3}
+      autoHideDuration={3000}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "center",
+      }}
+      hideIconVariant
+      action={(snackbarId) => (
+        <ListItemButton sx={{ width: "3.5rem", px: 0 }} onClick={() => closeSnackbar(snackbarId)}>
+          <ListItemIcon sx={{ display: "flex", justifyContent: "center" }}>
+            <Close width={24} height={24} color="black" />
+          </ListItemIcon>
+        </ListItemButton>
+      )}
+    >
+    
     <div className="App">
       <Routing/>
     </div>
+    </SnackbarProvider>
   );
 }
 
