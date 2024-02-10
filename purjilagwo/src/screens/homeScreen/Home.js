@@ -11,11 +11,11 @@ function Home() {
     return (
         <>
             <Landing />
-            <InfoBanner />
-            <Services />
-            <TopDoctors />
-            <AppBanner />
-            <LiveCounter />
+            {/* <InfoBanner /> */}
+            {/* <Services /> */}
+            {/* <TopDoctors /> */}
+            {/* <AppBanner /> */}
+            {/* <LiveCounter /> */}
 
         </>
     );

@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Call from "../components/Call";
 import Ambulance from "../components/Ambulance";
+import DrawerAppBar from "../components/Navbar";
  
 export const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -16,23 +17,23 @@ export const PublicRoute = ({ children }) => {
     <Navigate to="*" />
   ) : (
     <>
-      <Header />
-      {/* <DrawerAppBar /> */}
+      {/* <Header /> */}
+      <DrawerAppBar />
       {children}
-      <Ambulance />
-      <Call />
-      <Footer />
+      {/* <Ambulance /> */}
+      {/* <Call /> */}
+      {/* <Footer /> */}
     </>
   )}</>;
 };
 
 export const CommonRoute = ({ children }) => (
   <>
-    <Header />
-    {/* <DrawerAppBar /> */}
+    {/* <Header /> */}
+    <DrawerAppBar />
     {children}
-    <Ambulance />
-    <Call />
-    <Footer />
+    {/* <Ambulance /> */}
+    {/* <Call /> */}
+    {/* <Footer /> */}
   </>
 );

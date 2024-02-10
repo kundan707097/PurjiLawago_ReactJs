@@ -20,16 +20,23 @@
 // export default App;
 
 
-import React ,{Suspense}from 'react';
+import React, { Suspense } from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom'; // Note the updated imports
 // import Header from './components/Header';
 import Footer from './components/Footer';
-import { routevalues } from './Routes/PublicRoute'; 
+import { routevalues } from './Routes/PublicRoute';
 import Routing from './Routes/Routes';
 import { SnackbarProvider, closeSnackbar, MaterialDesignContent } from "notistack";
-import {  ListItemButton, ListItemIcon, styled,  } from "@mui/material";
+import { ListItemButton, ListItemIcon, styled, createTheme, ThemeProvider } from "@mui/material";
 import { Close } from "@carbon/icons-react";
+
+
+const theme = createTheme({
+  typography: {
+    fontFamily: ["Nunito Sans", "sans-serif"].join(","),
+  },
+});
 
 const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
   "&.notistack-MuiContent-success": {
@@ -37,7 +44,7 @@ const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
     backgroundColor: "white",
     color: "green",
     borderLeft: "4px solid green",
-    
+
   },
   "&.notistack-MuiContent-error": {
     width: "100%",
@@ -56,11 +63,11 @@ const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
 function App() {
   return (
     <SnackbarProvider
-    Components={{
-      success: StyledMaterialDesignContent,
-      error: StyledMaterialDesignContent,
-      info: StyledMaterialDesignContent,
-    }}
+      Components={{
+        success: StyledMaterialDesignContent,
+        error: StyledMaterialDesignContent,
+        info: StyledMaterialDesignContent,
+      }}
       maxSnack={3}
       autoHideDuration={3000}
       anchorOrigin={{
@@ -76,10 +83,12 @@ function App() {
         </ListItemButton>
       )}
     >
-    
-    <div className="App">
-      <Routing/>
-    </div>
+
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <Routing />
+        </div>
+      </ThemeProvider>
     </SnackbarProvider>
   );
 }
