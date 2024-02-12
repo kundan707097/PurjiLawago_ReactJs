@@ -16,10 +16,10 @@ input::placeholder {
 }
 
 .landing-dropdown{
-  background-color: white;
+  background-color: #F5F5F5;
 }
 .landing-dropdown:hover{
-  background-color: #F0F7FF;
+  background-color: #dbdbdb;
 }
 
 

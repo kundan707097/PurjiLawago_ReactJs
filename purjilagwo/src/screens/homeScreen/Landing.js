@@ -107,12 +107,12 @@ const Landing = () => {
 
         {/* Left box */}
         <Box sx={{ width: "50%" }}>
-          <Box sx={{position: "absolute", height:{xs: "30%", lg: "80%"}, width: "40%", top: {xs: "5rem", lg:0}}}>
+          <Box sx={{ position: "absolute", height: { xs: "30%", lg: "80%" }, width: "40%", top: { xs: "5rem", lg: 0 } }}>
 
             <img src={svg1} alt="" style={{ height: "100%" }} />
           </Box>
 
-          <Box sx={{ pl: { xs: 2, lg: 10 }, pt: {xs: 0, lg:4}, }}>
+          <Box sx={{ pl: { xs: 2, lg: 10 }, pt: { xs: 0, lg: 4 }, }}>
 
             {/* Image and support */}
 
@@ -147,7 +147,7 @@ const Landing = () => {
 
             <Box sx={{ mt: { xs: 2, lg: 8 }, display: "flex" }}>
               <Link to="/doctorlist" style={{ zIndex: 999 }}>
-                <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: {xs:.6, lg:1.3}, borderRadius: 3, fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", "&:hover": { color: "#42A5F5", backgroundColor: "white" } }}>
+                <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: { xs: .6, lg: 1.3 }, borderRadius: 3, fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", "&:hover": { color: "#42A5F5", backgroundColor: "white" } }}>
                   Make a Appointment
                 </Box>
               </Link>
@@ -170,7 +170,7 @@ const Landing = () => {
                 border: "1px solid #42A5F5",
                 borderRadius: "12px",
                 width: { xs: "100%", md: "50rem" },
-                position: {xs: "absolute", lg:"relative"},
+                position: { xs: "absolute", lg: "relative" },
                 left: { xs: 2, lg: 0 },
                 zIndex: 10,
                 backgroundColor: "white",
@@ -181,7 +181,7 @@ const Landing = () => {
               <Box
                 sx={{
                   borderRight: { xs: "none", sm: "none", md: "2px solid grey" },
-                  my: {xs: "4px", lg:"10px"},
+                  my: { xs: "4px", lg: "10px" },
                   mx: { md: "10px" },
                   width: "40%",
                   position: "relative",
@@ -212,16 +212,17 @@ const Landing = () => {
                     sx={{
                       display: isVisible.locationVisible ? 'block' : 'none',
                       position: "absolute",
-                      backgroundColor: "white",
+                      backgroundColor: "#F5F5F5",
                       width: "100%",
-                      top: { xs: "130px", sm: "120px", md: "40px" },
+                      top: { xs: "40px", sm: "120px", md: "40px" },
                       borderRadius: "10px",
                       py: "0.5rem",
+                      left: {xs:3, lg:0}
                     }}
                     ref={locationSearchRef}
                   >
                     <Box>
-                      {/*  put the map function here and remove the all the button and put the onclick on button */}
+                       put the map function here and remove the all the button and put the onclick on button
                       {filteredLocations.map((location) => (
                         <button
                           style={{
@@ -232,15 +233,16 @@ const Landing = () => {
                             border: "none",
                           }}
                           className="landing-dropdown"
-                          onClick={() => {
-                            setSearchLocation(location.city);
-                            setIsVisible({ locationVisible: false });
-                            handleDoctorListSelect(location.city);
-                          }}
+                           onClick={() => {
+                             setSearchLocation(location.city);
+                             setIsVisible({ locationVisible: false });
+                             handleDoctorListSelect(location.city);
+                           }}
                         // value={location.city}
                         >
-                          {location.city}
+                          {location.city} 
                         </button>
+                        
                       ))}
                     </Box>
                   </Box>
@@ -249,7 +251,7 @@ const Landing = () => {
 
               <Box
                 sx={{
-                  my: {xs: "4px", lg:"10px"},
+                  my: { xs: "4px", lg: "10px" },
                   width: { md: "70%" },
                   mx: { md: "5px" },
                 }}
@@ -273,44 +275,46 @@ const Landing = () => {
                   }}
                 />
                 {searchName.length >= 3 && filteredName.length > 0 && (
-                  // <datalist id="locationList">
-                  <Box
-                    sx={{
-                      display: isVisible.nameVisible ? 'block' : 'none',
-                      position: "absolute",
-                      backgroundColor: "white",
-                      width: { xs: "84.5%", sm: "89%", md: "62%" },
-                      top: { xs: "180px", sm: "160px", md: "50px" },
-                      borderRadius: "10px",
-                      py: "0.5rem",
-                    }}
-                    ref={locationSearchRef}
-                  >
-                    <Box>
-                      {/*  put the map function here and remove the all the button and put the onclick on button */}
-                      {filteredName.map((name) => (
-                        <button
-                          style={{
-                            padding: "10px",
-                            cursor: "pointer",
-                            width: "100%",
-                            textAlign: "left",
-                            border: "none",
-                          }}
-                          className="landing-dropdown"
-                          onClick={() => {
-                            setSearchName(name.user_Name);
-                            setIsVisible({ nameVisible: false });
-                            handledoctorNameSelect(name.id);
-                          }}
+                // <datalist id="locationList">
+                <Box
+                  sx={{
+                    display: isVisible.nameVisible ? 'block' : 'none',
+                    position: "absolute",
+                    backgroundColor: "#F5F5F5",
+                    width: { xs: "98%", sm: "89%", md: "62%" },
+                    top: { xs: "45px", sm: "160px", md: "50px" },
+                    borderRadius: "10px",
+                    py: "0.5rem",
+                    left: {xs:3, lg:0}
+                  }}
+                  ref={locationSearchRef}
+                >
+                  <Box>
+                    {/*  put the map function here and remove the all the button and put the onclick on button */}
+                    {filteredName.map((name) => (
+                      <button
+                        style={{
+                          padding: "10px",
+                          cursor: "pointer",
+                          width: "100%",
+                          textAlign: "left",
+                          border: "none",
+                        }}
+                        className="landing-dropdown"
+                        onClick={() => {
+                          setSearchName(name.user_Name);
+                          setIsVisible({ nameVisible: false });
+                          handledoctorNameSelect(name.id);
+                        }}
                         // value={location.city}
-                        >
-                          {name.user_Name}
-                        </button>
-                      ))}
+                      >
+                        {name.user_Name}
+                      </button>
 
-                    </Box>
+                    ))}
+
                   </Box>
+                </Box>
                 )}
                 {searchName.length >= 3 && (
                   <datalist id="doctorsList">
@@ -324,7 +328,7 @@ const Landing = () => {
                 )}
               </Box>
 
-              <Box sx={{ backgroundColor: "#42A5F5", borderRadius: "0px 12px 12px 0", display: "flex", px: 2, alignItems: "center", color: "white", cursor: "pointer",}}>
+              <Box sx={{ backgroundColor: "#42A5F5", borderRadius: "0px 12px 12px 0", display: "flex", px: 2, alignItems: "center", color: "white", cursor: "pointer", }}>
                 <Search />
                 <Typography sx={{ ml: 1, fontSize: { xs: '10px', lg: "15px" } }}>Search</Typography>
               </Box>
@@ -337,7 +341,7 @@ const Landing = () => {
         {/* Right Box */}
 
         <Box sx={{ width: "50%", overflow: "hidden" }}>
-          <Box sx={{ position: "absolute", top: "0", zIndex: 1, right: "-4.3rem", height: { xs: "18rem", lg: "46.9rem" },  }}>
+          <Box sx={{ position: "absolute", top: "0", zIndex: 1, right: "-4.3rem", height: { xs: "18rem", lg: "46.9rem" }, }}>
             <img src={svg11} alt="" height={"100%"} />
           </Box>
           <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "5.8rem", lg: "7.07rem" }, right: 2, height: { xs: "12rem", lg: "40rem" } }}>
