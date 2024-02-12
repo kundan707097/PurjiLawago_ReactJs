@@ -112,7 +112,7 @@ const Landing = () => {
             <img src={svg1} alt="" style={{ height: "100%" }} />
           </Box>
 
-          <Box sx={{ pl: { xs: 2, lg: 10 }, pt: {xs: 2, lg:14}, }}>
+          <Box sx={{ pl: { xs: 2, lg: 10 }, pt: {xs: 0, lg:4}, }}>
 
             {/* Image and support */}
 
@@ -125,7 +125,7 @@ const Landing = () => {
 
             {/* Text and heading */}
 
-            <Box sx={{ mt: { xs: 10, lg: 3 }, backgroundColor: "transparent" }}>
+            <Box sx={{ mt: { xs: 6, lg: 3 }, backgroundColor: "transparent" }}>
               <Typography sx={{ fontSize: { xs: '12px', lg: "24px" }, color: "#64EBB6", fontWeight: 700, }}>
                 <span>“</span><span style={{ color: "#5D6566" }}>JOIN THE BEST BE THE BEST</span><span style={{ marginRight: 14 }}>”</span>
                 <Box sx={{ display: { lg: 'none' } }} />
@@ -147,13 +147,13 @@ const Landing = () => {
 
             <Box sx={{ mt: { xs: 2, lg: 8 }, display: "flex" }}>
               <Link to="/doctorlist" style={{ zIndex: 999 }}>
-                <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "140px", lg: "250px" }, textAlign: "center", p: 1.3, borderRadius: 3, fontSize: { xs: "12px", lg: "15px" }, fontWeight: 600, color: "white", border: "2px solid #42A5F5", "&:hover": { color: "#42A5F5", backgroundColor: "white" } }}>
+                <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: {xs:.6, lg:1.3}, borderRadius: 3, fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", "&:hover": { color: "#42A5F5", backgroundColor: "white" } }}>
                   Make a Appointment
                 </Box>
               </Link>
 
               <Link to="/" style={{ marginLeft: 20, zIndex: 999 }}>
-                <Box sx={{ backgroundColor: "white", width: "250px", textAlign: "center", p: 1.3, borderRadius: 3, fontSize: "15px", fontWeight: 600, color: "#42A5F5", border: "2px solid #42A5F5", "&:hover": { backgroundColor: "#42A5F5", color: "white" }, display: { xs: "none", lg: "block" } }}>
+                <Box sx={{ backgroundColor: "white", width: "250px", textAlign: "center", p: 1.3, borderRadius: 3, fontSize: "15px", fontWeight: 500, color: "#42A5F5", border: "2px solid #42A5F5", "&:hover": { backgroundColor: "#42A5F5", color: "white" }, display: { xs: "none", lg: "block" } }}>
                   <img src={svg3} alt="" height={"20px"} style={{ marginRight: 10 }} />
                   Buy Medicine
                 </Box>
@@ -335,7 +335,6 @@ const Landing = () => {
         </Box>
 
         {/* Right Box */}
-
 
         <Box sx={{ width: "50%", overflow: "hidden" }}>
           <Box sx={{ position: "absolute", top: "0", zIndex: 1, right: "-4.3rem", height: { xs: "18rem", lg: "46.9rem" },  }}>

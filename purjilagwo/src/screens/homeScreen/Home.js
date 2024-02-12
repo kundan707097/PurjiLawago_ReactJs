@@ -2,8 +2,7 @@ import React from 'react';
 
 import Landing from './Landing';
 import InfoBanner from './InfoBanner';
-import Services, { Specialities } from './Services';
-import TopDoctors from './TopDoctors';
+import Specialities from './Specialities';
 import GetADoctor from './GetADoctor';
 import AboutUs from './AboutUs';
 import WhyUs from './WhyUs';
@@ -16,13 +15,11 @@ function Home() {
         <>
             <Landing />
             <InfoBanner />
-            {/* <Services /> */}
             <Specialities />
             <GetADoctor />
             <AboutUs />
             <WhyUs />
             <BookingSystem />
-            {/* <TopDoctors /> */}
             <LiveCounter />
             <Footer />
 
