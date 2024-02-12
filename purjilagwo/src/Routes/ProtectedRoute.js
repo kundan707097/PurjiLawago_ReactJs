@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import Call from "../components/Call";
 import Ambulance from "../components/Ambulance";
-import DrawerAppBar from "../components/Navbar";
+import Header from "../components/Header";
  
 export const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -15,8 +15,7 @@ export const PublicRoute = ({ children }) => {
     <Navigate to="*" />
   ) : (
     <>
-      {/* <Header /> */}
-      <DrawerAppBar />
+      <Header />
       {children}
       {/* <Ambulance /> */}
       {/* <Call /> */}
@@ -27,8 +26,7 @@ export const PublicRoute = ({ children }) => {
 
 export const CommonRoute = ({ children }) => (
   <>
-    {/* <Header /> */}
-    <DrawerAppBar />
+    <Header />
     {children}
     {/* <Ambulance /> */}
     {/* <Call /> */}
