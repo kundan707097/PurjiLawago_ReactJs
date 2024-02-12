@@ -1,7 +1,5 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import Call from "../components/Call";
 import Ambulance from "../components/Ambulance";
 import DrawerAppBar from "../components/Navbar";

@@ -34,7 +34,7 @@ import { Close } from "@carbon/icons-react";
 
 const theme = createTheme({
   typography: {
-    fontFamily: ["Nunito Sans", "sans-serif"].join(","),
+    fontFamily: ["Nunito Sans","Plaster", "sans-serif"].join(","),
   },
 });
 
