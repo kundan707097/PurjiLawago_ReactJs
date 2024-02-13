@@ -1,7 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import BG1 from "../../assets/image/front-view-nurses-team-hospital_23-2150796738.avif";
+// import BG1 from "../../assets/image/front-view-nurses-team-hospital_23-2150796738.avif";
+import BG1    from "../../assets/image/home1.png";
+import Hour   from "../../assets/image/24_Hours.png";
+import Group1 from "../../assets/image/Group_1.png";
+import Group2 from "../../assets/image/Group_2.png";
+import Group3 from "../../assets/image/Group_3.png";
+import IconButton from '@mui/material/IconButton';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+
 import "./Home.css";
 import { Location, Search } from "@carbon/icons-react";
 import DoctorService from '../../services/Doctor.services';
@@ -98,12 +106,24 @@ const Landing = () => {
       <Box display={"flex"} sx={{ backgroundColor: "#F0F7FF", zIndex: 12 }}>
         <Box
           sx={{
-            mt: { xs: "50px", sm: "50px", md: "130px" },
+            mt: { xs: "30px", sm: "30px", md: "70px" },
             px: { xs: "20px", sm: "50px", md: "50px", lg: "100px" },
             width: { xs: "100%", sm: "100%", md: "50%" },
           }}
         >
-          <Typography sx={{ fontWeight: 800, fontSize: "50px" }}>
+        <Typography>
+          <img
+              src={Hour}
+              alt=""
+              style={{
+                // height: "400px",
+                // width: "400px"
+              }}
+              className=""
+            />
+         </Typography>
+         
+          <Typography sx={{ fontWeight: 800, fontSize: "40px" }}>
             Keep Your Family More Healthy
           </Typography>
           <Typography
@@ -177,6 +197,7 @@ const Landing = () => {
               mb: "30px",
               mt: { xs: "20px", sm: "00px", md: 0 },
               flexDirection: { xs: "column", sm: "column", md: "row" },
+              height: "12vh"
             }}
           >
             <Box
@@ -263,7 +284,7 @@ const Landing = () => {
                   border: "none",
                   color: "#42A5F5",
                   marginLeft: "5px",
-                  width: "80%",
+                  width: "70%",
                 }}
                 placeholder="Search doctors, clinics, hospitals,etc"
                 list="doctorsList"
@@ -309,7 +330,6 @@ const Landing = () => {
                       {name.user_Name}
                     </button>
                       ))}
-                    
                   </Box>
                 </Box>
               )}
@@ -324,6 +344,9 @@ const Landing = () => {
                 </datalist>
               )}
             </Box>
+            <Typography color="primary" sx={{background: '#42A5F5', color: "white", width: "30%", padding: "10px", fontSize: '15px', borderRadius: "0px 6px 6px 0px" }} aria-label="directions">
+                <CalendarMonthIcon /> Schedule
+              </Typography>
           </Box>
         </Box>
 
@@ -331,23 +354,53 @@ const Landing = () => {
           sx={{
             width: { xs: "100%", sm: "100%", md: "50%" },
             borderRadius: "40px",
-            height: "80vh",
-            transform: "rotate(-45deg)",
+            // height: "80vh",
+            // transform: "rotate(45deg)",
+            transform: "skew(30deg)",
             position: "relative",
             top: { md: "-225px", lg: "-200px" },
             borderTopLeftRadius: "100px",
-            overflow: "hidden",
+            // overflow: "hidden",
             // border: "2px solid #E5EAF2",
             // boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)",
             zIndex: 12,
+            background: "#42A5F5",
             display: { xs: "none", sm: "none", md: "block" },
           }}
         >
+        
+        <img
+            src={Group1}
+            alt=""
+            style={{
+              transform: "skew(-30deg)",
+            }}
+            className="landing-img1"
+          />
+        <img
+            src={Group2}
+            alt=""
+            style={{
+              transform: "skew(-30deg)",
+            }}
+            className="landing-img2"
+          />
+          <img
+            src={Group3}
+            alt=""
+            style={{
+              transform: "skew(-30deg)",
+            }}
+            className="landing-img3"
+          />
           <img
             src={BG1}
             alt=""
             style={{
-              rotate: "45deg",
+              transform: "skew(-30deg)",
+              height: "400px",
+              width: "400px"
+              // rotate: "45deg",
             }}
             className="landing-img"
           />

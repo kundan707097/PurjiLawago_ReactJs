@@ -1,8 +1,30 @@
 .landing-img{
     position: relative;
-    width: 120%;
-    right: 210px;
-    top: 40px;
+/*    width: 120%;*/
+    left: 90px;
+    top: 200px;
+   
+}
+
+.landing-img1{
+    position: relative;
+/*    width: 120%;*/
+    right: 90px;
+    top: 300px;
+}
+
+.landing-img2{
+    position: relative;
+/*    width: 120%;*/
+    right: 100px;
+    top: 400px;
+}
+
+.landing-img3{
+    position: relative;
+/*    width: 120%;*/
+    right: 420px;
+    top: 600px;
 }
 
 input::placeholder {
@@ -37,7 +59,55 @@ input::placeholder {
         position: relative;
         width: 130%;
         right: 205px;
-        top: 90px;
+        top: 200px;
+    }
+
+    .landing-img1{
+        position: relative;
+/*        width: 130%;*/
+        right: 85px;
+        top: 362px;
+    }
+    .landing-img2{
+        position: relative;
+/*        width: 130%;*/
+        right: 100px;
+        top: 440px;
+    }
+    .landing-img3{
+        position: relative;
+/*        width: 130%;*/
+        right: 378px;
+        top: 570px;
+    }
+  
+}
+
+@media screen and (min-width: 1108px) and (max-width: 1200px) {
+    .landing-img{
+        position: relative;
+        width: 130%;
+        right: 205px;
+        top: 200px;
+    }
+
+    .landing-img1{
+        position: relative;
+/*        width: 130%;*/
+        right: 85px;
+        top: 300px;
+    }
+    .landing-img2{
+        position: relative;
+/*        width: 130%;*/
+        right: 100px;
+        top: 400px;
+    }
+    .landing-img3{
+        position: relative;
+/*        width: 130%;*/
+        right: 415px;
+        top: 564px;
     }
   
 }
