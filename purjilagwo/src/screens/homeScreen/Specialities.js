@@ -101,7 +101,7 @@ const Specialities = () => {
             {/* Slider */}
             <Swiper modules={[Navigation]} spaceBetween={20} slidesPerView={count} ref={swipeerRef} >
               {/* here you need to change the DepartmentCardData to departmentData */}
-              {DepartmentCardData.map((item) => {
+              {departmentData.map((item) => {
                 return (
                   <SwiperSlide>
                     <SpecialitiesCard
