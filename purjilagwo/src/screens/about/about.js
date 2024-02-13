@@ -1,8 +1,13 @@
 import React from 'react'
+import {Box} from "@mui/material"
 
 const About = () => {
   return (
-    <div>About</div>
+    <>
+    <Box sx={{ pt:10,}}>
+      About
+    </Box>
+    </>
   )
 }
 

@@ -1,52 +1,58 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { Box, Button, Typography } from "@mui/material";
-import { CardActionArea } from '@mui/material';
+import { Box, Typography } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
-import { LocationFilled } from '@carbon/icons-react';
+import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
+import { Link } from 'react-router-dom';
 
 const DoctorsList = (props) => {
     return (
         <>
-            <Card sx={{ width: 400, boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", border: "2px solid #E5EAF2", }}  >
-                <CardActionArea sx={{ p: "20px" }}>
-                    <Box sx={{ display: "flex", alignItems: "start", }}>
-                        <Avatar
-                            alt="Remy Sharp"
-                            src="../../images/doc-1.jpg"
-                            sx={{ width: 100, height: 100, border: "1px solid #42A5F5", mt: "1rem" }}
-                        />
-                        <CardContent sx={{height:140}}>
-                            <Typography variant="h5" component="div">
-                                {props.user_Name}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" lineHeight={1.5}>
-                                {props.speciality}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" lineHeight={1.5}>
-                                {props.experience} experience
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" lineHeight={1.5}>
-                                {props.education}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary" lineHeight={1.5} fontWeight={600}>
-                                Starts at ₹{props.fees}
-                            </Typography>
-                        </CardContent>
+            <Box sx={{ width: "350px", backgroundColor: "#F0F6FF", }}>
+                <Box sx={{ display: "flex", backgroundColor: "#42A5F5", width: "100%", justifyContent: "start", alignItems: "center", }}>
+                    <Avatar
+                        alt="Remy Sharp"
+                        src="../../images/doc-1.jpg"
+                        sx={{ width: 130, height: 130, position: "relative", top: 25, mx: 4 }}
+                    />
+                    <Box sx={{ mx: 2, mt: 3 }} >
+                        <Typography sx={{ fontSize: "35px", fontWeight: 900, color: "white" }}>$ 55</Typography>
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <AccessAlarmsIcon sx={{ fontSize: "24px", mr: 1, color: "white" }} />
+                            <Typography sx={{ fontSize: "20px", fontWeight: 400, color: "white" }}>8am-6pm</Typography>
+                        </Box>
                     </Box>
-                    <Box>
-                        <Box sx={{ display: "flex", alignItems: "center", mb: "5px" }}><img src="../images/language.png" alt="" style={{ width: "2rem" }} /><Typography sx={{ ml: "10px", fontSize: "15px" }}>English, Hindi</Typography></Box>
-                        <Box sx={{ display: "flex", alignItems: "center", }}><LocationFilled color='#0A6BD2' size={20} /><Typography sx={{ ml: "21px", fontSize: "15px" }}>{props.address}</Typography></Box>
+                </Box>
+
+                {/* Bottom box */}
+                <Box sx={{ backgroundColor: "#F0F6FF", pt: 6, pl: 5, height: 250 }}>
+                    <Typography sx={{ fontSize: "22px", fontWeight: 600, mb: 2 }}>Dr. Prof. Ettie Mertz</Typography>
+                    <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
+                        <img src="../../images/DoctorList/location.svg" alt="" style={{ height: 20 }} />
+                        <Typography sx={{ fontSize: "16px", fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Location:  86550 Rosenbaum Lights</Typography>
                     </Box>
-                    <Button
-                        variant="contained"
-                        sx={{ width: "100%", background: "#42A5F5", borderRadius: "12px", mt: "10px" }}
-                    >
-                        Consult Now
-                    </Button>
-                </CardActionArea>
-            </Card>
+                    <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
+                        <img src="../../images/DoctorList/science.svg" alt="" style={{ height: 18 }} />
+                        <Typography sx={{ fontSize: "16px", fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Experience : 5 Years</Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
+                        <img src="../../images/DoctorList/ecg.svg" alt="" style={{ height: 18 }} />
+                        <Typography sx={{ fontSize: "16px", fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Diagnostic Radiologist</Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
+                        <img src="../../images/DoctorList/language.svg" alt="" style={{ height: 18 }} />
+                        <Typography sx={{ fontSize: "16px", fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Language : Hindi , English</Typography>
+                    </Box>
+                </Box>
+
+                <Box sx={{width: "200px",my: 3, mx:"auto" }}>
+                    <Link to="/">
+                        <Box sx={{ textAlign: "center", p: 1, borderRadius: 3, fontSize: "15px", fontWeight: 600, color: "#42A5F5", border: "2px solid #42A5F5", "&:hover": { backgroundColor: "#42A5F5", color: "white" }, }}>
+                            Consult Now
+                        </Box>
+                    </Link>
+
+                </Box>
+            </Box>
 
         </>
     )

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -13,42 +13,82 @@ import ListItemText from "@mui/material/ListItemText";
 // import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
-import MenuBox from "./Menubox";
-import { Search, User, Locked,  } from "@carbon/icons-react";
-import Paper from '@mui/material/Paper';
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { User } from "@carbon/icons-react";
+import Paper from "@mui/material/Paper";
 
 const drawerWidth = 240;
 const navItems = [
-  "Find Doctor",
-  "Emergency Booking",
-  "Free consult",
-  "Service",
-  "Surgeries",
+  {
+    name: "Find Doctor",
+    to: "/doctorlist",
+  },
+  {
+    name: "Video Consult",
+    to: "/videoConsult",
+  },
+  {
+    name: "Medicine",
+    to: "/medicine",
+  },
+  {
+    name: "Lab Test",
+    to: "/labTest",
+  },
+  {
+    name: "Surgeries",
+    to: "/surgeries",
+  },
+  {
+    name: "About Us",
+    to: "/aboutus",
+  },
+  {
+    name: "Contact Us",
+    to: "/contactus",
+  },
 ];
 
 function DrawerAppBar() {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [isSticky, setSticky] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
+  const [token, setToken] = useState(null);
+  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const navigate = useNavigate();
 
-  React.useEffect(() => {
-    const handleScroll = () => {
-      const offset = window.scrollY;
+  useEffect(() => {
+    // Retrieve the token from local storage
+    const storedToken = localStorage.getItem("token");
 
-      if (offset > 1) {
-        setSticky(true);
-      } else {
-        setSticky(false);
+    if (storedToken) {
+      setToken(storedToken);
+
+      // Retrieve email and phone number from local storage
+      const storedName = localStorage.getItem("fullName");
+      const storedPhoneNumber = localStorage.getItem("phoneNumber");
+
+      if (storedName && storedPhoneNumber) {
+        setName(storedName);
+        setPhoneNumber(storedPhoneNumber);
       }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    }
   }, []);
+
+  // Logout function
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("fullName");
+    localStorage.removeItem("phoneNumber");
+
+    if (window.location.pathname === "/") {
+      // Reload the page
+      window.location.reload();
+    } else {
+      navigate("/");
+    }
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -62,9 +102,9 @@ function DrawerAppBar() {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
+          <ListItem key={item.name} disablePadding>
             <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText primary={item} />
+              <ListItemText primary={item.name} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -72,24 +112,18 @@ function DrawerAppBar() {
     </Box>
   );
 
-
   return (
     <Box>
       <CssBaseline />
       <AppBar
         component="nav"
         sx={{
-          // backgroundColor:"#F0F7FF" ,
-          backgroundColor :isSticky? "#F0F7FF" : "transparent"  ,
+          backgroundColor: "#FBFCFF",
           boxShadow: "none",
-          position:"fixed" , top: "0",
-          py: isSticky? 0 : ".5rem" ,
-          color: "black",
-          transition: "padding 0.3s ease-out",
-          // filter: "blur(8px)"
-          
+          py: ".5rem",
+          // position: "static",
+          zIndex:999
         }}
-
       >
         <Toolbar>
           <IconButton
@@ -102,50 +136,108 @@ function DrawerAppBar() {
             {/* <MenuIcon /> */}
           </IconButton>
 
-          <Box sx={{ width: "100%", display: "flex", marginX: "3rem" }}>
+          <Box sx={{ width: "100%", display: "flex", marginX: "3rem", }}>
             <Typography
               variant="h6"
               component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block", color: "#42a5f5" } }}
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", sm: "block", color: "#42a5f5" },
+              }}
             >
               Logo
             </Typography>
             <Box
               sx={{ display: { xs: "none", sm: "flex", alignItems: "center" } }}
             >
+              {/* Navabr item list  */}
+
               {navItems.map((item) => (
                 <Link
-                  to=""
-                  key={item}
+                  to={item.to}
+                  key={item.name}
                   style={{
-                    // color: "#42a5f5",
-                    color: "black",
+                    color:
+                      location.pathname === item.to ? "#64EBB6" : "#1C4188",
                     marginRight: "20px",
                     fontSize: "15px",
                     fontWeight: "500",
+                    borderBottom:
+                      location.pathname === item.to && "2px solid #64EBB6",
                   }}
                 >
-                  {item}
+                  {item.name}
                 </Link>
               ))}
 
-              <div
-                style={{
-                  color: "black",
-                  marginRight: "20px",
-                  fontSize: "15px",
-                  fontWeight: "500",
-                }}
-              >
-                <MenuBox isSticky={isSticky} />
-              </div>
-              <Search style={{marginRight: "20px"}} />
-              <Paper elevation={0} sx={{backgroundColor: "white", display: "flex", px: "10px",py: "5px", alignItems: "center", mr: "10px", border: "1px solid #a0a0a069", cursor: "pointer", borderRadius: "10px"}}>
-                <User style={{color :"black", marginRight: "5px"}}/> <Typography sx={{color: "black", fontSize: "15px", fontWeight: "600", }}>Register</Typography>
-              </Paper>
-              <Paper elevation={2} sx={{backgroundColor: "#42a5f5", display: "flex", px: "10px",py: "5px", alignItems: "center", cursor: "pointer", borderRadius: "10px"}}>
-                <Locked style={{color :"white", marginRight: "5px"}}/> <Typography sx={{color: "white", fontSize: "15px", fontWeight: "600", }}>Login</Typography>
-              </Paper>
+              {token ? (
+                <>
+                  {/* After Login Profile Avatar */}
+
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      backgroundColor: "white",
+                      display: "flex",
+                      p: "10px",
+                      alignItems: "center",
+                      mr: "10px",
+                      border: "2px solid #42A5F5",
+                      cursor: "pointer",
+                      borderRadius: "10px",
+                    }}
+                  >
+                    <User
+                      style={{
+                        color: "white",
+                        marginRight: "5px",
+                        backgroundColor: "#42A5F5",
+                        width: "35px",
+                        height: "35px",
+                        padding: 8,
+                        borderRadius: "8px",
+                      }}
+                    />
+                    <Typography
+                      sx={{
+                        color: "#1C4188",
+                        fontSize: "15px",
+                        fontWeight: 600,
+                        ml: 2,
+                      }}
+                    >
+                      Profile Name
+                    </Typography>
+                  </Paper>
+                </>
+              ) : (
+                <>
+                  {/* Login and signup button */}
+                  <Link to="/login">
+                    <Paper
+                      sx={{
+                        backgroundColor: "#42a5f5",
+                        display: "flex",
+                        px: "12px",
+                        py: "5px",
+                        alignItems: "center",
+                        cursor: "pointer",
+                        borderRadius: "10px",
+                        color: "white",
+                        "&:hover": {
+                          color: "#1C4188",
+                          backgroundColor: "white",
+                        },
+                        transition: "all 0.1s ease-in-out",
+                        fontWeight: 600,
+                        border: "2px solid #42A5F5",
+                      }}
+                    >
+                      Login / Signup
+                    </Paper>
+                  </Link>
+                </>
+              )}
             </Box>
           </Box>
         </Toolbar>
@@ -174,10 +266,6 @@ function DrawerAppBar() {
 }
 
 DrawerAppBar.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window: PropTypes.func,
 };
 

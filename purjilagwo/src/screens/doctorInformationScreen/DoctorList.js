@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import '../../style/DoctorList.css';
 import DoctorService from '../../services/Doctor.services';
-import DoctorsListCard from './DoctorsListCard';
-import { Box, Typography, Button, Container } from '@mui/material';
+import { Box, Typography, Container, Paper } from '@mui/material';
 import Stack from '@mui/material/Stack';
-import { Location, LocationFilled, Search } from '@carbon/icons-react';
-import { CardActionArea } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Footer from '../../components/Footer';
 import Loading from '../../components/Loading';
 import DataNotFound from '../../components/DataNotFound';
+import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
+import DoctorsList from './DoctorsListCard';
+import LiveCounter from '../../components/LiveCounter';
 
 function Doctors() {
     const { groupId } = useParams();
@@ -20,29 +18,7 @@ function Doctors() {
     const [location, setLocation] = useState(routeLocation || ''); // Initialize with the route location if available
     const [doctorInfo, setDoctorInfo] = useState(null);
     const [doctorName, setDoctorName] = useState(null);
-    const [isSticky, setIsSticky] = useState(false);
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const offset = window.scrollY;
-
-            // You can adjust the threshold as needed
-            const threshold = 70;
-
-            setIsSticky(offset > threshold);
-        };
-
-        // Attach the scroll event listener
-        window.addEventListener('scroll', handleScroll);
-
-        // Remove the event listener on component unmount
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
-
 
     useEffect(() => {
         (async () => {
@@ -92,185 +68,251 @@ function Doctors() {
         )
         : [];
 
-    const handleBookConsultation = (doctorId) => {
-        // Perform actions with the doctorId and other data
-        console.log(`Book consultation for doctor with ID: ${doctorId}`);
-        // You can navigate to another page, show a modal, etc.
-    };
-
-    const handleDoctorListClick = (doctorId) => {
-        window.location.href = `/doctorsdetails/${doctorId}`;
-    };
-
     return (
         <>
             {loading ? (<Loading />) : (
-                <Box sx={{ backgroundColor: "#F5F5F5", position: "absolute", width: "100%" }}>
+                <>
+                    <Box sx={{ backgroundColor: "#F5F5F5", position: "absolute", width: "100%" }}>
 
-                    <Box sx={{ backgroundColor: "white", borderBottom: "2px solid #E5EAF2", boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", py: isSticky ? "20px" : "30px", position: isSticky ? "sticky" : "static", top: "0px", zIndex: 999, transition: "padding 0.2s ease-in-out", width: "100%" }}>
-                        <Container sx={{ width: { sx: "100%", md: "70%" } }} >
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "space-evenly",
-                                    boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)",
-                                    border: "1px solid black",
-                                    px: { xs: "10px", md: "0" },
-                                    zIndex: 1,
-                                    backgroundColor: "white",
-                                    flexDirection: { xs: "column", sm: "column", md: "row" },
-                                    color: "black", borderRadius: "12px",
 
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        borderRight: { xs: "none", sm: "none", md: "2px solid grey" },
-                                        my: { xs: "20px", sm: "10px" },
-                                        mx: { md: "10px" },
-                                        width: { md: "40%" },
-                                    }}
-                                >
-                                    <Location />
-                                    <input
-                                        style={{
-                                            border: "none",
-                                            color: "#42A5F5",
-                                            width: "80%",
-                                            marginLeft: "5px",
+                        <Container  >
+
+                            <Box sx={{ position: "sticky", top: 0 , backgroundColor: "#F5F5F5", zIndex:999}}>
+
+                                <Typography sx={{ fontSize: { xs: "16px", md: "30px" }, fontWeight: 700, color: "#1C4188", mb: 2, mt: 3, pt:3 }}>
+                                    GET POPULAR DOCTORS AND APPOINTMENT
+                                </Typography>
+
+                                {/* Search box and filter */}
+
+                                <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}>
+
+                                    {/* Search box */}
+
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "space-evenly",
+                                            border: "1px solid #42A5F5",
+                                            px: 0,
+                                            backgroundColor: "white",
+                                            flexDirection: "row",
+                                            color: "black", borderRadius: "12px",
+                                            width: { xs: "100%", lg: "70%" }
+
                                         }}
-                                        id="searchLocation"
-                                        type="text"
-                                        placeholder="Location"
-                                        list="locationList"
-                                        value={location}
-                                        onInput={(e) => {
-                                            const selectedValue = e.target.value;
-                                            setLocation(selectedValue);
-                                            const matchingLocation = filteredLocations.find((data) => data.city === selectedValue);
+                                    >
+                                        <Box
+                                            sx={{
+                                                borderRight: { xs: "none", sm: "none", md: "2px solid grey" },
+                                                my: "10px",
+                                                mx: { md: "10px" },
+                                                width: "30%",
+                                                py: { xs: 0, lg: "2px" },
+                                                px: { xs: "2px", md: 0 }
+                                            }}
+                                        >
+                                            <img src="../../images/DoctorList/location.svg" alt="" style={{ height: "18px" }} />
+                                            <input
+                                                style={{
+                                                    border: "none",
+                                                    color: "#42A5F5",
+                                                    width: "70%",
+                                                    marginLeft: "5px",
+                                                }}
+                                                id="searchLocation"
+                                                type="text"
+                                                placeholder="Location"
+                                                list="locationList"
+                                                value={location}
+                                                onInput={(e) => {
+                                                    const selectedValue = e.target.value;
+                                                    setLocation(selectedValue);
+                                                    const matchingLocation = filteredLocations.find((data) => data.city === selectedValue);
 
-                                            if (matchingLocation) {
-                                                // If there is a match, trigger the handleLocationChange function
-                                                handleLocationChange(selectedValue);
-                                            }
-                                        }}
-                                    />
+                                                    if (matchingLocation) {
+                                                        // If there is a match, trigger the handleLocationChange function
+                                                        handleLocationChange(selectedValue);
+                                                    }
+                                                }}
+                                            />
 
+
+                                        </Box>
+
+                                        <Box
+                                            sx={{
+                                                my: "10px",
+                                                width: "60%",
+                                                mx: { md: "5px" },
+                                                py: { xs: 0, lg: "2px" }
+                                            }}
+                                        >
+                                            <img src="../../images/DoctorList/policy.svg" alt="" height={"18px"} />
+                                            <input
+                                                id="doctorsName"
+                                                type="text"
+                                                style={{
+                                                    border: "none",
+                                                    color: "#42A5F5",
+                                                    marginLeft: "5px",
+                                                    width: "80%",
+                                                }}
+                                                placeholder="Search doctors, clinics, hospitals,etc"
+                                                list="doctorsList"
+                                                value={doctorName}
+                                                onInput={(e) => {
+                                                    setDoctorName(e.target.value);
+                                                    const arrayOfWords = e.target.value.split(" ");
+                                                    const matchingLocation = filteredLocations.find((data) => data.user_Name === e.target.value);
+
+                                                    if (matchingLocation) {
+                                                        handledoctorNameSelect(matchingLocation.id);
+                                                    }
+                                                }}
+
+                                            />
+
+                                        </Box>
+
+                                        <Box sx={{ backgroundColor: "#64EBB6", borderRadius: "8px 12px 12px 8px", display: "flex", px: 2, alignItems: "center", color: "white", cursor: "pointer", width: "20%", justifyContent: "center", }}>
+                                            <Typography sx={{ ml: 1, fontSize: { xs: '10px', lg: "15px" }, mr: 1, }}>SEARCH </Typography>
+                                            <Box sx={{ display: { xs: "none", md: "block" } }}>
+                                                <img src="../../images/DoctorList/arrow_circle_left.svg" alt="" />
+                                            </Box>
+                                        </Box>
+                                    </Box>
+
+                                    {/* Filter */}
+
+                                    <Box sx={{ display: "flex", mt: { xs: 3, lg: 0 }, width: { xs: "100%", lg: "30%" }, justifyContent: "end", alignItems: "center" }}>
+                                        <img src="../../images/DoctorList/menu.svg" alt="" style={{ height: "18px", marginRight: "10px" }} />
+                                        <img src="../../images/DoctorList/widgets.svg" alt="" style={{ height: "25px", marginRight: "10px" }} />
+                                        <Paper
+                                            elevation={0}
+                                            sx={{
+                                                backgroundColor: "white",
+                                                display: "flex",
+                                                p: "10px",
+                                                alignItems: "center",
+                                                mr: "10px",
+                                                border: "2px solid #42A5F5",
+                                                cursor: "pointer",
+                                                borderRadius: "10px",
+                                                width: "60%",
+                                                justifyContent: "space-between"
+                                            }}
+                                        >
+
+                                            <Typography
+                                                sx={{
+                                                    color: "#1C4188",
+                                                    fontSize: "15px",
+                                                    fontWeight: 600,
+                                                }}
+                                            >
+                                                Filter
+                                            </Typography>
+                                            <img src="../../images/DoctorList/tune.svg" alt="" />
+                                        </Paper>
+
+                                    </Box>
 
                                 </Box>
 
-                                <Box
-                                    sx={{
-                                        my: { xs: "10px" },
-                                        width: { md: "70%" },
-                                        mx: { md: "5px" },
-                                    }}
-                                >
-                                    <Search />
-                                    <input
-                                        id="doctorsName"
-                                        type="text"
-                                        style={{
-                                            border: "none",
-                                            color: "#42A5F5",
-                                            marginLeft: "5px",
-                                            width: "80%",
-                                        }}
-                                        placeholder="Search doctors, clinics, hospitals,etc"
-                                        list="doctorsList"
-                                        value={doctorName}
-                                        onInput={(e) => {
-                                            setDoctorName(e.target.value);
-                                            const arrayOfWords = e.target.value.split(" ");
-                                            const matchingLocation = filteredLocations.find((data) => data.user_Name === e.target.value);
 
-                                            if (matchingLocation) {
-                                                handledoctorNameSelect(matchingLocation.id);
-                                            }
-                                        }}
-
-                                    />
-
-                                </Box>
-                            </Box>
-
-                            {location.length > 0 && (
-
-
-                                <Box sx={{ color: "black", mt: 1 }} >
+                                <Box sx={{ color: "black", mt: 3, pb: 1 }} >
                                     {/* <Typography >Location: <span>{location}</span> </Typography> */}
-                                    <Typography sx={{ fontSize: "14px", fontWeight: 600, color: "#409FEC" }} >Doctor available: <span >{doctorInfo && doctorInfo.length > 0 ? (
+                                    <Typography sx={{ fontSize: "14px", fontWeight: 600, color: "#409FEC" }} >Total Doctor available: <span >{doctorInfo && doctorInfo.length > 0 ? (
                                         doctorInfo.length) : (0)}</span> </Typography>
                                     <Box sx={{ height: "4px", width: "10%", backgroundColor: "#409FEC", mt: 1 }}>
 
                                     </Box>
                                 </Box>
 
+                            </Box>
 
-                            )}
+
+                            <Stack spacing={{ xs: 2, sm: 6 }} direction="row" useFlexGap flexWrap="wrap" sx={{ justifyContent: "center", py: "20px", }}>
+
+                                {doctorInfo && doctorInfo.length > 0 ? (
+                                    doctorInfo.map((doctor) => (
+                                        <>
+                                            <Box sx={{ width: "350px", backgroundColor: "#F0F6FF", }}>
+
+                                                {/* Avatar and price box */}
+
+                                                <Box sx={{ display: "flex", backgroundColor: "#42A5F5", width: "100%", justifyContent: "start", alignItems: "center", }}>
+                                                    <Avatar
+                                                        alt="Remy Sharp"
+                                                        src="../../images/doc-1.jpg"
+                                                        sx={{ width: 130, height: 130, position: "relative", top: 25, mx: 4 }}
+                                                    />
+                                                    <Box sx={{ mx: 2, mt: 3 }} >
+                                                        <Typography sx={{ fontSize: "35px", fontWeight: 900, color: "white" }}>$ 55</Typography>
+                                                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                                                            <AccessAlarmsIcon sx={{ fontSize: "24px", mr: 1, color: "white" }} />
+                                                            <Typography sx={{ fontSize: "20px", fontWeight: 400, color: "white" }}>8am-6pm</Typography>
+                                                        </Box>
+                                                    </Box>
+                                                </Box>
+
+                                                {/* Bottom box */}
+                                                <Box sx={{ backgroundColor: "#F0F6FF", pt: 6, pl: 5, height: 250 }}>
+                                                    <Typography sx={{ fontSize: "22px", fontWeight: 600, mb: 2 }}>{doctor?.user_Name}</Typography>
+                                                    <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
+                                                        <img src="../../images/DoctorList/location.svg" alt="" style={{ height: 20 }} />
+                                                        <Typography sx={{ fontSize: "16px", fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Location: {doctor?.doctor_Address}</Typography>
+                                                    </Box>
+                                                    <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
+                                                        <img src="../../images/DoctorList/science.svg" alt="" style={{ height: 18 }} />
+                                                        <Typography sx={{ fontSize: "16px", fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Experience : {doctor?.experience}</Typography>
+                                                    </Box>
+                                                    <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
+                                                        <img src="../../images/DoctorList/ecg.svg" alt="" style={{ height: 18 }} />
+                                                        <Typography sx={{ fontSize: "16px", fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>{doctor?.speciality}</Typography>
+                                                    </Box>
+                                                    <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
+                                                        <img src="../../images/DoctorList/language.svg" alt="" style={{ height: 18 }} />
+                                                        <Typography sx={{ fontSize: "16px", fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Language : Hindi , English</Typography>
+                                                    </Box>
+                                                </Box>
+
+                                                {/* Consult Now link button */}
+
+                                                <Box sx={{ width: "200px", mx: "auto", my: 3 }}>
+                                                    <Link to={`/doctorsdetails/${doctor.id}`}>
+                                                        <Box sx={{ textAlign: "center", p: 1, borderRadius: 3, fontSize: "15px", fontWeight: 600, color: "#42A5F5", border: "2px solid #42A5F5", "&:hover": { backgroundColor: "#42A5F5", color: "white" }, }}>
+                                                            Consult Now
+                                                        </Box>
+                                                    </Link>
+                                                </Box>
+
+                                            </Box>
+                                        </>
+                                    ))
+
+                                ) : (
+                                    <>
+                                        {/* Replace the card with the not found */}
+
+                                        <DataNotFound />    
+                                        {/* <DoctorsList /> */}
+
+                                    </>
+                                )}
+
+
+                            </Stack>
 
                         </Container>
+
+                        <LiveCounter />
+                        <Footer />
+
                     </Box>
 
-                    <Stack spacing={{ xs: 1, sm: 3 }} direction="row" useFlexGap flexWrap="wrap" sx={{ justifyContent: "center", py: "20px", }}>
-
-                        {doctorInfo && doctorInfo.length > 0 ? (
-                            doctorInfo.map((doctor) => (
-                                <Card sx={{ width: 400, borderRadius: "12px", boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", border: "2px solid #E5EAF2", }}  >
-                                    <CardActionArea sx={{ p: "20px" }} onClick={() => handleDoctorListClick(doctor.id)}>
-                                        <Box sx={{ display: "flex", alignItems: "start", }}>
-                                            <Avatar
-                                                alt="Remy Sharp"
-                                                src="../../images/doc-1.jpg"
-                                                sx={{ width: 100, height: 100, border: "1px solid #42A5F5", mt: "1rem" }}
-                                            />
-                                            <CardContent sx={{ height: 140 }}>
-                                                <Typography variant="h5" component="div">
-                                                    {doctor?.user_Name}
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary" lineHeight={1.5}>
-                                                    {doctor?.speciality}
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary" lineHeight={1.5}>
-                                                    {doctor?.experience} experience
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary" lineHeight={1.5}>
-                                                    {doctor?.education}
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary" lineHeight={1.5} fontWeight={600}>
-                                                    Starts at ₹45000
-                                                </Typography>
-                                            </CardContent>
-                                        </Box>
-                                        <Box>
-                                            <Box sx={{ display: "flex", alignItems: "center", mb: "5px" }}><img src="../images/language.png" alt="" style={{ width: "2rem" }} /><Typography sx={{ ml: "10px", fontSize: "15px" }}>English, Hindi</Typography></Box>
-                                            <Box sx={{ display: "flex", alignItems: "center", }}><LocationFilled color='#0A6BD2' size={20} /><Typography sx={{ ml: "21px", fontSize: "15px" }}>{doctor?.doctor_Address}</Typography></Box>
-                                        </Box>
-                                        <Button
-                                            variant="contained"
-                                            sx={{ width: "100%", background: "#42A5F5", borderRadius: "12px", mt: "10px" }}
-                                        >
-                                            Consult Now
-                                        </Button>
-                                    </CardActionArea>
-                                </Card>
-                            ))
-
-                        ) : (
-                            <>
-                                {/* Replace the card with the not found */}
-
-                                <DataNotFound />    
-
-                            </>
-                        )}
-
-
-                    </Stack>
-
-                    <Footer />
-
-                </Box>
+                </>
             )}
 
         </>

@@ -57,11 +57,11 @@ export const commonroutes = [
     element: <EditProfile />,
   },
   {
-    path: '/about_us',
+    path: '/aboutus',
     element: <About />,
   },
   {
-    path: '/contact_us',
+    path: '/contactus',
     element: <Contact />,
   },
 ];

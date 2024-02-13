@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Typography, ListItemText, ListItemIcon, ListItemButton, ListItem ,List} from '@mui/material'
+import { Typography, ListItemText,  ListItemButton, ListItem, List, Paper } from '@mui/material'
+import { User } from "@carbon/icons-react";
 
 
 function Header() {
@@ -137,7 +138,7 @@ function Header() {
                     </Link>
                   </li>
 
-                  <li className="nav-item" style={{marginRight: "5px"}}>
+                  <li className="nav-item" style={{ marginRight: "5px" }}>
                     <Link
                       className="nav-link"
                       to="/contact_us"
@@ -152,39 +153,50 @@ function Header() {
                 </ul>
                 {token ? (
                   <div className="dropdown">
-                    <Link
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        backgroundColor: "white",
+                        display: "flex",
+                        p: "10px",
+                        alignItems: "center",
+                        mr: "10px",
+                        border: "2px solid #42A5F5",
+                        cursor: "pointer",
+                        borderRadius: "10px",
+                      }}
                       className="nav-link dropdown-toggle"
                       id="dropdown07"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      Kundan Kumar
-                    </Link>
+                      <User
+                        style={{
+                          color: "white",
+                          marginRight: "5px",
+                          backgroundColor: "#42A5F5",
+                          width: "35px",
+                          height: "35px",
+                          padding: 8,
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Typography
+                        sx={{
+                          color: "#1C4188",
+                          fontSize: "15px",
+                          fontWeight: 600,
+                          ml: "2px",
+                        }}
+                      >
+                        Kundan Kumar
+                      </Typography>
+                    </Paper>
                     <ul
                       className="dropdown-menu liststyle-none"
                       aria-labelledby="dropdown07"
                     >
-                      <List sx={{width: "230px"}}>
-                        <ListItem disablePadding>
-                          <ListItemButton sx={{ py: 0 }} >
-                            <ListItemIcon>
-                              <div className="profile-info">
-                                <img
-                                  className="profile-img"
-                                  src="https://accounts.practo.com/profile_picture/20080310/medium_thumbnail"
-                                  alt=""
-                                  width="40"
-                                  height="40"
-                                />
-
-                              </div>
-                            </ListItemIcon>
-                            <ListItemText sx={{ fontSize: "13px" }}>
-                              <Typography sx={{ fontSize: "13px", fontWeight: 700 }}>{name}</Typography>
-                              <Typography className="phone-number" sx={{ fontSize: "13px" }}>{phoneNumber}</Typography>
-                            </ListItemText>
-                          </ListItemButton>
-                        </ListItem>
+                      <List sx={{ width: "230px" }}>
                         <ListItem disablePadding>
                           <ListItemButton>
                             <ListItemText sx={{ fontSize: "13px" }}>
@@ -217,21 +229,29 @@ function Header() {
                     </ul>
                   </div>
                 ) : (
-                  <span>
-                    <Link
-                      to="/login"
-                      name="Practo login"
-                      event="Nav Bar:Interacted:Practo login"
-                      className="btn btn-sm btn-outline-primary"
-                      style={{
-                        borderRadius: "12px",
-                        padding: "5px 20px",
-                        marginRight: "10px",
+                  <Link to="/login">
+                    <Paper
+                      sx={{
+                        backgroundColor: "#42a5f5",
+                        display: "flex",
+                        px: "12px",
+                        py: "5px",
+                        alignItems: "center",
+                        cursor: "pointer",
+                        borderRadius: "10px",
+                        color: "white",
+                        "&:hover": {
+                          color: "#1C4188",
+                          backgroundColor: "white",
+                        },
+                        transition: "all 0.1s ease-in-out",
+                        fontWeight: 600,
+                        border: "2px solid #42A5F5",
                       }}
                     >
                       Login / Signup
-                    </Link>
-                  </span>
+                    </Paper>
+                  </Link>
                 )}
               </div>
             </div>
