@@ -296,8 +296,21 @@ function Doctors() {
                                     <>
                                         {/* Replace the card with the not found */}
 
-                                        <DataNotFound />    
-                                        {/* <DoctorsList /> */}
+                                        {/* <DataNotFound />     */}
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
+                                        <DoctorsList />
 
                                     </>
                                 )}

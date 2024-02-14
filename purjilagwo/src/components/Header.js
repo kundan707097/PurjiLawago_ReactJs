@@ -151,7 +151,7 @@ function Header() {
                   </li>
 
                 </ul>
-                {token ? (
+                {true ? (
                   <div className="dropdown">
                     <Paper
                       elevation={0}
