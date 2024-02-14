@@ -10,6 +10,7 @@ import BookingSystem from './BookingSystem';
 import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
 import MobileAppBanner from '../../components/MobileAppBanner';
+import VideoCalling from './VideoCalling';
 
 function Home() {
     return (
@@ -19,6 +20,7 @@ function Home() {
             <Specialities />
             <GetADoctor />
             <AboutUs />
+            <VideoCalling />
             <WhyUs />
             <BookingSystem />
             <MobileAppBanner />
