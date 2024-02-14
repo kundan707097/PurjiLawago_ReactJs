@@ -94,31 +94,6 @@ function InputBox(props) {
           </Box>
         </>
       );
-    case "text":
-      return (
-        <>
-          <Box sx={{ pb: 3 }}>
-            <Typography
-              sx={{ fontSize: "12px" }}
-              className={props.required && "required"}
-            >
-              {props.title}
-            </Typography>
-            <input
-            id={props.id}
-            type="text"
-              style={{
-                border: "1px solid gray",
-                fontSize: "14px",
-                padding: "5px",
-                width: "16rem",
-                borderRadius: "8px",
-              }}
-              onChange={props.handleChange}
-            />
-          </Box>
-        </>
-      );
     case "textarea":
       return (
         <>
@@ -178,25 +153,28 @@ function InputBox(props) {
           </FormGroup>
         </>
       );
-
     default:
       return (
         <>
-          <div className="">
-            <div className={props.required ? " required" : ""}>
-              {props.title}
-            </div>
-            <input
+          <Box>
+            <Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}>{props.title}</Typography>
+            <Box sx={{ mb: 1 }}>
+              <input 
               type={props.type}
-              className="input-box"
-              placeholder="Enter"
-              value={props.value}
-              onChange={props.handleChange}
-              disabled={props.disabled}
-              id={props.title}
-              required={props.required}
-            />
-          </div>
+              name={props.name}
+               style={{
+                border: "1px solid #64EBB6",
+                padding: "10px",
+                backgroundColor: "white",
+                color: '#42A5F5',
+                borderRadius: "10px",
+                width: "100%",
+                fontFamily: "nunito",
+              }} 
+              value={props.value} 
+              onChange={props.onChange} />
+            </Box>
+          </Box>
         </>
       );
   }
