@@ -214,7 +214,7 @@ const Landing = () => {
                       position: "absolute",
                       backgroundColor: "#F5F5F5",
                       width: "100%",
-                      top: { xs: "40px", sm: "120px", md: "40px" },
+                      top: { xs: "40px", sm: "120px", md: "45px" },
                       borderRadius: "10px",
                       py: "0.5rem",
                       left: {xs:3, lg:0}
@@ -222,7 +222,7 @@ const Landing = () => {
                     ref={locationSearchRef}
                   >
                     <Box>
-                       put the map function here and remove the all the button and put the onclick on button
+                       {/* put the map function here and remove the all the button and put the onclick on button */}
                       {filteredLocations.map((location) => (
                         <button
                           style={{
@@ -232,15 +232,15 @@ const Landing = () => {
                             textAlign: "left",
                             border: "none",
                           }}
-                          className="landing-dropdown"
-                           onClick={() => {
-                             setSearchLocation(location.city);
-                             setIsVisible({ locationVisible: false });
-                             handleDoctorListSelect(location.city);
-                           }}
+                           className="landing-dropdown"
+                             onClick={() => {
+                               setSearchLocation(location.city);
+                               setIsVisible({ locationVisible: false });
+                               handleDoctorListSelect(location.city);
+                             }}
                         // value={location.city}
                         >
-                          {location.city} 
+                          {location.city}   
                         </button>
                         
                       ))}
@@ -274,18 +274,18 @@ const Landing = () => {
                     setIsVisible({ nameVisible: true });
                   }}
                 />
-                {searchName.length >= 3 && filteredName.length > 0 && (
+                {searchName.length >= 3 && filteredLocations.length > 0 && (
                 // <datalist id="locationList">
                 <Box
                   sx={{
                     display: isVisible.nameVisible ? 'block' : 'none',
                     position: "absolute",
                     backgroundColor: "#F5F5F5",
-                    width: { xs: "98%", sm: "89%", md: "62%" },
-                    top: { xs: "45px", sm: "160px", md: "50px" },
+                    width: { xs: "98%", sm: "89%", md: "55%" },
+                    top: { xs: "45px", sm: "160px", md: "55px" },
                     borderRadius: "10px",
                     py: "0.5rem",
-                    left: {xs:3, lg:0}
+                    left: {xs:3, lg:"16rem"},
                   }}
                   ref={locationSearchRef}
                 >
@@ -301,11 +301,11 @@ const Landing = () => {
                           border: "none",
                         }}
                         className="landing-dropdown"
-                        onClick={() => {
-                          setSearchName(name.user_Name);
-                          setIsVisible({ nameVisible: false });
-                          handledoctorNameSelect(name.id);
-                        }}
+                         onClick={() => {
+                           setSearchName(name.user_Name);
+                           setIsVisible({ nameVisible: false });
+                           handledoctorNameSelect(name.id);
+                         }}
                         // value={location.city}
                       >
                         {name.user_Name}

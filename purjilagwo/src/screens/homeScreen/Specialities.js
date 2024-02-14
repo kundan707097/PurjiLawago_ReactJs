@@ -78,7 +78,7 @@ const Specialities = () => {
 
   return (
     <>
-      {departmentData.length === 0 && (
+      {departmentData.length !== 0 && (
         <>
           <Box sx={{ background: "#42A5F5", py: 6, px: 6, position: "relative", mb: 6 }}>
             <img src={svg1} alt="" style={{ position: "absolute", top: 0, left: 0, height: "100%" }} />
