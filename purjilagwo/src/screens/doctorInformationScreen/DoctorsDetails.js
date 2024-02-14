@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TabScrollButton, Typography, Avatar } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TabScrollButton, Typography, Avatar, AccordionSummary, AccordionDetails, Accordion, Tooltip } from '@mui/material';
 import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import '../../style/DoctorsDetails.css'
@@ -17,7 +17,10 @@ import "../../components/style/InputBox.css"
 import CustomeButton from '../../components/Button';
 import { useSnackbar } from 'notistack';
 import { Checkmark } from "@carbon/icons-react";
-
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MobileAppBanner from '../../components/MobileAppBanner';
+import LiveCounter from '../../components/LiveCounter';
+import Footer from '../../components/Footer';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,7 +56,6 @@ function a11yProps(index) {
 }
 
 export default function Doctor() {
-  const [activeTab, setActiveTab] = useState(1);
   const [doctorData, setDoctorData] = useState(null); // uncomment this and remove the dummy data
   const [timeSlots, setTimeSlots] = useState([]);
   const [dateString, setDateString] = useState([]);
@@ -62,10 +64,13 @@ export default function Doctor() {
   const [openSlot, setopenSlot] = useState(false);
   const [details, setDetails] = useState(false); // useState for the details that we passing in the dialog box
 
+  const [expanded, setExpanded] = React.useState(false);
 
-  const handleTabClick = (tabNumber) => {
-    setActiveTab(tabNumber);
+  const handleExpand = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
   };
+
+
   const { id } = useParams();
   const [value, setValue] = useState(0);
 
@@ -164,53 +169,106 @@ export default function Doctor() {
       {loading ? <Loading /> : (
         <>
           {doctorData !== null ? (
-            <div className="doctor-wrapper">
-              <div className="doc-flex">
-                <div className="main-col">
-                  <main>
-                    <div className="doc-row">
-                      <div className="doc-col-1">
-                        <div className="doc-img">
-                          <img src="../../images/doc-1.jpg"></img>
-                        </div>
-                      </div>
-                      <div className="doc-col-2">
-                        <div className="text-content">
-                          <h2 className="doc-name">{doctorData?.user_Name} </h2>
-                          <p className="doc-details">{doctorData?.education}</p>
-                          <p className="doc-exp">24 Years Experience Overall  (17 years as specialist)</p>
-                          <p className="doc-desc">{doctorData?.description} </p>
-                        </div>
 
-                        <div className="icon-content">
-                          <div className="icon-1">
-                            <img src="../../images/verified.svg" />
-                            <p>Medical Registration Verified</p>
-                          </div>
+            <>
 
-                          <div className="icon-2">
-                            <img src="../../images/thumbsup.svg" />
-                            <p>95%</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </main>
+              <Box sx={{ bgcolor: { xs: "white", lg: "#F0F6FF" }, display: "flex", }}>
 
+                {/* Left box */}
+                <Box sx={{ bgcolor: "white", border: { xs: 0, lg: "2px solid #64EBB666" }, width: "100%", borderRadius: { xs: 0, lg: "15px" }, my: { xs: 2, lg: 8 }, ml: { xs: 0, lg: 5 }, }}>
 
-                  <Box sx={{ display: { xs: "block", md: "none", backgroundColor: "white" } }}>
-                    <Typography sx={{ fontSize: "14px", fontWeight: 600, color: "black", mb: 1, p: 2 }}>Pick a time slot</Typography>
+                  {/* Doctor name and image */}
+
+                  <Box sx={{ display: "flex", justifyContent: { xs: "center", lg: "space-between" }, flexDirection: { xs: "column", lg: "row" } }}>
+
+                    {/* Doctor name and image */}
+
+                    <Box sx={{ display: "flex", justifyContent: { xs: "center", lg: "start" }, flexDirection: { xs: "column", lg: "row" }, pt: 4, alignItems: { xs: "center", lg: "start" } }} >
+
+                      <Box>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src="../../images/doc-1.jpg"
+                          sx={{ width: 130, height: 130, mx: 4, mb: { xs: 2, lg: 0 }, border: "1px solid #64EBB6" }}
+                        />
+                      </Box>
+
+                      <Box sx={{ pl: { xs: 0, lg: 5 }, width: { xs: "70%", lg: "100%" } }}>
+                        <Typography sx={{ fontSize: "32px", fontWeight: 700, mb: 2, color: "#1C4188" }}>{doctorData?.user_Name} </Typography>
+                        <Box sx={{ display: "flex", my: 1 }}>
+                          <img src="../../images/DoctorList/location.svg" alt="" style={{ height: 20, marginTop: 1 }} />
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Education: {doctorData?.education}</Typography>
+                        </Box>
+                        <Box sx={{ display: "flex", my: 1 }}>
+                          <img src="../../images/DoctorList/science.svg" alt="" style={{ height: 18, marginTop: 3 }} />
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Experience : 5 Years</Typography>
+                        </Box>
+                        <Box sx={{ display: "flex", my: 1 }}>
+                          <img src="../../images/DoctorList/ecg.svg" alt="" style={{ height: 18, marginTop: 4 }} />
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>{doctorData?.description}</Typography>
+                        </Box>
+                        <Box sx={{ display: "flex", my: 1 }}>
+                          <img src="../../images/DoctorList/language.svg" alt="" style={{ height: 18., marginTop: 3 }} />
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Language : Hindi , English</Typography>
+                        </Box>
+                      </Box>
+
+                    </Box>
+
+                    {/* Time and fee */}
+
+                    <Box sx={{ display: "flex", flexDirection: { xs: "column-reverse", lg: "column" }, justifyContent: "space-between", mx: 2 }}>
+                      <Box sx={{ mt: 2, display: "flex", flexDirection: { xs: "row", lg: "column" }, justifyContent: "space-between", }}>
+                        <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#1C4188", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
+                          <img src="../../images/DoctorDetails/alarm_on.svg" alt="" height={"20px"} style={{ marginRight: 10 }} />
+                          10am-8pm
+                        </Box>
+
+                        <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#42A5F5", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
+                          FEE $4544
+                        </Box>
+                      </Box>
+                      <Box sx={{ display: "flex", justifyContent: "space-evenly", mt: 2 }}>
+                        <Box sx={{ padding: ".8rem", backgroundColor: "#F0F6FF", borderRadius: "100px", height: "60px", boxShadow: "4px 4px 10px #00000040" }}>
+                          <img src="../../images/DoctorDetails/image99.svg" style={{ height: "100%" }} alt="" />
+                        </Box>
+                        <Tooltip title="Coming soon.." placement="top" arrow>
+                          <Box sx={{ padding: ".8rem", backgroundColor: "#F0F6FF", borderRadius: "100px", height: "60px", boxShadow: "4px 4px 10px #00000040", cursor: "pointer" }}>
+                            <img src="../../images/DoctorDetails/image100.svg" style={{ height: "100%" }} alt="" />
+                          </Box>
+                        </Tooltip>
+                        <Box sx={{ padding: ".8rem", backgroundColor: "#F0F6FF", borderRadius: "100px", height: "60px", boxShadow: "4px 4px 10px #00000040" }}>
+
+                          <img src="../../images/DoctorDetails/image101.svg" style={{ height: "100%" }} alt="" />
+                        </Box>
+                      </Box>
+                    </Box>
+
+                  </Box>
+
+                  {/* This slot is availbale in moblie view */}
+
+                  <Box sx={{ display: { xs: "block", md: "none", backgroundColor: "white", } }}>
+                    <Typography sx={{ fontSize: "18px", fontWeight: 600, color: "#8E999A", mb: 1, textAlign: "center", mt: 2 }}>Pick a Time Slot</Typography>
                     <Box
                       sx={{
                         flexGrow: 1,
-                        width: 380,
+                        width: 400,
                         bgcolor: 'background.paper',
+                        borderRadius: "15px",
+                        border: "2px solid #64EBB666",
                         mx: "auto"
+
                       }}
                     >
                       <Typography sx={{ textAlign: "center", py: 2, fontSize: "14px", color: "black" }}>Book an appointment for Consultation</Typography>
+
+                      <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: .6, borderRadius: "5px", fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", mx: "auto", mb: 2 }}>
+                        Clinic appointment 650₹
+                      </Box>
+
                       {currentDate != null && timeSlots.length !== 0 ? (
-                        <Box sx={{ display: "flex" }}>
+                        <Box sx={{ display: "flex", px: 1 }}>
                           <TabScrollButton onClick={handleLeft} direction='left' orientation='horizontal'>
                             <ChevronLeftIcon />
                           </TabScrollButton>
@@ -241,7 +299,7 @@ export default function Doctor() {
                                       items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Tomorrow</div>}
                                     {items.getDate() !== currentDate.getDate() && items.getDate() !== currentDate.getDate() + 1 && <div style={{ color: "black" }}>{items.toDateString().split(' ')[0]}, {items.toDateString().split(' ')[2]} {items.toDateString().split(' ')[1]}</div>}
 
-                                    <div style={{ marginTop: '5px', color: "black", fontSize: "8px", fontWeight: 800, color: "#01A400", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
+                                    <div style={{ marginTop: '5px', fontSize: "8px", fontWeight: 800, color: "#42A5F599", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
                                   </>
                                 ]} sx={{ fontSize: "10px", p: 0, width: "100px", fontWeight: 500, }} {...a11yProps(index)} />
 
@@ -271,11 +329,11 @@ export default function Doctor() {
                       {/* <Typography sx={{ mt: 2, fontSize: "15px", color: "black", ml: 3, fontWeight: 600 }}>Evening</Typography> */}
 
 
-                      {dateString.length !== 0 && dateString.map((items, index) => {
+                      {dateString.map((items, index) => {
                         return (
                           <>
                             <CustomTabPanel value={value} index={index} key={index}>
-                              {doctorData.timeSlots[dateString[index]] != undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
+                              {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
                                 <>
                                   <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", pr: "24px" }}>
                                     <img src={Calender} alt="No Slot Available" width={50} />
@@ -292,16 +350,23 @@ export default function Doctor() {
 
                                 </>
                               )}
-                              <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll" }}>
+                              <Box >
+                                <Box sx={{ py: 1, px: 4, bgcolor: "#F0F6FF", borderRadius: "10px", mr: 3, mb: 3 }}>
+                                  <Typography sx={{ color: "#1C4188", textAlign: "center" }}>Total Availability {countSlot(index)} slot</Typography>
+                                </Box>
+                                <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll", justifyContent: "center", "::-webkit-scrollbar": { width: "15px", bgcolor: "#F0F6FF", borderRadius: "10px" }, "::-webkit-scrollbar-thumb": { bgcolor: "#64EBB6", borderRadius: "10px" } }}>
+                                  {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
+                                    return (
+                                      <>
+                                        <Box sx={{ fontSize: "12px", px: 1, py: 1, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index])} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
 
-                                {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
-                                  return (
-                                    <>
-                                      <Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index])} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
-                                      {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index])}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
-                                    </>
-                                  )
-                                })}
+                                        {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index])}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
+                                      </>
+                                    )
+                                  })}
+
+
+                                </Box>
 
 
                               </Box>
@@ -311,12 +376,12 @@ export default function Doctor() {
                         )
                       })}
 
-                      <Box sx={{ width: "90%", mx: "auto", backgroundColor: "#D1EEFA", px: 1, py: 1.5, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", mb: 3 }}>
+                      <Box sx={{ width: "90%", mx: "auto", backgroundColor: "#42A5F5", px: 1, py: 1.5, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", mb: 3, color: "white" }}>
                         After you have submitted the appointment request, we might call to confirm the preferred appointment slot.
 
                       </Box>
                       <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", pb: 1 }}>
-                        <Box sx={{ display: "flex", justifyContent: "space-between", }}><Typography sx={{ fontSize: "14px", fontWeight: 600 }}>Manipal Hospital</Typography><Typography sx={{ fontSize: "12px" }}>₹ 650</Typography></Box>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", }}><Typography sx={{ fontSize: "14px", fontWeight: 600 }}>Manipal Hospital</Typography></Box>
                         <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}><Typography sx={{ fontSize: "12px" }}>Jayanagar 9 block</Typography><Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography></Box>
 
                       </Box>
@@ -324,322 +389,229 @@ export default function Doctor() {
                     </Box>
                   </Box>
 
-                  <div className="block-1">
-                    <ul className="block1-nav">
-                      <li className={activeTab === 1 ? 'active' : ''}><a onClick={() => handleTabClick(1)}>Info</a></li>
-                      <li className={activeTab === 2 ? 'active' : ''}><a onClick={() => handleTabClick(2)}>Stories(27)</a></li>
-                      <li className={activeTab === 3 ? 'active' : ''}><a onClick={() => handleTabClick(3)}>Consult Q&A</a></li>
-                    </ul>
+                  {/* Info and consult Q & A */}
 
-                    <div class="block1-wrapper">
-                      <div className="info-tab" style={{ display: activeTab === 1 ? 'block' : 'none' }}>
-                        <div className="info-tab-container">
-                          <div class="add-col">
-                            <div className="title-row">
-                              <img src="../images/address.svg" />
-                              <h3>Address</h3>
-                            </div>
-                            <p className="hospital-name fw-m">Manipal Hospital</p>
-                            <p>{doctorData?.doctor_Address}</p>
-                          </div>
+                  <Box sx={{ mx: { xs: 3, lg: 6 }, mt: 8, }}>
 
-                          <div className="time-col">
-                            <div className="time-container">
-                              <div className="title-row">
-                                <img src="../images/timing.svg" />
-                                <h3>Timing</h3>
-                              </div>
-                              <p className="days days-1 fw-m">Mon, Fri</p>
-                              <p>{doctorData?.doctorsTimeAvailability}</p>
-                              <p className="days days-2 fw-m">Tue - Thu, Sat</p>
-                              <p>06:00 PM - 08:00 PM</p>
-                            </div>
-                          </div>
+                    {/* Info and consult Q & A heading */}
 
-                          <div className="price-col">
-                            <div className="title-row">
-                              <h3>Consultation Fee</h3>
-                            </div>
-                            <p className="fees">₹ 650</p>
-                            <div className="prime-row">
-                              <p className="prime fw-m">Prime</p>
-                              <div className="tick"></div>
-                            </div>
-                            <p>Max. 30 mins wait + Verified details</p>
-                          </div>
-                        </div>
 
-                        <div className="btn-container">
-                          <button>Book Appointment</button>
-                          <p>No booking fees</p>
-                        </div>
-                      </div>
+                    <Box sx={{ display: "flex", mx: 2 }}>
+                      <Box sx={{ pb: { xs: 2, lg: 3 }, borderBottom: "2px dashed #64EBB6", }}>
+                        <Typography sx={{ color: "#1C4188", fontSize: { xs: 20, lg: 22 }, fontWeight: 600, px: 2, }}>INFO</Typography>
+                      </Box>
+                    </Box>
 
-                      <div className="stories-tab" style={{ display: activeTab === 2 ? 'block' : 'none' }}>
-                        <h2>Patient stories for {doctorData?.user_Name}</h2>
-                        <p className="desc">These are patient’s opinions and do not necessarily reflect the doctor’s medical capabilities. <a href="#">Read more</a></p>
+                    {/* Content */}
 
-                        <div className="topbar">
-                          <p>27 Stories</p>
-                          <div className="sorting-options">
-                            <label for="cars">Sort by:</label>
+                    <Box sx={{ my: 2, display: "flex", flexDirection: { xs: "column", lg: "row" } }}>
 
-                            <select name="sort" id="sort-by">
-                              <option value="recent">Recent</option>
-                              <option value="Most helpful">Most Helpful</option>
-                            </select>
-                          </div>
-                        </div>
+                      <Box sx={{ m: 2, width: { xs: "100%", lg: "33%" } }}>
+                        <Box sx={{ display: "flex", alignItems: "center", }}>
+                          <img src="../../images/DoctorDetails/distance.svg" alt="" style={{ height: 25 }} />
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, mx: 2, color: "#1C4188" }}>ADDRESS</Typography>
+                        </Box>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mt: 2, }}>Manipal Hospital</Typography>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mb: 2 }}>435 Cedar St, City , Country</Typography>
+                      </Box>
+                      <Box sx={{ m: 2, width: { xs: "100%", lg: "33%" } }}>
+                        <Box sx={{ display: "flex", alignItems: "center", }}>
+                          <img src="../../images/DoctorDetails/alarm.svg" alt="" style={{ height: 25 }} />
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, mx: 2, color: "#1C4188" }}>TIMING</Typography>
+                        </Box>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mt: 2, }}>Mon, Fri</Typography>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", }}>11.00 AM - 05.00 PM</Typography>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mt: 2, }}>Tue - Thu, Sat</Typography>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mb: 2 }}>07.00 AM - 05.00 PM</Typography>
+                      </Box>
+                      <Box sx={{ m: 2, width: { xs: "100%", lg: "33%" } }}>
+                        <Box sx={{ display: "flex", alignItems: "center", }}>
+                          <img src="../../images/DoctorDetails/add_card.svg" alt="" style={{ height: 25 }} />
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, mx: 2, color: "#1C4188" }}>Consolation Free</Typography>
+                        </Box>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#1C4188", mt: 2, }}>$75454</Typography>
+                        <Box sx={{ display: "flex", alignItems: "center", }}>
+                          <img src="../../images/DoctorDetails/Group690.svg" alt="" style={{ height: 20 }} />
+                          <Typography sx={{ fontSize: { xs: "14px", lg: "16px" }, fontWeight: 500, ml: 1, color: "#626262", my: 1 }}>Prime</Typography>
+                        </Box>
+                        <Typography sx={{ fontSize: "16px", fontWeight: 400, color: "#626262", mb: 1 }}>Max. 30 mins wait  + Verified Details</Typography>
+                        <img src="../../images/DoctorDetails/visa_card.svg" alt="" height={30} />
+                      </Box>
+                    </Box>
 
-                        <div className="story">
-                          <div className="col-dp">
-                            <div className="dp">A</div>
-                          </div>
+                  </Box>
 
-                          <div className="col-story">
-                            <div className="name-row">
-                              <p className="name">Adanoor Residency</p>
-                              <img src="../images/verified-user.svg" className="verified-user" />
-                            </div>
-                            <p className="time">3 years ago</p>
-                            <p className="story-content">
-                              Due to allergic condition of the scalp, I wanted to consult the best dermatologist. That is when I found {doctorData?.user_Name} through Practo. I am extremely gratified with her consultation. The given treatment was a great relief. After a deep analysis, she explained the condition evidently. She has given the follow-up date as well. I will definitely continue my further treatment with her.
-                            </p>
+                  {/* Experince */}
 
-                            <div className="recommending-doc">
-                              <p>I recommend the doctor</p>
-                              <img src="../images/thumbsup.svg" />
-                            </div>
-                          </div>
+                  <Box sx={{ mx: { xs: 3, lg: 6 }, mt: 8 }}>
 
-                          <img src="../images/quote-right.svg" />
-                        </div>
+                    {/* Experince heading */}
 
-                        <div className="story">
-                          <div className="col-dp">
-                            <div className="dp">S</div>
-                          </div>
+                    <Box sx={{ display: "flex", mx: 2, borderBottom: "2px dashed #64EBB6", width: "30%" }}>
+                      <Typography sx={{ color: "#1C4188", fontSize: 22, fontWeight: 600, pb: 1, }}>EXPERIENCE</Typography>
+                    </Box>
 
-                          <div className="col-story">
-                            <div className="name-row">
-                              <p className="name">Sakshi Sharma</p>
-                              <img src="../images/verified-user.svg" className="verified-user" />
-                            </div>
-                            <p className="time">1 month ago</p>
-                            <p className="story-content">
-                              After completing three of my sessions, things are going well. I am happy about the progressive treatment. {doctorData?.user_Name}  is very considerate. She has given all the needful advice. But the waiting period is really bothersome. My consultation has been delayed for an hour sometimes. If the schedules can be arranged carefully, this might be avoided. Otherwise, everything is perfect.
-                            </p>
+                    {/* Experince content */}
 
-                            <div className="recommending-doc">
-                              <p>I do not recommend the doctor</p>
-                              <img src="../images/thumbsup.svg" className="donot-recomm" />
-                            </div>
-                          </div>
+                    <Box sx={{ my: 2, mx: 2 }}>
+                      <Box sx={{ display: "flex", my: 4 }}>
+                        <img src="../../images/DoctorDetails/Group816.svg" alt="" style={{ height: 25 }} />
+                        <Typography sx={{ fontSize: { xs: "16px", lg: "17px" }, width: { xs: "100%", lg: "80%" }, fontWeight: 500, mx: 2, color: "#5D6566" }}>2003 - 2003 Consultant dermatologist at HDeepti Nursing Home</Typography>
+                      </Box>
 
-                          <img src="../images/quote-right.svg" />
-                        </div>
+                      <Box sx={{ display: "flex", my: 4 }}>
+                        <img src="../../images/DoctorDetails/Group816.svg" alt="" style={{ height: 25 }} />
+                        <Typography sx={{ fontSize: { xs: "16px", lg: "17px" }, width: { xs: "100%", lg: "80%" }, fontWeight: 500, mx: 2, color: "#5D6566" }}>2004 - 2005 Senior resident/tutor at Skin Institute and School of Dermatology</Typography>
+                      </Box>
 
-                        <div className="story">
-                          <div className="col-dp">
-                            <div className="dp">A</div>
-                          </div>
+                      <Box sx={{ display: "flex", my: 4 }}>
+                        <img src="../../images/DoctorDetails/Group816.svg" alt="" style={{ height: 25 }} />
+                        <Typography sx={{ fontSize: { xs: "16px", lg: "17px" }, width: { xs: "100%", lg: "80%" }, fontWeight: 500, mx: 2, color: "#5D6566" }}>2009 - 2009 Consultant dermatologist at Kaya Skin Clinic</Typography>
+                      </Box>
 
-                          <div className="col-story">
-                            <div className="name-row">
-                              <p className="name">Adanoor Residency</p>
-                              <img src="../images/verified-user.svg" className="verified-user" />
-                            </div>
-                            <p className="time">3 years ago</p>
-                            <p className="story-content">
-                              Due to allergic condition of the scalp, I wanted to consult the best dermatologist. That is when I found {doctorData?.user_Name}  through Practo. I am extremely gratified with her consultation. The given treatment was a great relief. After a deep analysis, she explained the condition evidently. She has given the follow-up date as well. I will definitely continue my further treatment with her.
-                            </p>
+                      <Box sx={{ display: "flex", my: 4 }}>
+                        <img src="../../images/DoctorDetails/Group816.svg" alt="" style={{ height: 25 }} />
+                        <Typography sx={{ fontSize: { xs: "16px", lg: "17px", }, width: { xs: "100%", lg: "80%" }, fontWeight: 500, mx: 2, color: "#5D6566" }}>2011 - 2013 Medical Superintendent and Consultant Dermatologist at Hairline
+                          International Hair and Skin Clinic</Typography>
+                      </Box>
+                    </Box>
 
-                            <div className="recommending-doc">
-                              <p>I recommend the doctor</p>
-                              <img src="../images/thumbsup.svg" />
-                            </div>
-                          </div>
 
-                          <img src="../images/quote-right.svg" />
-                        </div>
+                  </Box>
 
-                        <div className="story">
-                          <div className="col-dp">
-                            <div className="dp">S</div>
-                          </div>
+                  {/* FAQ Question asked */}
 
-                          <div className="col-story">
-                            <div className="name-row">
-                              <p className="name">Sakshi Sharma</p>
-                              <img src="../images/verified-user.svg" className="verified-user" />
-                            </div>
-                            <p className="time">1 month ago</p>
-                            <p className="story-content">
-                              After completing three of my sessions, things are going well. I am happy about the progressive treatment. {doctorData?.user_Name}  is very considerate. She has given all the needful advice. But the waiting period is really bothersome. My consultation has been delayed for an hour sometimes. If the schedules can be arranged carefully, this might be avoided. Otherwise, everything is perfect.
-                            </p>
+                  <Box sx={{ mx: { xs: 3, lg: 6 }, mt: 8, position: "relative" }}>
 
-                            <div className="recommending-doc">
-                              <p>I do not recommend the doctor</p>
-                              <img src="../images/thumbsup.svg" className="donot-recomm" />
-                            </div>
-                          </div>
+                    {/* Experince heading */}
 
-                          <img src="../images/quote-right.svg" />
-                        </div>
-                      </div>
+                    <Box sx={{ display: "flex", mx: 2, borderBottom: "2px dashed #64EBB6", width: { xs: "70%", sm: "30%" } }}>
+                      <Typography sx={{ color: "#1492F7", fontSize: 16, fontWeight: 800, pb: 1, }}>FAQ</Typography>
+                      <Typography sx={{ color: "#64EBB6", fontSize: 16, fontWeight: 800, pb: 1, ml: 2 }}>QUESTION ASKED</Typography>
+                    </Box>
 
-                      <div className="qna-tab" style={{ display: activeTab === 3 ? 'block' : 'none' }}>
-                        <div className="topbar">
-                          <h3>Common question & answers</h3>
-                        </div>
+                    <Box sx={{ height: { xs: "100px", lg: "150px" }, position: "absolute", right: 0, top: { xs: "-4.5rem", lg: "-5.5rem" } }}>
+                      <img src="../../images/DoctorDetails/image92.svg" alt="" height={"100%"} />
+                    </Box>
 
-                        <div className="qna-container">
-                          <div className="qna">
-                            <p className="question">Q: Where does {doctorData?.user_Name}  practice?</p>
-                            <p className="answer"><span class="fw-b">A: </span>{doctorData?.user_Name}   practices at Manipal Hospital - Jayanagar 9 Block</p>
-                          </div>
+                    {/* Experince content */}
 
-                          <div className="qna">
-                            <p className="question">Q: How can I take {doctorData?.user_Name} appointment?</p>
-                            <p className="answer"><span class="fw-b">A: </span>You can take <a href="javascript:void(0)">{doctorData?.user_Name}</a> appointment online through Practo for in-clinic visit with the doctor.</p>
-                          </div>
+                    <Box sx={{ my: 4, mx: 2, }}>
 
-                          <div className="qna">
-                            <p className="question">Q: Why do patients visit {doctorData?.user_Name}?</p>
-                            <p className="answer"><span class="fw-b">A: </span>Patients frequently visit {doctorData?.user_Name}  for PRP Hair Transplantation, Hair Weaving & Bonding, Sun Burn Treatment. To see more reasons visit the <a href="javascript:void(0)">doctor's profile</a> on Practo.</p>
-                          </div>
+                      <Accordion expanded={expanded === 'panel1'} onChange={handleExpand('panel1')} sx={{ my: 2, boxShadow: 0, border: "1px solid #42A5F599", py: 2, borderRadius: 2, bgcolor: "#F2F6F9" }}>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls="panel1bh-content"
+                          id="panel1bh-header"
+                        >
+                          <Typography sx={{ width: '100%', flexShrink: 0, color: "#1C4188", fontSize: { xs: "14px", lg: "18px" }, fontWeight: 700 }}>
+                            1. How can I get in touch with your customer support team?
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography sx={{ px: 2.5, fontSize: { xs: "14px", lg: "16px" } }}>
+                            You can reach our customer support team by filling out the contact form on this page, sending us an email at support@example.com, or calling us at [phone number]. Our team is available [hours of operation] to assist you with any inquiries or concerns.
+                          </Typography>
+                        </AccordionDetails>
+                      </Accordion>
 
-                          <div className="qna">
-                            <p className="question">Q: What do patients say about {doctorData?.user_Name}?</p>
-                            <p className="answer"><span class="fw-b">A: </span>{doctorData?.user_Name} has been recommended by 74 patients and has recieved stories from 27 patients. You can <a href="javascript:void(0)">read detailed patient stories</a> of the doctor on Practo.</p>
-                          </div>
+                      <Accordion expanded={expanded === 'panel2'} onChange={handleExpand('panel2')} sx={{ my: 2, boxShadow: 0, border: "1px solid #42A5F599", py: 2, borderRadius: 2, bgcolor: "#F2F6F9" }}>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls="panel1bh-content"
+                          id="panel2bh-header"
+                        >
+                          <Typography sx={{ width: '100%', flexShrink: 0, color: "#1C4188", fontSize: { xs: "14px", lg: "18px" }, fontWeight: 700 }}>
+                            2. What is your response time for inquiries submitted through the contact form?
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography sx={{ px: 2.5, fontSize: { xs: "14px", lg: "16px" } }}>
+                            You can reach our customer support team by filling out the contact form on this page, sending us an email at support@example.com, or calling us at [phone number]. Our team is available [hours of operation] to assist you with any inquiries or concerns.
+                          </Typography>
+                        </AccordionDetails>
+                      </Accordion>
 
-                          <div className="qna">
-                            <p className="question">Q: What is {doctorData?.user_Name} education qualification?</p>
-                            <p className="answer"><span class="fw-b">A: </span>{doctorData?.user_Name} has the following qualifications - MBBS, DNB - Dermatology, Venereology & Leprosy. You can <a href="javascript:void(0)">book the doctor</a> through the doctor's profile on Practo.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                      <Accordion expanded={expanded === 'panel3'} onChange={handleExpand('panel3')} sx={{ my: 2, boxShadow: 0, border: "1px solid #42A5F599", py: 2, borderRadius: 2, bgcolor: "#F2F6F9" }}>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls="panel3bh-content"
+                          id="panel2bh-header"
+                        >
+                          <Typography sx={{ width: '100%', flexShrink: 0, color: "#1C4188", fontSize: { xs: "14px", lg: "18px" }, fontWeight: 700 }}>
+                            3. Can I visit your office in person?
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography sx={{ px: 2.5, fontSize: { xs: "14px", lg: "16px" } }}>
+                            You can reach our customer support team by filling out the contact form on this page, sending us an email at support@example.com, or calling us at [phone number]. Our team is available [hours of operation] to assist you with any inquiries or concerns.
+                          </Typography>
+                        </AccordionDetails>
+                      </Accordion>
 
-                  <div className="block-2">
-                    <div className="block2-container1">
-                      <div className="titlebar">
-                        <h3>Services</h3>
-                        <a href="">View all (68)</a>
-                      </div>
 
-                      <ul>
-                        <li>PRP Hair Transplantation</li>
-                        <li>Cheek Augmentation</li>
-                        <li>keloid/scar treatment</li>
-                        <li>Syphilis Treatment</li>
-                        <li>Leprosy Treatment/Rehab</li>
+                      <Accordion expanded={expanded === 'panel4'} onChange={handleExpand('panel4')} sx={{ my: 2, boxShadow: 0, border: "1px solid #42A5F599", py: 2, borderRadius: 2, bgcolor: "#F2F6F9" }}>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls="panel3bh-content"
+                          id="panel4bh-header"
+                        >
+                          <Typography sx={{ width: '100%', flexShrink: 0, color: "#1C4188", fontSize: { xs: "14px", lg: "18px" }, fontWeight: 700 }}>
+                            4. Do you have a physical store where I can purchase your products/services?
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography sx={{ px: 2.5, fontSize: { xs: "14px", lg: "16px" } }}>
+                            You can reach our customer support team by filling out the contact form on this page, sending us an email at support@example.com, or calling us at [phone number]. Our team is available [hours of operation] to assist you with any inquiries or concerns.
+                          </Typography>
+                        </AccordionDetails>
+                      </Accordion>
 
-                        <li>Hair Weaving & Bonding</li>
-                        <li>Thread Lift</li>
-                        <li>Bacterial Skin Infection Treatment</li>
-                        <li>Gonorrhea Treatment</li>
-                        <li>Chemical Peel</li>
+                      <Accordion expanded={expanded === 'panel5'} onChange={handleExpand('panel5')} sx={{ my: 2, boxShadow: 0, border: "1px solid #42A5F599", py: 2, borderRadius: 2, bgcolor: "#F2F6F9" }}>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls="panel5bh-content"
+                          id="panel4bh-header"
+                        >
+                          <Typography sx={{ width: '100%', flexShrink: 0, color: "#1C4188", fontSize: { xs: "14px", lg: "18px" }, fontWeight: 700 }}>
+                            5. How can I stay updated on news and promotions from your company?
+                          </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography sx={{ px: 2.5, fontSize: { xs: "14px", lg: "16px" } }}>
+                            You can reach our customer support team by filling out the contact form on this page, sending us an email at support@example.com, or calling us at [phone number]. Our team is available [hours of operation] to assist you with any inquiries or concerns.
+                          </Typography>
+                        </AccordionDetails>
+                      </Accordion>
 
-                        <li>Sun Burn Treatment</li>
-                        <li>Anti Aging Treatment</li>
-                        <li>Melanoma Treatment</li>
-                        <li>Glutathione - Skin Whitening</li>
-                        <li>Skin Polishing</li>
-                      </ul>
-                    </div>
+                    </Box>
 
-                    <div className="block2-container2">
-                      <div className="ul-wrapper">
-                        <div className="titlebar">
-                          <h3>Specializations</h3>
-                        </div>
+                  </Box>
 
-                        <ul>
-                          <li>Dermatologist</li>
-                          <li>Cosmetologist</li>
-                        </ul>
-                      </div>
+                </Box>
 
-                      <div className="ul-wrapper">
-                        <div className="titlebar">
-                          <h3>Awards and Recognitions</h3>
-                        </div>
-                        <ul>
-                          <li>Asia-pacific at the L`Oreal Social Responsibility Awards in Dermatology</li>
-                          <li>World Congress of Dermatology, Vancouver, Canada, June 2015</li>
-                          <li>IADVL-KT Community Dermatology Award</li>
-                        </ul>
-                      </div>
-                    </div>
+                {/* Box for book slot right box */}
 
-                    <div className="block2-container3">
-                      <div className="ul-wrapper">
-                        <div className="titlebar">
-                          <h3>Education</h3>
-                        </div>
-
-                        <ul>
-                          <li>{doctorData?.education}</li>
-                        </ul>
-                      </div>
-
-                      <div className="ul-wrapper">
-                        <div className="titlebar">
-                          <h3>Memberships</h3>
-                          <a >View all (9)</a>
-                        </div>
-                        <ul>
-                          <li>Karnataka Medical Council</li>
-                          <li>ife Member, Indian Association of Dermatologists, Venereologists and Leprologists</li>
-                          <li>Life Member, Geriatric Society of India</li>
-                          <li>EC Member, Bangalore Dermatology Society, India</li>
-                          <li>National Advisor, First Conference on Community Dermatology. Rajahmundry, AP. 2nd August, 2015</li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="block2-container4">
-                      <div className="ul-wrapper">
-                        <div className="titlebar">
-                          <h3>Experience</h3>
-                        </div>
-
-                        <ul>
-                          <li>2003 - 2003 Consultant dermatologist at HDeepti Nursing Home</li>
-                          <li>2004 - 2005 Senior resident/tutor at Skin Institute and School of Dermatology</li>
-                          <li>2009 - 2009 Consultant dermatologist at Kaya Skin Clinic</li>
-                          <li>2011 - 2013 Medical Superintendent and Consultant Dermatologist at Hairline International Hair and Skin Clinic</li>
-                        </ul>
-                      </div>
-
-                      <div className="ul-wrapper">
-                        <div className="titlebar">
-                          <h3>Registrations</h3>
-                        </div>
-                        <ul>
-                          <li>53039 Karnataka Medical Council, 1999</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <Box sx={{ display: { xs: "none", md: "block" } }}>
-                  <Typography sx={{ fontSize: "14px", fontWeight: 600, color: "black", mb: 1 }}>Pick a time slot</Typography>
+                <Box sx={{ display: { xs: "none", md: "block" }, mt: "30px", mr: 5, ml: 2 }}>
+                  <Typography sx={{ fontSize: "18px", fontWeight: 600, color: "#8E999A", mb: 1, }}>Pick a Time Slot</Typography>
                   <Box
                     sx={{
                       flexGrow: 1,
-                      width: 380,
+                      width: 400,
                       bgcolor: 'background.paper',
+                      borderRadius: "15px",
+                      border: "2px solid #64EBB666",
+
                     }}
                   >
                     <Typography sx={{ textAlign: "center", py: 2, fontSize: "14px", color: "black" }}>Book an appointment for Consultation</Typography>
 
+                    <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: .6, borderRadius: "5px", fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", mx: "auto", mb: 2 }}>
+                      Clinic appointment 650₹
+                    </Box>
+
                     {currentDate != null && timeSlots.length !== 0 ? (
-                      <Box sx={{ display: "flex" }}>
+                      <Box sx={{ display: "flex", px: 1 }}>
                         <TabScrollButton onClick={handleLeft} direction='left' orientation='horizontal'>
                           <ChevronLeftIcon />
                         </TabScrollButton>
@@ -670,7 +642,7 @@ export default function Doctor() {
                                     items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Tomorrow</div>}
                                   {items.getDate() !== currentDate.getDate() && items.getDate() !== currentDate.getDate() + 1 && <div style={{ color: "black" }}>{items.toDateString().split(' ')[0]}, {items.toDateString().split(' ')[2]} {items.toDateString().split(' ')[1]}</div>}
 
-                                  <div style={{ marginTop: '5px', fontSize: "8px", fontWeight: 800, color: "#01A400", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
+                                  <div style={{ marginTop: '5px', fontSize: "8px", fontWeight: 800, color: "#42A5F599", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
                                 </>
                               ]} sx={{ fontSize: "10px", p: 0, width: "100px", fontWeight: 500, }} {...a11yProps(index)} />
 
@@ -721,16 +693,23 @@ export default function Doctor() {
 
                               </>
                             )}
-                            <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll" }}>
+                            <Box >
+                              <Box sx={{ py: 1, px: 4, bgcolor: "#F0F6FF", borderRadius: "10px", mr: 3, mb: 3 }}>
+                                <Typography sx={{ color: "#1C4188", textAlign: "center" }}>Total Availability {countSlot(index)} slot</Typography>
+                              </Box>
+                              <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll", justifyContent: "center", "::-webkit-scrollbar": { width: "15px", bgcolor: "#F0F6FF", borderRadius: "10px" }, "::-webkit-scrollbar-thumb": { bgcolor: "#64EBB6", borderRadius: "10px" } }}>
+                                {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
+                                  return (
+                                    <>
+                                      <Box sx={{ fontSize: "12px", px: 1, py: 1, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index])} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
 
-                              {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
-                                return (
-                                  <>
-                                    <Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index])} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
-                                    {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "1px solid #199FD9" : "1px solid #bfbfbfa8", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "75px", textAlign: "center", borderRadius: "3px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index])}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
-                                  </>
-                                )
-                              })}
+                                      {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index])}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
+                                    </>
+                                  )
+                                })}
+
+
+                              </Box>
 
 
                             </Box>
@@ -740,12 +719,12 @@ export default function Doctor() {
                       )
                     })}
 
-                    <Box sx={{ width: "90%", mx: "auto", backgroundColor: "#D1EEFA", px: 1, py: 1.5, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", mb: 3 }}>
+                    <Box sx={{ width: "90%", mx: "auto", backgroundColor: "#42A5F5", px: 1, py: 1.5, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", mb: 3, color: "white" }}>
                       After you have submitted the appointment request, we might call to confirm the preferred appointment slot.
 
                     </Box>
                     <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", pb: 1 }}>
-                      <Box sx={{ display: "flex", justifyContent: "space-between", }}><Typography sx={{ fontSize: "14px", fontWeight: 600 }}>Manipal Hospital</Typography><Typography sx={{ fontSize: "12px" }}>₹ 650</Typography></Box>
+                      <Box sx={{ display: "flex", justifyContent: "space-between", }}><Typography sx={{ fontSize: "14px", fontWeight: 600 }}>Manipal Hospital</Typography></Box>
                       <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}><Typography sx={{ fontSize: "12px" }}>Jayanagar 9 block</Typography><Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography></Box>
 
                     </Box>
@@ -753,8 +732,10 @@ export default function Doctor() {
                   </Box>
                 </Box>
 
-              </div>
-            </div>
+              </Box>
+
+            </>
+
           ) : (
 
             <>
@@ -763,6 +744,11 @@ export default function Doctor() {
 
             </>
           )}
+
+
+          <MobileAppBanner />
+          <LiveCounter />
+          <Footer />
         </>
       )}
       {details !== null && (<SlotBookDialog open={openSlot} onClose={() => setopenSlot(false)} details={details} />)}
@@ -892,9 +878,9 @@ const SlotBookDialog = ({ open, onClose, details }) => {
         <DialogTitle fontSize={19} lineHeight={1} fontWeight={600}>Book Slot</DialogTitle>
 
         <DialogContent >
-          <Box sx={{ display: "flex", width: "100%", mt: 1, flexDirection: {xs: "column", sm: "row"} }}>
+          <Box sx={{ display: "flex", width: "100%", mt: 1, flexDirection: { xs: "column", sm: "row" } }}>
             {/* Box for Doctor Details */}
-            <Box sx={{ width: {xs: "100%", sm: "50%"} }}>
+            <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
               <Paper elevation={10} sx={{ mb: 2 }}>
                 <Typography sx={{ fontWeight: 600, fontSize: 15, textAlign: "left", borderLeft: "3px solid #199FD9", pl: "1rem", lineHeight: 2.5, borderRadius: "4px", color: "black" }}>
                   In-clinic Appointment
@@ -936,7 +922,7 @@ const SlotBookDialog = ({ open, onClose, details }) => {
             </Box>
 
             {/* Box for verification and pateint details */}
-            <Box sx={{width: {xs: "100%", sm: "50%"}, textAlign: "left", ml: {xs: 0, sm:4}, mt: {xs: 4, sm:0}, }}>
+            <Box sx={{ width: { xs: "100%", sm: "50%" }, textAlign: "left", ml: { xs: 0, sm: 4 }, mt: { xs: 4, sm: 0 }, }}>
               <Box>
                 <Typography sx={{ color: "black", fontSize: "15px" }} className='required'>Pateint Name</Typography>
                 <input type="text" name="" id="" style={{ width: "100%", marginTop: 4, padding: 6, border: "1px solid gray", fontSize: "14px" }} placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} />

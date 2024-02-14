@@ -22,7 +22,7 @@ const LiveCounter = () => {
               <Box sx={{ fontSize: "40px", color: "white", fontWeight: 900, ml: {xs: 0, lg:3}, mt: {xs: 2, lg:0}, textAlign: "center" }} >
                 <CountUp start={0} end={1000} duration={3} delay={0} style={{ marginRight: "4px", }} />
                 <span>+</span>
-                <Typography sx={{ fontSize: {xs: "20px" , lg: "24px"},  }}>ACTIVE VISITORS</Typography>
+                <Typography sx={{ fontSize: {xs: "20px" , lg: "24px"}, color: "white", mt:2  }}>ACTIVE VISITORS</Typography>
               </Box>
             </>)}
           </Box>
@@ -33,7 +33,7 @@ const LiveCounter = () => {
               <Box sx={{ fontSize: "40px", color: "white", fontWeight: 900, ml: {xs: 0, lg:3}, mt: {xs: 2, lg:0}, textAlign: "center"}} >
                 <CountUp start={0} end={500} duration={2} delay={0} style={{ marginRight: "4px" }} />
                 <span>+</span>
-                <Typography sx={{ fontSize: {xs: "20px" , lg: "24px"}, }}>TREATMENT OF PATIENT</Typography>
+                <Typography sx={{ fontSize: {xs: "20px" , lg: "24px"},color: "white", mt:2 }}>TREATMENT OF PATIENT</Typography>
               </Box>
             </>)}
           </Box>
@@ -44,7 +44,7 @@ const LiveCounter = () => {
               <Box sx={{ fontSize: "40px", color: "white", fontWeight: 900, ml: {xs: 0, lg:3}, mt: {xs: 2, lg:0}, textAlign: "center" }} >
                 <CountUp start={0} end={100} duration={4} delay={0} style={{ marginRight: "4px" }} />
                 <span>+</span>
-                <Typography sx={{ fontSize: {xs: "20px" , lg: "24px"}, }}>ACTIVE DOCTORS</Typography>
+                <Typography sx={{ fontSize: {xs: "20px" , lg: "24px"}, color: "white", mt:2 }}>ACTIVE DOCTORS</Typography>
               </Box>
             </>)}
           </Box>

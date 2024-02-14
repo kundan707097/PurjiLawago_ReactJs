@@ -9,6 +9,7 @@ import WhyUs from './WhyUs';
 import BookingSystem from './BookingSystem';
 import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
+import MobileAppBanner from '../../components/MobileAppBanner';
 
 function Home() {
     return (
@@ -20,6 +21,7 @@ function Home() {
             <AboutUs />
             <WhyUs />
             <BookingSystem />
+            <MobileAppBanner />
             <LiveCounter />
             <Footer />
 
