@@ -17,6 +17,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { User } from "@carbon/icons-react";
 import Paper from "@mui/material/Paper";
 
+
 const drawerWidth = 240;
 const navItems = [
   {
@@ -113,7 +114,7 @@ function DrawerAppBar() {
   );
 
   return (
-    <Box>
+    <Box >
       <CssBaseline />
       <AppBar
         component="nav"
@@ -145,7 +146,20 @@ function DrawerAppBar() {
                 display: { xs: "none", sm: "block", color: "#42a5f5" },
               }}
             >
-              Logo
+            <Link to="/" className="navbar-brand">
+              <img src="/images/logo.png" alt="Logo" className="" />
+            </Link>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarsExample07"
+              aria-controls="navbarsExample07"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
             </Typography>
             <Box
               sx={{ display: { xs: "none", sm: "flex", alignItems: "center" } }}

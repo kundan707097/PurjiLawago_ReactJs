@@ -5,7 +5,7 @@ const HomeDashboard = lazy(() => import('../screens/dashBoardScreens/HomeDashboa
 export const privateRoutes = [
  
   {
-    path: '/homeDashhboard',
+    path: '/homeDashboard',
     element: <HomeDashboard />,
 
   },
