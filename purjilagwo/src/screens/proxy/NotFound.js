@@ -6,6 +6,8 @@ const notFoundStyle = {
   fontSize: "24px",
   fontFamily: "Arial, sans-serif",
   color: "#333",
+  width: "100%",
+  height: "100vh"
 };
 
 const NotFound = () => {
