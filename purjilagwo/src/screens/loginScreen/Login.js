@@ -84,6 +84,7 @@ const LoginForm = () => {
       localStorage.setItem("token", response.token);
       localStorage.setItem("fullName", response.fullName);
       localStorage.setItem("phoneNumber", response.phoneNumber);
+      // localStorage.setItem("isDoctor", response.isDoctor);
       navigate("/")
     }
     else {
@@ -366,7 +367,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
-    debugger
+    // debugger
     if (activeTab === "register") {
       handleRegistration(data);
     } else {
@@ -376,19 +377,25 @@ const Login = () => {
 
   const handleLogin = async (loginData) => {
     let value = LoginValue;
-    debugger;
+    // debugger;
     value.emailOrPhoneNumber = loginData.emailOrPhoneNumber;
     value.password = loginData.loginPassword;
-    const response = await LoginService.Login(value);
-    if (response !== undefined) {
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("fullName", response.fullName);
-      localStorage.setItem("phoneNumber", response.phoneNumber);
-      navigate("/")
-    }
-    else {
-      throw Error("Network response was not ok");
-    }
+     const response = await LoginService.Login(value);
+     if (response !== undefined) {
+       localStorage.setItem("token", response.token);
+       localStorage.setItem("fullName", response.fullName);
+       localStorage.setItem("phoneNumber", response.phoneNumber);
+       localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
+       navigate("/")
+     }
+     else {
+       throw Error("Network response was not ok");
+     }
+    // localStorage.setItem("token", "Vicky is good boy");
+    // localStorage.setItem("fullName", "Vicky jaiswal");
+    // localStorage.setItem("phoneNumber", "6205316232");
+    // localStorage.setItem("isDocotrsOrPatiets", true);
+    // navigate("/")
   };
   const handleRegistration = async (formData) => {
     try {
@@ -516,16 +523,18 @@ const Login = () => {
               </Box>
             )}
 
+            {/* This is for signup screen */}
+
             {activeTab === 'register' && (
               <Box sx={{ width: "100%" }}>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
 
                   <Box sx={{ display: "flex", mt: 2 }}>
-                    <Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}>Are You a Doctor ?</Typography>
-                    <Link>
-                      <Typography sx={{ color: "#42A5F5", fontSize: "16px", fontWeight: 600, ml: 1 }}>Register Here</Typography>
-                    </Link>
+                    {!isDoctor && (<Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600, mr: 1, }}>Are You a Doctor ?</Typography>)}
+
+                    <Typography component={"button"} type='button' sx={{ color: "#42A5F5", fontSize: "16px", fontWeight: 600,  border:"none", bgcolor:"transparent" }} onClick={toggleDoctorStatus}>{isDoctor ? "Not a Doctor ?" : "Register Here"}</Typography>
+
 
                   </Box>
 
@@ -575,7 +584,7 @@ const Login = () => {
                     )}
                   </Box>
 
-                  {/* Button for login */}
+                  {/* Button for signup */}
 
                   <Box sx={{ width: "100%", mt: 2 }}>
                     <CustomizedButton title={"Sign Up"} type={"submit"} />

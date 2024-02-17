@@ -4,7 +4,6 @@ import Home from '../screens/homeScreen/Home';
 import VideoConsult from '../screens/videoconsult/VideoConsult';
 import Medicine from '../screens/medicine/Medicine';
 import LabTest from '../screens/labtest/LabTest';
-import EditProfile from '../screens/editProfile/EditProfile';
 import Surgeries from '../screens/surgeries/surgeries';
 import About from '../screens/about/about';
 import Contact from '../screens/contact/contact';
@@ -51,10 +50,6 @@ export const commonroutes = [
   {
     path: '/surgeries',
     element: <Surgeries />,
-  },
-  {
-    path: '/edit/profile',
-    element: <EditProfile />,
   },
   {
     path: '/aboutus',

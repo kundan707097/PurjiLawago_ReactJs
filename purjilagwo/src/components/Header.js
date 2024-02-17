@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Typography, ListItemText,  ListItemButton, ListItem, List, Paper } from '@mui/material'
+import { Typography, ListItemText, ListItemButton, ListItem, List, Paper } from '@mui/material'
 import { User } from "@carbon/icons-react";
 
 
@@ -153,50 +153,53 @@ function Header() {
                 </ul>
                 {token ? (
                   <div className="dropdown">
-                    <Paper
-                      elevation={0}
-                      sx={{
-                        backgroundColor: "white",
-                        display: "flex",
-                        p: "10px",
-                        alignItems: "center",
-                        mr: "10px",
-                        border: "2px solid #42A5F5",
-                        cursor: "pointer",
-                        borderRadius: "10px",
-                      }}
-                      className="nav-link dropdown-toggle"
-                      id="dropdown07"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <User
-                        style={{
-                          color: "white",
-                          marginRight: "5px",
-                          backgroundColor: "#42A5F5",
-                          width: "35px",
-                          height: "35px",
-                          padding: 8,
-                          borderRadius: "8px",
-                        }}
-                      />
-                      <Typography
+                    <Link to="/dashboard/edit/profile">
+                      <Paper
+                        elevation={0}
                         sx={{
-                          color: "#1C4188",
-                          fontSize: "15px",
-                          fontWeight: 600,
-                          ml: "2px",
+                          backgroundColor: "white",
+                          display: "flex",
+                          p: "10px",
+                          alignItems: "center",
+                          mr: "10px",
+                          border: "2px solid #42A5F5",
+                          cursor: "pointer",
+                          borderRadius: "10px",
                         }}
+                      // className="nav-link dropdown-toggle"
+                      // id="dropdown07"
+                      // data-bs-toggle="dropdown"
+                      // aria-expanded="false"
                       >
-                        Kundan Kumar
-                      </Typography>
-                    </Paper>
-                    <ul
+                        <User
+                          style={{
+                            color: "white",
+                            marginRight: "5px",
+                            backgroundColor: "#42A5F5",
+                            width: "35px",
+                            height: "35px",
+                            padding: 8,
+                            borderRadius: "8px",
+                          }}
+                        />
+                        <Typography
+                          sx={{
+                            color: "#1C4188",
+                            fontSize: "15px",
+                            fontWeight: 600,
+                            ml: "2px",
+                          }}
+                        >
+                          {name}
+                        </Typography>
+                      </Paper>
+                    </Link>
+
+                    {/* <ul
                       className="dropdown-menu liststyle-none"
                       aria-labelledby="dropdown07"
                     >
-                      <List sx={{ width: "230px" }}>
+                      <List sx={{ width: "230px"}}>
                         <ListItem disablePadding>
                           <ListItemButton>
                             <ListItemText sx={{ fontSize: "13px" }}>
@@ -226,7 +229,7 @@ function Header() {
                           </ListItemButton>
                         </ListItem>
                       </List>
-                    </ul>
+                    </ul> */}
                   </div>
                 ) : (
                   <Link to="/login">

@@ -1,5 +1,5 @@
 
-import { Box, Button, Container, Typography, Avatar, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { Box, Button, Container, Typography, Avatar, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Autocomplete } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import InputBox from "../../components/InputBox";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -8,23 +8,22 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import ProfileUpdate from "../../services/Update.services";
+import { DoctorProfileData, PatientProfileData } from "../../models/Index";
+import Loading from "../../components/Loading";
+import ErrorMessage from "../../components/ErrorMessage";
+import { CustomizedButton } from "../../components/Button";
 
 function EditProfile() {
   // debugger;
+  const [id, setID] = useState();
+  const [isDoctor, setIsDoctor] = useState(true);
   const [value, setValue] = useState({
-    id: 116,
-    image:"",
     name: "",
-    phonenumber: "",
-    email: "",
     gender: "",
-    dateofbirth: "",
     education: "",
     experience: "",
-    specialization: "",
+    specialization: [],
     description: "",
-    lunchTime: "",
-    availableTime: "",
     consultantFee: "",
     houseNoStreetArea: "",
     colonyStreetLocality: "",
@@ -39,28 +38,165 @@ function EditProfile() {
   const [day, setDays] = useState({
     monday: false,
     tuesday: false,
-    Wednesday: false,
+    wednesday: false,
     thursday: false,
     friday: false,
     saturday: false,
     sunday: false,
   });
   const [image, setImage] = useState(null);
-  const [lunchTime, setLunchTime] = useState(() => [
-    dayjs('2022-04-17T11:30'),
-    dayjs('2022-04-17T19:30'),
-  ])
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [dob, setDob] = useState(() => dayjs('2000-01-01'));
   const [availableTime, setAvailableTime] = useState(() => [
-    dayjs('2022-04-17T11:30'),
+    dayjs('2022-04-17T10:00'),
     dayjs('2022-04-17T19:30'),
   ])
+  const [lunchTime, setLunchTime] = useState(() => [
+    dayjs('2022-04-17T13:00'),
+    dayjs('2022-04-17T14:30'),
+  ]);
+
+  function dateCoverter(inputDate) {
+    const dateObject = new Date(inputDate);
+    // Extract components of the date
+    const year = dateObject.getFullYear();
+    const month = (`0${dateObject.getMonth() + 1}`).slice(-2); // Adding 1 because months are zero-based
+    const day = (`0${dateObject.getDate()}`).slice(-2);
+    const hours = (`0${dateObject.getHours()}`).slice(-2);
+    const minutes = (`0${dateObject.getMinutes()}`).slice(-2);
+
+    // Construct the desired format
+    const outputDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+    return outputDate;
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('id')) {
+      setID(localStorage.getItem('id'));
+    }
+    if (localStorage.getItem('isDocotrsOrPatiets')) {
+      setIsDoctor(localStorage.getItem('isDocotrsOrPatiets'));
+    }
+  }, [])
+
+
+  //Function for get the profile data 
+
+  useEffect(() => {
+    (async () => {
+      try {
+        if (isDoctor) {
+          const response = await ProfileUpdate.GetProfileData(id, "DoctorsInformation/DoctorsProfileById");
+          if (response.ok) {
+            const responseData = await response.json();
+            console.log('Profile data:', responseData);
+            setImage(responseData.image);
+            setDob(dayjs(responseData.dateofbirth));
+            setLunchTime(responseData.lunchTime.split('/').map((time) => dayjs(time)));
+            setAvailableTime(responseData.availableTime.split('/').map((time) => dayjs(time)));
+            responseData.days.forEach((day) => {
+              setDays((prevDays) => ({
+                ...prevDays,
+                [day]: true,
+              }));
+            });
+            setValue({
+              name: responseData.name,
+              gender: responseData.gender,
+              education: responseData.education,
+              experience: responseData.experience,
+              specialization: responseData.specialization,
+              description: responseData.description,
+              consultantFee: responseData.consultantFee,
+              houseNoStreetArea: responseData.houseNoStreetArea,
+              colonyStreetLocality: responseData.colonyStreetLocality,
+              city: responseData.city,
+              state: responseData.state,
+              country: responseData.country,
+              pincode: responseData.pincode,
+              extraphonenumbers: responseData.extraPhoneNumbers,
+              language: responseData.language,
+
+            })
+            setEmail(responseData.email);
+            setPhoneNumber(responseData.phoneNumber);
+          }
+        }
+        else {
+          const response = await ProfileUpdate.GetProfileData(id, "DoctorsInformation/DoctorsProfileById");
+          if (response.ok) {
+            const responseData = await response.json();
+            console.log('Profile data:', responseData);
+            setImage(responseData.profile_Picture);
+            setDob(dayjs(responseData.dateOfBirth));
+            setValue({
+              name: responseData.user_Name,
+              gender: responseData.gender,
+              houseNoStreetArea: responseData.patient_Address,
+              colonyStreetLocality: responseData.colonyStreetLocality,
+              city: responseData.city,
+              state: responseData.state,
+              country: responseData.country,
+              pincode: responseData.pincode,
+
+            })
+            setEmail(responseData.email);
+            setPhoneNumber(responseData.moblie_Number);
+          }
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    })();
+
+  }, [ProfileUpdate.GetProfileData])
+
 
   const handleUpdateProfile = async () => {
     debugger;
-    value.lunchTime = lunchTime[0].format('HH:mm') + " - " + lunchTime[1].format('HH:mm');
-    value.availableTime = availableTime[0].format('HH:mm') + " - " + availableTime[1].format('HH:mm');
+    if (isDoctor) {
+      handleDoctorUpdateProfile();
+    }
+    else {
+      handlePatientUpdateProfile();
+    }
+  };
+
+  const handleDoctorUpdateProfile = async () => {
+    debugger;
+    let doctor_profile_data = DoctorProfileData;
+    doctor_profile_data.id = id;
+    doctor_profile_data.image = image;
+    doctor_profile_data.name = value.name;
+    doctor_profile_data.phoneNumber = phoneNumber;
+    doctor_profile_data.email = email;
+    doctor_profile_data.gender = value.gender;
+    doctor_profile_data.dateOfBirth = dob.format('YYYY-MM-DD')
+    doctor_profile_data.education = value.education;
+    doctor_profile_data.experience = value.experience;
+    doctor_profile_data.specialization = value.specialization;
+    doctor_profile_data.description = value.description;
+    doctor_profile_data.lunchTime = dateCoverter(lunchTime[0].$d) + "/" + dateCoverter(lunchTime[1].$d);
+    doctor_profile_data.availableTime = dateCoverter(availableTime[0].$d) + "/" + dateCoverter(availableTime[1].$d);
+    doctor_profile_data.consultantFee = value.consultantFee;
+    doctor_profile_data.houseNoStreetArea = value.houseNoStreetArea;
+    doctor_profile_data.colonyStreetLocality = value.colonyStreetLocality;
+    doctor_profile_data.city = value.city;
+    doctor_profile_data.state = value.state;
+    doctor_profile_data.country = value.country;
+    doctor_profile_data.days = value.days;
+    doctor_profile_data.pincode = value.pincode;
+    doctor_profile_data.extraPhoneNumbers = value.extraphonenumbers;
+    doctor_profile_data.language = value.language;
+    console.log(doctor_profile_data);
+
     try {
-      const response = await ProfileUpdate.UpdateProfile(value);
+      const response = await ProfileUpdate.UpdateProfile(doctor_profile_data, 'DoctorsInformation/update');
 
       if (response.ok) {
         debugger;
@@ -72,22 +208,51 @@ function EditProfile() {
     } catch (error) {
       console.error('Error updating profile:', error);
     }
-  };
+  }
+
+  const handlePatientUpdateProfile = async () => {
+
+    let patient_profile_data = PatientProfileData;
+    patient_profile_data.id = id;
+    patient_profile_data.user_Name = value.name;
+    patient_profile_data.profile_Picture = image;
+    patient_profile_data.email = email;
+    patient_profile_data.moblie_Number = phoneNumber;
+    patient_profile_data.patient_Address = value.houseNoStreetArea;
+    patient_profile_data.city = value.city;
+    patient_profile_data.state = value.state;
+    patient_profile_data.pinCode = value.pincode;
+    patient_profile_data.gender = value.gender;
+    patient_profile_data.dateOfBirth = dob.format('YYYY-MM-DD');
+
+    try {
+      const response = await ProfileUpdate.UpdateProfile(patient_profile_data, 'PatientDetails/Update-Patient-Details');
+      if (response.ok) {
+        debugger;
+        const responseData = await response.json();
+        console.log('Profile updated successfully:', responseData);
+      } else {
+        console.error('Error updating profile:', response.statusText);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleChange = (e) => {
     debugger;
     setValue((prevValue) => ({
       ...prevValue,
-      [e.target.id]: e.target.value
+      [e.target.name]: e.target.value
     }));
 
     console.log(value);
   };
   const handleDayChange = (id) => {
-      setDays((prevDays) => ({
-        ...prevDays,
-        [id]: !prevDays[id], // Toggle the checkbox state
-      }));
+    setDays((prevDays) => ({
+      ...prevDays,
+      [id]: !prevDays[id], // Toggle the checkbox state
+    }));
     const selectedDays = Object.keys(day).filter((key) => day[key]);
     debugger;
     setValue({
@@ -99,19 +264,19 @@ function EditProfile() {
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
     const reader = new FileReader();
-  
+
     reader.onload = (upload) => {
       debugger;
       const base64Image = upload.target.result;
       setImage(base64Image);
-  
+
       // Update the 'image' property in the 'value' state with base64 format
-      setValue((prevValue) => ({
-        ...prevValue,
-        image: base64Image,
-      }));
+      // setValue((prevValue) => ({
+      //   ...prevValue,
+      //   image: base64Image,
+      // }));
     };
-  
+
     if (selectedImage) {
       reader.readAsDataURL(selectedImage);
       // You can also send the image to the backend here (as base64 or other format)
@@ -125,11 +290,11 @@ function EditProfile() {
 
   return (
     <>
-      <Box sx={{ backgroundColor: "#FAFAFA", width: "100%", p: 4 }}>
+      {loading ? (<Loading />) : (<Box sx={{ backgroundColor: "#F8FCFB", width: "100%", p: 4, py: 6, }}>
 
         {/* container for update */}
         <Container
-          sx={{ backgroundColor: "white", borderBottom: "1px solid #dedede" }}
+          sx={{ backgroundColor: "white", borderBottom: "1px solid #dedede", borderRadius: "15px 15px 0 0" }}
         >
           <Box
             sx={{
@@ -164,7 +329,7 @@ function EditProfile() {
               <Typography sx={{ fontSize: "12px", }}>Profile photo</Typography>
 
               <Box sx={{ display: "flex" }}>
-              <Avatar src={image || ""} sx={{ width: 100, height: 100 }} />
+                <Avatar src={image || ""} sx={{ width: 100, height: 100 }} />
                 <Box sx={{ ml: 2, mt: 2 }}>
                   <Typography sx={{ fontSize: "10px", width: "60%" }}>Pick a photo from your computer</Typography>
                   <Button sx={{ textTransform: "none" }} component="label">
@@ -173,25 +338,29 @@ function EditProfile() {
                       hidden
                       accept="image/png,image/jpg,image/svg,image/jpeg"
                       type="file"
-                      onChange={handleImageChange} 
+                      onChange={handleImageChange}
                     />
                   </Button>
                 </Box>
               </Box>
             </Box>
+            <Box sx={{ width: { xs: "85%", lg: "25%" } }}>
+              <InputBox
+                name="name"  // Use "name" as the id
+                title="Name"
+                boxType="text"
+                type="text"
+                value={value.name}
+                onChange={handleChange}
+                required
+              />
 
-            <InputBox
-              id="name"  // Use "name" as the id
-              title="Name"
-              type="text"
-              value={value.name}
-              handleChange={handleChange}
-              required
-            />
+            </Box>
+
           </Box>
         </Container>
 
-        {/* Container for phone and email */}
+        {/* Container for phone and email and gender */}
 
         <Container sx={{ backgroundColor: "white" }}>
 
@@ -200,206 +369,254 @@ function EditProfile() {
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                width: { xs: "100%", lg: "80%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
+                width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
               }}
             >
-              <InputBox
-                id="phonenumber"
-                title="Phone number"
-                type="edit"
-                value={value.phonenumber}
-              //to="/edit/phone"
-              />
-              <InputBox
-                id="email"
-                title="Email"
-                type="edit"
-                value={value.email}
-              //to="/edit/email"
-              />
-              <InputBox
-                id="gender"
-                title="Gender"
-                type="dropdown"
-                value={value.gender}
-                array={genderArray}
-                handleChange={handleChange}
-              />
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                <UpdatePhoneNumber
+                  title="Phone number"
+                  value={phoneNumber}
+                  setValue={setPhoneNumber}
+                />
+              </Box>
+
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                <UpdateEmail
+                  title="Email"
+                  value={email}
+                  setValue={setEmail}
+                />
+
+              </Box>
+
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+                <InputBox
+                  name="gender"
+                  title="Gender"
+                  boxType="dropdown"
+                  type="dropdown"
+                  value={value.gender}
+                  array={genderArray}
+                  onChange={handleChange}
+                />
+
+              </Box>
 
             </Box>
           </Box>
-          <Box sx={{ borderBottom: "1px solid #dedede", pb: 5 }}>
+          <Box sx={{ borderBottom: "1px solid #dedede", py: { xs: 0, lg: 4 } }}>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                width: { xs: "100%", lg: "80%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
+                width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
               }}
             >
-              <InputBox
-                id="dateofbirth"
-                title="Date of birth"
-                type="calender"
-                value={value.dateofbirth}
-                handleChange={handleChange}
-              />
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, }}>
+                <InputBox
+                  name="dateofbirth"
+                  title="Date of birth"
+                  boxType="calender"
+                  type="calender"
+                  value={dob}
+                  setValue={setDob}
+                />
+
+              </Box>
+
             </Box>
           </Box>
         </Container>
 
-        {/* Container for Doctor Details */}
 
-        <Container sx={{ backgroundColor: "white" }}>
-          <Typography fontSize={"13px"} sx={{ pt: 4 }}>
-            Doctor's Details
-          </Typography>
-          <Box sx={{ pt: 3 }}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: { xs: "100%", lg: "80%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
-              }}
-            >
-              <InputBox
-                id="education"
-                title="Education"
-                type="text"
-                value={value.education}
-                handleChange={handleChange}
-              />
-              <InputBox
-                id="experience"
-                title="Experience"
-                type="dropdown"
-                value={value.experience}
-                handleChange={handleChange}
-                array={experienceArray}
-              />
-              <InputBox
-                id="specialization"
-                title="Specialization"
-                type="text"
-                value={value.specialization}
-                handleChange={handleChange}
-              />
+        {isDoctor && (<>
 
+          <Container sx={{ backgroundColor: "white" }}>
+            <Typography fontSize={"13px"} sx={{ pt: 4 }}>
+              Doctor's Details
+            </Typography>
+            <Box sx={{ py: 3, pb: { xs: 0, lg: 3 } }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
+                }}
+              >
+
+                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+                  <InputBox
+                    name="education"
+                    title="Education"
+                    boxType="text"
+                    type="text"
+                    value={value.education}
+                    onChange={handleChange}
+                  />
+
+                </Box>
+
+                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                  <InputBox
+                    name="experience"
+                    title="Experience"
+                    boxType="dropdown"
+                    type="dropdown"
+                    value={value.experience}
+                    onChange={handleChange}
+                    array={experienceArray}
+                  />
+
+                </Box>
+
+                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                  <SpecializationPicker title="Specialization" setValue={setValue} value={value.specialization} />
+
+                </Box>
+
+              </Box>
             </Box>
-          </Box>
-          <Box sx={{ borderBottom: "1px solid #dedede", pb: 5, display: "flex", justifyContent: { xs: "center", lg: "start" }, }}>
-            <Box
-              sx={{
-                width: { xs: "16rem", md: "100%", lg: "80%" },
-              }}
-            >
-              <InputBox
-                id="description"
-                title="Description"
-                type="textarea"
-                value={value.description}
-                handleChange={handleChange}
-              />
+
+            <Box sx={{ borderBottom: "1px solid #dedede", pb: 5, display: "flex", justifyContent: { xs: "center", lg: "start" }, }}>
+              <Box
+                sx={{
+                  width: "87% ",
+                }}
+              >
+                <InputBox
+                  name="description"
+                  title="Description"
+                  boxType="textarea"
+                  type="textarea"
+                  value={value.description}
+                  onChange={handleChange}
+                />
+              </Box>
             </Box>
-          </Box>
-        </Container>
+          </Container>
 
-        {/* Container for Availability Details */}
+          {/* Container for Availability Details */}
 
-        <Container sx={{ backgroundColor: "white" }}>
-          <Typography fontSize={"13px"} sx={{ pt: 4 }}>
-            Availability
-          </Typography>
-          <Box sx={{ pt: 2, display: "flex", justifyContent: { xs: "center", lg: "start" } }}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: { xs: "16rem", md: "100%", lg: "80%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "start", md: "left" }
-              }}
-            >
-              <InputBox
-                id="monday"
-                label="Monday"
-                type="checkbox"
-                checked={day.monday}
-                handleChange={() => handleDayChange("monday")}
-              />
-              <InputBox
-                id="tuesday"
-                label="Tuesday"
-                type="checkbox"
-                value={day.tuesday}
-                handleChange={() => handleDayChange("tuesday")}
-              />
+          <Container sx={{ backgroundColor: "white" }}>
+            <Typography fontSize={"13px"} sx={{ pt: 4 }}>
+              Availability
+            </Typography>
+            <Box sx={{ pt: 2, display: "flex", justifyContent: { xs: "center", lg: "start" } }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "87%", flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "start", md: "left" }
+                }}
+              >
+                <InputBox
+                  id="monday"
+                  label="Monday"
+                  boxType="checkbox"
+                  type="checkbox"
+                  checked={day.monday}
+                  handleChange={() => handleDayChange("monday")}
+                />
+                <InputBox
+                  id="tuesday"
+                  label="Tuesday"
+                  boxType="checkbox"
+                  type="checkbox"
+                  value={day.tuesday}
+                  handleChange={() => handleDayChange("tuesday")}
+                />
 
-              <InputBox
-                id="wednesday"
-                label="Wednesday"
-                type="checkbox"
-                value={day.Wednesday}
-                handleChange={() => handleDayChange("wednesday")}
-              />
-              <InputBox
-                id="thursday"
-                label="Thursday"
-                type="checkbox"
-                value={day.thursday}
-                handleChange={() => handleDayChange("thursday")}
-              />
-              <InputBox
-                id="friday"
-                label="Friday"
-                type="checkbox"
-                value={day.friday}
-                handleChange={() => handleDayChange("friday")}
-              />
-              <InputBox
-                id="saturday"
-                label="Saturday"
-                type="checkbox"
-                value={day.saturday}
-                handleChange={() => handleDayChange("saturday")}
-              />
-              <InputBox
-                id="sunday"
-                label="Sunday"
-                type="checkbox"
-                value={day.sunday}
-                handleChange={() => handleDayChange("sunday")}
-              />
+                <InputBox
+                  id="wednesday"
+                  label="Wednesday"
+                  boxType="checkbox"
+                  type="checkbox"
+                  value={day.wednesday}
+                  handleChange={() => handleDayChange("wednesday")}
+                />
+                <InputBox
+                  id="thursday"
+                  label="Thursday"
+                  boxType="checkbox"
+                  type="checkbox"
+                  value={day.thursday}
+                  handleChange={() => handleDayChange("thursday")}
+                />
+                <InputBox
+                  id="friday"
+                  label="Friday"
+                  boxType="checkbox"
+                  type="checkbox"
+                  value={day.friday}
+                  handleChange={() => handleDayChange("friday")}
+                />
+                <InputBox
+                  id="saturday"
+                  label="Saturday"
+                  boxType="checkbox"
+                  type="checkbox"
+                  value={day.saturday}
+                  handleChange={() => handleDayChange("saturday")}
+                />
+                <InputBox
+                  id="sunday"
+                  label="Sunday"
+                  boxType="checkbox"
+                  type="checkbox"
+                  value={day.sunday}
+                  handleChange={() => handleDayChange("sunday")}
+                />
+              </Box>
             </Box>
-          </Box>
-          <Box sx={{ borderBottom: "1px solid #dedede", pb: 5, pt: 3 }}>
-            <Box
-              sx={{
-                display: "flex", justifyContent: "space-between",
-                width: { xs: "100%", lg: "80%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
-              }}
-            >
-              <TimeRangePicker
-                id="availableTime"
-                title="Available Time"
-                time={lunchTime}
-                setTime={setLunchTime}
-              />
+            <Box sx={{ borderBottom: "1px solid #dedede", pb: 5, pt: 3 }}>
+              <Box
+                sx={{
+                  display: "flex", justifyContent: "space-between",
+                  width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
+                }}
+              >
+                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
 
-              <TimeRangePicker
-                id="lunchTime"
-                title="Lunch Time"
-                time={availableTime}
-                setTime={setAvailableTime}
-              />
+                  <TimeRangePicker
+                    id="availableTime"
+                    title="Available Time"
+                    time={availableTime}
+                    setTime={setAvailableTime}
+                  />
 
-              <InputBox
-                id="consultantFee"
-                title="Consultant Fee"
-                type="text"
-                value={value.consultantFee}
-                handleChange={handleChange}
-              />
+                </Box>
+
+                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                  <TimeRangePicker
+                    id="lunchTime"
+                    title="Lunch Time"
+                    time={lunchTime}
+                    setTime={setLunchTime}
+                  />
+
+                </Box>
+
+                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+                  <InputBox
+                    name="consultantFee"
+                    title="Consultant Fee"
+                    boxType="text"
+                    type="text"
+                    value={value.consultantFee}
+                    onChange={handleChange}
+                  />
+
+                </Box>
+
+              </Box>
             </Box>
-          </Box>
-        </Container>
+          </Container>
+        </>)}
 
         {/* Container for address */}
 
@@ -407,74 +624,110 @@ function EditProfile() {
           <Typography fontSize={"13px"} sx={{ pt: 4 }}>
             Address
           </Typography>
-          <Box sx={{ pt: 3 }}>
+
+          <Box sx={{ py: 3 }}>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                width: { xs: "100%", lg: "80%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
+                width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
               }}
             >
-              <InputBox
-                id="houseNoStreetArea"
-                title="House No./ Street Name/ Area"
-                type="text"
-                value={value.houseNoStreetArea}
-                handleChange={handleChange}
-              />
-              <InputBox
-                id="colonyStreetLocality"
-                title="Colony / Street / Locality"
-                type="text"
-                value={value.colonyStreetLocality}
-                handleChange={handleChange}
-              />
-              <InputBox
-                id="city"
-                title="City"
-                type="text"
-                value={value.city}
-                handleChange={handleChange}
-              />
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+                <InputBox
+                  name="houseNoStreetArea"
+                  title="House No./ Street Name/ Area"
+                  boxType="text"
+                  type="text"
+                  value={value.houseNoStreetArea}
+                  onChange={handleChange}
+                />
+
+              </Box>
+
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                <InputBox
+                  name="colonyStreetLocality"
+                  title="Colony / Street / Locality"
+                  boxType="text"
+                  type="text"
+                  value={value.colonyStreetLocality}
+                  onChange={handleChange}
+                />
+
+              </Box>
+
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, }}>
+
+                <InputBox
+                  name="city"
+                  title="City"
+                  boxType="text"
+                  type="text"
+                  value={value.city}
+                  onChange={handleChange}
+                />
+
+              </Box>
+
             </Box>
           </Box>
+
           <Box sx={{ borderBottom: "1px solid #dedede", pb: 5 }}>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                width: { xs: "100%", lg: "80%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
+                width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
               }}
             >
-              <InputBox
-                id="state"
-                title="State"
-                type="text"
-                value={value.state}
-                handleChange={handleChange}
-              />
-              <InputBox
-                id="country"
-                title="Country"
-                type="dropdown"
-                required
-                value={value.country}
-                handleChange={handleChange}
-                array={countryArray}
-              />
-              <InputBox
-                id="pincode"
-                title="Pincode"
-                type="text"
-                value={value.pincode}
-                handleChange={handleChange}
-              />
+
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+                <InputBox
+                  name="state"
+                  title="State"
+                  boxType="text"
+                  type="text"
+                  value={value.state}
+                  onChange={handleChange}
+                />
+
+              </Box>
+
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+                <InputBox
+                  name="country"
+                  title="Country"
+                  boxType="dropdown"
+                  type="dropdown"
+                  required
+                  value={value.country}
+                  onChange={handleChange}
+                  array={countryArray}
+                />
+
+              </Box>
+
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                <InputBox
+                  name="pincode"
+                  title="Pincode"
+                  boxType="number"
+                  type="number"
+                  value={value.pincode}
+                  onChange={handleChange}
+                />
+
+              </Box>
+
             </Box>
           </Box>
         </Container>
 
         {/* Container for other information */}
-        <Container sx={{ backgroundColor: "white" }}>
+        <Container sx={{ backgroundColor: "white", borderRadius: "0 0 15px 15px" }}>
           <Typography fontSize={"13px"} sx={{ pt: 4 }}>
             Other Information
           </Typography>
@@ -482,31 +735,40 @@ function EditProfile() {
             <Box
               sx={{
                 display: "flex",
-                width: { xs: "100%", md: "80%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
+                width: { xs: "100%", md: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
               }}
             >
-              <InputBox
-                id="extraphonenumbers"
-                title="Extra phone numbers"
-                type="text"
-                value={value.extraphonenumbers}
-                handleChange={handleChange}
-              />
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+                <InputBox
+                  name="extraphonenumbers"
+                  title="Extra phone numbers"
+                  boxType="number"
+                  type="number"
+                  value={value.extraphonenumbers}
+                  onChange={handleChange}
+                />
 
-              <Box mx="2.4rem"></Box>
-              <InputBox
-                id="language"
-                title="Language"
-                type="dropdown"
-                required
-                array={languageArray}
-                value={value.language}
-                handleChange={handleChange}
-              />
+              </Box>
+
+              <Box mx="1.5rem" />
+              <Box sx={{ width: { xs: "85%", lg: "30%" }, }}>
+                <InputBox
+                  name="language"
+                  title="Language"
+                  boxType="dropdown"
+                  type="dropdown"
+                  required
+                  array={languageArray}
+                  value={value.language}
+                  onChange={handleChange}
+                />
+              </Box>
+
             </Box>
           </Box>
         </Container>
-      </Box>
+      </Box >)
+      }
     </>
   );
 }
@@ -521,13 +783,13 @@ const TimeRangePicker = (props) => {
 
 
   useEffect(() => {
-    if(props.time){
+    if (props.time) {
       setValue(props.time)
     }
   }, [props.time])
-  
 
-  const handleSet = () =>{
+
+  const handleSet = () => {
     props.setTime(value)
     setOpen(false)
   }
@@ -538,27 +800,34 @@ const TimeRangePicker = (props) => {
 
   return (
     <>
-      <Box sx={{ pb: 3 }}>
+      <Box>
         <Typography
-          sx={{ fontSize: "12px" }}
+          sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}
           className={props.required && "required"}
         >
           {props.title}
         </Typography>
-        <input
-          type="text"
-          style={{
-            border: "1px solid gray",
-            fontSize: "14px",
-            padding: "5px",
-            width: "16rem",
-            borderRadius: "8px",
-            cursor: "pointer"
-          }}
-          onClick={() => setOpen(true)}
-          value={value[0].format('HH:mm') + " - " + value[1].format('HH:mm')}
-        />
+        <Box>
+          <input
+            type="text"
+            style={{
+              border: "1px solid #64EBB6",
+              padding: "10px",
+              backgroundColor: "white",
+              // color: '#42A5F5',
+              borderRadius: "10px",
+              width: "100%",
+              fontFamily: "nunito",
+              cursor: "pointer"
+            }}
+            onClick={() => setOpen(true)}
+            value={value[0].format('HH:mm') + " - " + value[1].format('HH:mm')}
+          />
+
+        </Box>
+
       </Box>
+
       <Dialog onClose={handleClose} open={open} maxWidth="xs" fullWidth>
         <DialogTitle>{props.title}</DialogTitle>
         <DialogContent sx={{ pt: 3 }}>
@@ -584,5 +853,319 @@ const TimeRangePicker = (props) => {
     </>
   );
 }
+
+const SpecializationPicker = (props) => {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = React.useState([]);
+
+  const handleClose = () => {
+    setValue([]);
+    setOpen(false);
+  };
+
+  const handleSet = () => {
+    props.setValue((prevValue) => ({
+      ...prevValue,
+      specialization: value,
+    }))
+    setOpen(false)
+  }
+
+  useEffect(() => {
+    if (props.value.length !== 0) {
+      setValue(props.value)
+    }
+  }, [props])
+
+
+  const handleSelectionChange = (_, newValue) => {
+    setValue(newValue);
+  };
+
+  return (
+    <>
+      <Box>
+        <Typography
+          sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}
+          className={props.required && "required"}
+        >
+          {props.title}
+        </Typography>
+        <Box>
+          <input
+            type="text"
+            style={{
+              border: "1px solid #64EBB6",
+              padding: "10px",
+              backgroundColor: "white",
+              // color: '#42A5F5',
+              borderRadius: "10px",
+              width: "100%",
+              fontFamily: "nunito",
+              cursor: "pointer"
+            }}
+            onClick={() => setOpen(true)}
+            value={props.value.toString()}
+          />
+
+        </Box>
+      </Box>
+
+      <Dialog onClose={handleClose} open={open} maxWidth="xs" fullWidth>
+        <DialogContent sx={{ pt: 3., fontSize: "20px", textAlign: "center", fontWeight: 600 }}>Choose Your Specialization</DialogContent>
+        <DialogContent>
+          <Autocomplete
+            multiple
+            // id="tags-outlined"
+            options={medicalSpecialties}
+            getOptionLabel={(option) => option.toString()}
+            // defaultValue={[medicalSpecialties[0]]}
+            filterSelectedOptions
+            freeSolo
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Specialization"
+                placeholder="Ex. Dentist, Cardiologist, etc."
+              />
+            )}
+            value={value} onChange={handleSelectionChange}
+          />
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
+          <Button autoFocus onClick={handleSet} sx={{ bgcolor: "#F0F6FF" }}>
+            Set
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+    </>
+  )
+}
+
+const UpdatePhoneNumber = (props) => {
+
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [phone, setPhone] = useState('');
+
+  // After Verfying the opt we set the original value
+
+  return (
+
+    <>
+      <Box>
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            color: "#1C4188", fontSize: "16px", fontWeight: 600
+          }}
+          className={props.required && "required"}
+        >
+          <span>{props.title}</span>
+          <Typography component={"button"} type="button" sx={{ color: "#42A5F5", border: "none", bgcolor: "transparent", p: 0, fontWeight: 600 }} onClick={() => setOpenEditDialog(true)}>
+            Edit
+          </Typography>
+        </Typography>
+        <input
+          style={{
+            fontSize: "14px",
+            backgroundColor: "#F0F6FF",
+            border: "1px solid #64EBB6",
+            padding: "10px",
+            borderRadius: "10px",
+            width: "100%",
+            fontFamily: "nunito",
+          }}
+          value={props.value}
+          disabled="true"
+        />
+      </Box>
+
+      <Dialog open={openEditDialog} maxWidth="xs" fullWidth>
+        <DialogTitle textAlign={"center"}>Update {props.title}</DialogTitle>
+        <DialogContent>
+          <Box>
+            <Typography
+              sx={{
+                color: "#1C4188", fontSize: "16px", fontWeight: 600
+              }}
+              className={props.required && "required"}
+            >
+              New {props.title}
+            </Typography>
+            <input
+              type="number"
+              style={{
+                fontSize: "14px",
+                // backgroundColor: "#F0F6FF",
+                border: "1px solid #64EBB6",
+                padding: "10px",
+                // color: '#42A5F5',
+                borderRadius: "10px",
+                width: "100%",
+                fontFamily: "nunito",
+              }}
+              value={phone === '' ? props.value : phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </Box>
+
+        </DialogContent>
+      </Dialog>
+
+    </>
+
+  );
+
+}
+
+const UpdateEmail = (props) => {
+
+  const [openEmailDialog, setOpenEmailDialog] = useState(false);
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+  const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    if (props.value !== '') {
+      setEmail(props.value)
+    }
+  }, [props])
+
+  useEffect(() => {
+    if (email !== '') {
+      setDisabled(false)
+    } else {
+      setDisabled(true)
+    }
+  }, [email])
+
+  function isValidEmail(email) {
+    // Regular expression for a basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  const handleSubmitEmail = () => {
+
+    if (!isValidEmail(email)) {
+      setError('Enter a valid email address');
+      return;
+    }
+
+    console.log(isValidEmail(email));
+
+  }
+
+
+  // After Verfying the opt we set the original value
+
+  return (
+
+    <>
+      <Box>
+        <Typography
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            color: "#1C4188", fontSize: "16px", fontWeight: 600
+          }}
+          className={props.required && "required"}
+        >
+          <span>{props.title}</span>
+          <Typography component={"button"} type="button" sx={{ color: "#42A5F5", border: "none", bgcolor: "transparent", p: 0, fontWeight: 600 }} onClick={() => setOpenEmailDialog(true)}>
+            Edit
+          </Typography>
+        </Typography>
+        <input
+          style={{
+            fontSize: "14px",
+            backgroundColor: "#F0F6FF",
+            border: "1px solid #64EBB6",
+            padding: "10px",
+            borderRadius: "10px",
+            width: "100%",
+            fontFamily: "nunito",
+          }}
+          value={props.value}
+          disabled="true"
+        />
+      </Box>
+
+      <Dialog open={openEmailDialog} maxWidth="xs" fullWidth>
+        <DialogTitle textAlign={"center"}>Update {props.title}</DialogTitle>
+        <DialogContent>
+          <Box>
+            <Typography
+              sx={{
+                color: "#1C4188", fontSize: "16px", fontWeight: 600
+              }}
+              className={props.required && "required"}
+            >
+              New {props.title}
+            </Typography>
+            <input
+              type="email"
+              style={{
+                fontSize: "14px",
+                // backgroundColor: "#F0F6FF",
+                border: "1px solid #64EBB6",
+                padding: "10px",
+                // color: '#42A5F5',
+                borderRadius: "10px",
+                width: "100%",
+                fontFamily: "nunito",
+              }}
+              value={email === '' ? props.value : email}
+              onChange={(e) => setEmail(e.target.value)}
+              onInput={() => setError('')}
+            />
+            {error !== '' && <ErrorMessage message={error} />}
+
+            <Box sx={{ my: 2 }}>
+
+              <CustomizedButton title={"Submit"} disabled={disabled} onClick={handleSubmitEmail} />
+
+            </Box>
+
+          </Box>
+
+        </DialogContent>
+      </Dialog>
+
+    </>
+
+  );
+
+}
+
+const medicalSpecialties = [
+  "Cardiology",
+  "Dermatology",
+  "Endocrinology",
+  "Gastroenterology",
+  "Hematology",
+  "Infectious Disease",
+  "Internal Medicine",
+  "Nephrology",
+  "Neurology",
+  "Obstetrics and Gynecology",
+  "Ophthalmology",
+  "Orthopedics",
+  "Otolaryngology (ENT)",
+  "Pediatrics",
+  "Physical Medicine and Rehabilitation",
+  "Pulmonology",
+  "Psychiatry",
+  "Radiology",
+  "Rheumatology",
+  "Surgery",
+  "Urology",
+  "Dentist",
+];
+
 
 export default EditProfile;
