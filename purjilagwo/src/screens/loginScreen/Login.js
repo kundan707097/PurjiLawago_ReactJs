@@ -80,6 +80,7 @@ const LoginForm = () => {
     value.emailOrPhoneNumber = loginData.emailOrPhoneNumber;
     value.password = loginData.loginPassword;
     const response = await LoginService.Login(value);
+    debugger;
     if (response !== undefined) {
       localStorage.setItem("token", response.token);
       localStorage.setItem("fullName", response.fullName);
@@ -386,6 +387,7 @@ const Login = () => {
        localStorage.setItem("fullName", response.fullName);
        localStorage.setItem("phoneNumber", response.phoneNumber);
        localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
+       localStorage.setItem("id", response.loginId)
        navigate("/")
      }
      else {

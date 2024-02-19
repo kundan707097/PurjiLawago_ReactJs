@@ -1,15 +1,17 @@
 import axiosClient from '../interceptors/axiosInstance';
 
-const UpdateProfile = async (profileData, endpoint) => {
+const UpdateProfile = async (DoctorProfileData) => {
+debugger;
     try {
         const response = await axiosClient({
             method: 'POST',
-            url: endpoint,
+            url: `https://localhost:44324/DoctorsInformation/update`,
             headers: {
                 'Content-Type': 'application/json',
             },
-            data: JSON.stringify(profileData),
+            data: JSON.stringify(DoctorProfileData),
         });
+        console.log(response)
         return response.data;
     } catch (error) {
         console.log(error);
@@ -18,16 +20,17 @@ const UpdateProfile = async (profileData, endpoint) => {
 
 // This action is for getting the profile data of the doctor/patient
 
-const GetProfileData = async(id, endpoint) => {
+const GetProfileData = async(endpoint) => {
     try{
         const response = await axiosClient({
             method: 'GET',
-            url: `${endpoint}/${id}`, //Need to change the endpoint
+            url: endpoint, //Need to change the endpoint
             headers: {
                 'Content-Type': 'application/json',
             }
         });
-        return JSON.parse(response.data);
+        // console.log(response.data)
+        return response.data;
     }catch(error){
         console.log(error);
     

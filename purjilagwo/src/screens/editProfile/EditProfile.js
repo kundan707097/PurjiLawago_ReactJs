@@ -12,11 +12,12 @@ import { DoctorProfileData, PatientProfileData } from "../../models/Index";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
 import { CustomizedButton } from "../../components/Button";
+import { parse } from "url";
 
 function EditProfile() {
   // debugger;
-  const [id, setID] = useState();
-  const [isDoctor, setIsDoctor] = useState(true);
+  const [id, setID] = useState(localStorage.getItem('id'));
+  const [isDoctor, setIsDoctor] = useState(localStorage.getItem('isDocotrsOrPatiets'));
   const [value, setValue] = useState({
     name: "",
     gender: "",
@@ -74,8 +75,9 @@ function EditProfile() {
   }
 
   useEffect(() => {
-    if (localStorage.getItem('id')) {
+    if (localStorage.getItem('id') !== undefined) {
       setID(localStorage.getItem('id'));
+      //console.log(localStorage.getItem('id'))
     }
     if (localStorage.getItem('isDocotrsOrPatiets')) {
       setIsDoctor(localStorage.getItem('isDocotrsOrPatiets'));
@@ -88,21 +90,31 @@ function EditProfile() {
   useEffect(() => {
     (async () => {
       try {
-        if (isDoctor) {
-          const response = await ProfileUpdate.GetProfileData(id, "DoctorsInformation/DoctorsProfileById");
-          if (response.ok) {
-            const responseData = await response.json();
+        if (id !== undefined && isDoctor ) {
+          setLoading(true)
+          const responseData = await ProfileUpdate.GetProfileData(`DoctorsInformation/DoctorsProfileById?id=${id}`);
+
+          if (responseData != null) {
             console.log('Profile data:', responseData);
             setImage(responseData.image);
             setDob(dayjs(responseData.dateofbirth));
-            setLunchTime(responseData.lunchTime.split('/').map((time) => dayjs(time)));
-            setAvailableTime(responseData.availableTime.split('/').map((time) => dayjs(time)));
-            responseData.days.forEach((day) => {
-              setDays((prevDays) => ({
-                ...prevDays,
-                [day]: true,
-              }));
-            });
+            if(responseData.lunchTime !== null){
+
+              setLunchTime(responseData.lunchTime.split('/').map((time) => dayjs(time)));
+            }
+            if(responseData.availableTime !== null){
+
+              setAvailableTime(responseData.availableTime.split('/').map((time) => dayjs(time)));
+            }
+            if(responseData.days !== null){
+              responseData.days.forEach((day) => {
+                setDays((prevDays) => ({
+                  ...prevDays,
+                  [day]: true,
+                }));
+              });
+            }
+
             setValue({
               name: responseData.name,
               gender: responseData.gender,
@@ -123,12 +135,16 @@ function EditProfile() {
             })
             setEmail(responseData.email);
             setPhoneNumber(responseData.phoneNumber);
+            setLoading(false);
           }
         }
         else {
-          const response = await ProfileUpdate.GetProfileData(id, "DoctorsInformation/DoctorsProfileById");
+          console.log(id)
+          const response = await ProfileUpdate.GetProfileData(`PatientDetails/Get-Patientd-Details?id=${id}`);
           if (response.ok) {
+            console.log(response)
             const responseData = await response.json();
+            console.log(responseData);
             console.log('Profile data:', responseData);
             setImage(responseData.profile_Picture);
             setDob(dayjs(responseData.dateOfBirth));
@@ -166,37 +182,63 @@ function EditProfile() {
       handlePatientUpdateProfile();
     }
   };
+  const [DoctorProfileData] = useState({
 
+    Id: 0,
+    Image: "",
+    Name: "",
+    PhoneNumber: "",
+    Email: "",
+    Gender: "",
+    DateOfBirth: "",
+    Education: "",
+    Experience: "",
+    Specialization: "",
+    Description: "",
+    LunchTime: "",
+    AvailableTime: "",
+    ConsultantFee: "",
+    HouseNoStreetArea: "",
+    ColonyStreetLocality: "",
+    City: "",
+    State: "",
+    Country: "",
+    Days: "",
+    Pincode: "",
+    ExtraPhoneNumbers: "",
+    Language: "",
+    //inputdays: ""
+  });
   const handleDoctorUpdateProfile = async () => {
     debugger;
-    let doctor_profile_data = DoctorProfileData;
-    doctor_profile_data.id = id;
-    doctor_profile_data.image = image;
-    doctor_profile_data.name = value.name;
-    doctor_profile_data.phoneNumber = phoneNumber;
-    doctor_profile_data.email = email;
-    doctor_profile_data.gender = value.gender;
-    doctor_profile_data.dateOfBirth = dob.format('YYYY-MM-DD')
-    doctor_profile_data.education = value.education;
-    doctor_profile_data.experience = value.experience;
-    doctor_profile_data.specialization = value.specialization;
-    doctor_profile_data.description = value.description;
-    doctor_profile_data.lunchTime = dateCoverter(lunchTime[0].$d) + "/" + dateCoverter(lunchTime[1].$d);
-    doctor_profile_data.availableTime = dateCoverter(availableTime[0].$d) + "/" + dateCoverter(availableTime[1].$d);
-    doctor_profile_data.consultantFee = value.consultantFee;
-    doctor_profile_data.houseNoStreetArea = value.houseNoStreetArea;
-    doctor_profile_data.colonyStreetLocality = value.colonyStreetLocality;
-    doctor_profile_data.city = value.city;
-    doctor_profile_data.state = value.state;
-    doctor_profile_data.country = value.country;
-    doctor_profile_data.days = value.days;
-    doctor_profile_data.pincode = value.pincode;
-    doctor_profile_data.extraPhoneNumbers = value.extraphonenumbers;
-    doctor_profile_data.language = value.language;
+    const doctor_profile_data = DoctorProfileData;
+    doctor_profile_data.Id = parseInt(id, 10);
+    doctor_profile_data.Image = image;
+     doctor_profile_data.Name = value.name;
+    doctor_profile_data.PhoneNumber = phoneNumber;
+    doctor_profile_data.Email = email;
+    doctor_profile_data.Gender = value.gender;
+    doctor_profile_data.DateOfBirth = dob.format('YYYY-MM-DD')
+     doctor_profile_data.Education = value.education;
+    doctor_profile_data.Experience = value.experience;
+    doctor_profile_data.Specialization = value.specialization;
+    doctor_profile_data.Description = value.description;
+    doctor_profile_data.LunchTime = dateCoverter(lunchTime[0].$d) + "/" + dateCoverter(lunchTime[1].$d);
+    doctor_profile_data.AvailableTime = dateCoverter(availableTime[0].$d) + "/" + dateCoverter(availableTime[1].$d);
+    doctor_profile_data.ConsultantFee = value.consultantFee;
+    doctor_profile_data.HouseNoStreetArea = value.houseNoStreetArea;
+    doctor_profile_data.ColonyStreetLocality = value.colonyStreetLocality;
+    doctor_profile_data.City = value.city;
+    doctor_profile_data.State = value.state;
+    doctor_profile_data.Country = value.country;
+    doctor_profile_data.Days = value.days;
+    doctor_profile_data.Pincode = value.pincode;
+    doctor_profile_data.ExtraPhoneNumbers = value.extraphonenumbers;
+    doctor_profile_data.Language = value.language;
     console.log(doctor_profile_data);
 
     try {
-      const response = await ProfileUpdate.UpdateProfile(doctor_profile_data, 'DoctorsInformation/update');
+      const response = await ProfileUpdate.UpdateProfile(doctor_profile_data);
 
       if (response.ok) {
         debugger;
@@ -872,7 +914,7 @@ const SpecializationPicker = (props) => {
   }
 
   useEffect(() => {
-    if (props.value.length !== 0) {
+    if (props.value !==null && props.value.length !== 0) {
       setValue(props.value)
     }
   }, [props])
@@ -905,7 +947,7 @@ const SpecializationPicker = (props) => {
               cursor: "pointer"
             }}
             onClick={() => setOpen(true)}
-            value={props.value.toString()}
+            value={props.value !==null ? props.value.toString() : ""}
           />
 
         </Box>

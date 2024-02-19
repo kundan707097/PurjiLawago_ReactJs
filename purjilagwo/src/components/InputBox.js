@@ -20,10 +20,7 @@ import { useEffect, useState } from "react";
 
 function InputBox(props) {
 
-  switch (props.boxType) {
-
-    case "calender":
-
+  
       //This usestate is for calender
 
       const [open, setOpen] = useState(false);
@@ -34,6 +31,13 @@ function InputBox(props) {
           setValue(dayjs(props.value))
         }
       }, [props])
+
+      const [openEditDialog, setOpenEditDialog] = useState(false);
+
+  switch (props.boxType) {
+
+    case "calender":
+
 
 
       const handleSet = () => {
@@ -93,7 +97,7 @@ function InputBox(props) {
       );
     case "edit":
 
-      const [openEditDialog, setOpenEditDialog] = useState(false);
+
 
       return (
         <>
