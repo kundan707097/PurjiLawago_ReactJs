@@ -1,31 +1,48 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
+import icon from "../../assets/dashboard/icon.png";
+import Upcomming_icon from "../../assets/dashboard/Upcomming icon.png";
+import bed_icon from "../../assets/dashboard/Bed icon.png";
+import book_icon from "../../assets/dashboard/book icon.png";
+import Cancel_icon from "../../assets/dashboard/Cancel Icon.png";
+import group_265 from "../../assets/dashboard/Group 265.png";
+// import Upcomming_icon from "../../assets/dashboard/Upcomming icon.png";
+// import Upcomming_icon from "../../assets/dashboard/Upcomming icon.png";
+
+
 
 
 const HomeDashboard = () => {
   return (
-    <Box p={3}>
-      <Typography variant="h4" gutterBottom>
-        Dashboard
-      </Typography>
+    <Box >
       <Box display="flex" justifyContent="space-between">
-        <Box>
-          <Typography variant="h6" gutterBottom>
-            Total Users
+        <Box  sx={{border: "1px solid", borderRadius: 1, p:1, borderColor: "#f3efef"}}>
+          <Typography >
+            Total Number of patient
+            <img style={{"padding": "10px"}} src={icon} alt="Logo" className="" />
           </Typography>
-          <Typography variant="body1">100</Typography>
+          <Typography >4500</Typography>
+          <Typography >Last month successful 140 patients</Typography>
         </Box>
-        <Box>
-          <Typography variant="h6" gutterBottom>
-            Total Sales
+        <Box sx={{border: "1px solid", borderRadius: 1, p:1, borderColor: "#f3efef"}}>
+          <Typography >
+            Total Upcoming Apartment
+            <img style={{"padding": "10px"}} src={Upcomming_icon} alt="Logo" className="" />
           </Typography>
-          <Typography variant="body1">$1000</Typography>
+          <Typography >1147</Typography>
+          <Typography >Last Month Positive 217 Reviews</Typography>
         </Box>
-        <Box>
-          <Typography variant="h6" gutterBottom>
-            Total Orders
+        <Box sx={{border: "1px solid", borderRadius: 1,  borderColor: "#f3efef"}}>
+          <Typography  >
+            My Last Month Treatment
+            <img  src={group_265} alt="Logo" className="" />
           </Typography>
-          <Typography variant="body1">50</Typography>
+          <Typography >
+            <img style={{"padding": "10px"}} src={bed_icon} alt="Logo" className="" />
+            <img style={{"padding": "10px"}} src={book_icon} alt="Logo" className="" />
+            <img style={{"padding": "10px"}} src={Cancel_icon} alt="Logo" className="" />
+          </Typography>
+          <Typography >50</Typography>
         </Box>
       </Box>
       <Box mt={3}>

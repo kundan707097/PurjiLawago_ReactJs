@@ -18,15 +18,16 @@ const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   textAlign: 'center',
   color: theme.palette.text.secondary,
+  boxShadow: 'none'
 }));
  
 export const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
   return <>{token ? (
-    <Box sx={{  }}>
+    <Box >
     <Header/>
     <BreadCrums/>
-      <Grid container spacing={1} sx={{ '&, [class^=MuiDataGrid]': { boxShadow: 'none' } }}>
+      <Grid container spacing={1}>
         <Grid item xs={2}>
           <Item><LeftMenu /></Item>
         </Grid>
