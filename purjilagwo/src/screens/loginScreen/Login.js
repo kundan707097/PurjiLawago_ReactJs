@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { Link, useNavigate } from "react-router-dom"
 import { yupResolver } from '@hookform/resolvers/yup';
-import LoginService from "../../services/Login.services";
+import AuthenticationService from "../../services/Authentication.services";
 import RegisterService from "../../services/register.service";
 import { Register, LoginValue } from "../../models/Index";
 import { Box, Container, Typography } from '@mui/material';
@@ -13,6 +13,10 @@ import MobileAppBanner from '../../components/MobileAppBanner';
 import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
 import ErrorMessage from '../../components/ErrorMessage';
+import MessageBar from '../../components/MessageBar';
+import BackdropLoading from '../../components/BackdropLoading';
+import { OtpVerificationDialogBox } from '../../components/DialogBox';
+
 
 const LoginForm = () => {
   const [activeTab, setActiveTab] = useState('login');
@@ -326,7 +330,22 @@ const Login = () => {
     loginPassword: '',
     password: '',
   });
+  const [buttonDisabled, setButtonDisabled] = useState({
+    ForLogin: false,
+    ForRegister: false,
 
+  });
+  const [backdropLoading, setBackdropLoading] = useState(false);
+
+  const [otp, setOtp] = useState("");
+  const [openLoginOtpBox, setOpenLoginOtpBox] = useState(false);
+  const [openRegisterOtpBox, setOpenRegisterOtpBox] = useState(false);
+  const [messageProperty, setMessageProperty] = useState({
+    openDialog: false,
+    dialogTitle: "",
+    dialogContent: "",
+    variant: "",
+  });
 
   const validationSchema = (activeTab = 'login') => {
     return yup.object().shape({
@@ -357,6 +376,10 @@ const Login = () => {
   };
 
   const handleInputChange = (e) => {
+    setButtonDisabled({
+      ForLogin: false,
+      ForRegister: false
+    })
     const { name, value } = e.target;
     setInputValues((prevValues) => ({
       ...prevValues,
@@ -365,6 +388,9 @@ const Login = () => {
     setValue(name, value, { shouldValidate: true });
   };
 
+  const toggleDoctorStatus = () => {
+    setIsDoctor(!isDoctor);
+  }
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -377,56 +403,160 @@ const Login = () => {
   };
 
   const handleLogin = async (loginData) => {
+    setButtonDisabled({ ForLogin: true })
     let value = LoginValue;
     // debugger;
     value.emailOrPhoneNumber = loginData.emailOrPhoneNumber;
     value.password = loginData.loginPassword;
-     const response = await LoginService.Login(value);
-     if (response !== undefined) {
-       localStorage.setItem("token", response.token);
-       localStorage.setItem("fullName", response.fullName);
-       localStorage.setItem("phoneNumber", response.phoneNumber);
-       localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
-       localStorage.setItem("id", response.loginId)
-       navigate("/")
-     }
-     else {
-       throw Error("Network response was not ok");
-     }
+    setBackdropLoading(true);
+    const response = await AuthenticationService.Login(value);
+    // setOpenLoginOtpBox(true);
+    if (response !== undefined) {
+      if (response.requiresVerification === true && response.isSuccess === false)  {
+        // this means we need to verify the user
+        setOpenLoginOtpBox(false);
+      } else if(response.requiresVerification === false && response.isSuccess === true){
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("fullName", response.fullName);
+        localStorage.setItem("phoneNumber", response.phoneNumber);
+        localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
+        navigate("/")
+      }
+    }
+    else {
+      setBackdropLoading(false);
+      setMessageProperty({
+        openDialog: true,
+        dialogTitle: "Internal Server Error",
+        dialogContent: "Please try again later.",
+        variant: "error"
+      })
+
+      setTimeout(() => {
+        setMessageProperty({ openDialog: false });
+      }, 3000);
+    }
+    setBackdropLoading(false);
     // localStorage.setItem("token", "Vicky is good boy");
     // localStorage.setItem("fullName", "Vicky jaiswal");
     // localStorage.setItem("phoneNumber", "6205316232");
     // localStorage.setItem("isDocotrsOrPatiets", true);
     // navigate("/")
   };
+
   const handleRegistration = async (formData) => {
+    setButtonDisabled({ ForRegister: true })
     try {
+      setBackdropLoading(true);
       const value = Register;
       value.user_Name = formData.fullName
       value.password = formData.password;
       value.mobileNumber = formData.mobileNumber;
       value.isDocotrsOrPatiets = isDoctor;
-      let response = await RegisterService.register(value);
-      if (response !== true) {
-        throw Error("Network response was not ok");
+      const response = await AuthenticationService.Register(value);
+      if (response !== undefined) {
+        if (response.requiresVerification === true && response.isSuccess === true) {
+          setBackdropLoading(false);
+          setOpenRegisterOtpBox(true);
+        }else if(response.isSuccess === false){
+          setBackdropLoading(false);
+          setMessageProperty({
+            openDialog: true,
+            dialogContent: response.errorMessage,
+            variant: "error"
+          })
+
+          setTimeout(() => {
+            setMessageProperty({ openDialog: false });
+          }, 3000);
+        }
       }
       else {
-        setActiveTab("login");
-        setValue('registeredemail', formData.email, { shouldValidate: true });
-        setValue('registeredpassword', formData.password, { shouldValidate: true });
-      }
+        setBackdropLoading(false);
+        setMessageProperty({
+          openDialog: true,
+          dialogTitle: "Internal Server Error",
+          dialogContent: "Please try again later.",
+          variant: "error"
+        })
 
+        setTimeout(() => {
+          setMessageProperty({ openDialog: false });
+        }, 3000);
+      }
+      setBackdropLoading(false);
+
+    } catch (error) {
+      setMessageProperty({
+        openDialog: true,
+        dialogTitle: "Internal Server Error",
+        dialogContent: "Please try again later.",
+        variant: "error"
+      })
+
+      setTimeout(() => {
+        setMessageProperty({ openDialog: false });
+      }, 3000);
     }
-    catch (ex) {
-    }
+
+    setBackdropLoading(false);
 
   };
-  const toggleDoctorStatus = () => {
-    setIsDoctor(!isDoctor);
+
+  const handleSubmitOtp = () => {
+    const otp_Data = {
+      otp: otp,
+      mobileNumber: ""
+    }
+    if (activeTab === 'register') {
+      otp_Data.mobileNumber = inputValues.mobileNumber;
+    } else {
+      otp_Data.mobileNumber = inputValues.emailOrPhoneNumber;
+    }
+
+    console.log(otp_Data);
+
+    try {
+      setBackdropLoading(true);
+      const response = AuthenticationService.VerifyOtp(otp_Data);
+      if (response !== undefined) {
+        if (response.isSuccess === true) {
+          setOpenLoginOtpBox(false);
+          setBackdropLoading(false);
+          localStorage.setItem("token", response.token);
+          localStorage.setItem("fullName", response.fullName);
+          localStorage.setItem("phoneNumber", response.phoneNumber);
+          localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
+          navigate("/")
+        } else {
+          setBackdropLoading(false);
+          setMessageProperty({
+            openDialog: true,
+            dialogContent: response.errorMessage,
+            variant: "error"
+          })
+          setTimeout(() => {
+            setMessageProperty({ openDialog: false });
+          }, 3000);
+        }
+      }
+
+    } catch (error) {
+      setMessageProperty({
+        openDialog: true,
+        dialogContent: "Internal Server Error",
+        variant: "error"
+      })
+      setTimeout(() => {
+        setMessageProperty({ openDialog: false });
+      }, 3000);
+    }
+
   }
 
   return (
     <>
+      <BackdropLoading open={backdropLoading} />
       <Box sx={{ bgcolor: "#F0F6FF", py: { xs: 2, lg: 8 } }}>
 
         <Container sx={{ display: "flex", flexDirection: { xs: "column-reverse", lg: "row" } }}>
@@ -517,10 +647,13 @@ const Login = () => {
 
                   {/* Button for login */}
                   <Box sx={{ width: "100%", mt: 2 }}>
-                    <CustomizedButton title={"Sign In"} type={"submit"} />
+                    <CustomizedButton title={"Sign In"} type={"submit"} disabled={buttonDisabled.ForLogin} />
                   </Box>
 
                 </form>
+
+                <OtpVerificationDialogBox openDialog={openLoginOtpBox} closeDialog={() => setOpenLoginOtpBox(false)} handleSubmitOtp={handleSubmitOtp} setOtpMain={setOtp} />
+
 
               </Box>
             )}
@@ -535,7 +668,7 @@ const Login = () => {
                   <Box sx={{ display: "flex", mt: 2 }}>
                     {!isDoctor && (<Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600, mr: 1, }}>Are You a Doctor ?</Typography>)}
 
-                    <Typography component={"button"} type='button' sx={{ color: "#42A5F5", fontSize: "16px", fontWeight: 600,  border:"none", bgcolor:"transparent" }} onClick={toggleDoctorStatus}>{isDoctor ? "Not a Doctor ?" : "Register Here"}</Typography>
+                    <Typography component={"button"} type='button' sx={{ color: "#42A5F5", fontSize: "16px", fontWeight: 600, border: "none", bgcolor: "transparent" }} onClick={toggleDoctorStatus}>{isDoctor ? "Not a Doctor ?" : "Register Here"}</Typography>
 
 
                   </Box>
@@ -589,10 +722,13 @@ const Login = () => {
                   {/* Button for signup */}
 
                   <Box sx={{ width: "100%", mt: 2 }}>
-                    <CustomizedButton title={"Sign Up"} type={"submit"} />
+                    <CustomizedButton title={"Sign Up"} type={"submit"} disabled={buttonDisabled.ForRegister} />
                   </Box>
 
                 </form>
+
+                <OtpVerificationDialogBox openDialog={openRegisterOtpBox} closeDialog={() => setOpenRegisterOtpBox(false)} handleSubmitOtp={handleSubmitOtp} setOtpMain={setOtp} />
+
               </Box>
             )}
 
@@ -616,6 +752,8 @@ const Login = () => {
           </Box>
 
         </Container>
+
+        <MessageBar openDialog={messageProperty.openDialog} closeDialog={() => setMessageProperty({ openDialog: false })} title={messageProperty.dialogTitle} content={messageProperty.dialogContent} variant={messageProperty.variant} />
 
       </Box>
 

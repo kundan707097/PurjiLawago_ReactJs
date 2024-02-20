@@ -12,6 +12,6 @@ export default function CustomeButton({ title, onClick, disabled }) {
 
 export const CustomizedButton = ({title, onClick, type, disabled}) => {
   return (
-    <Button sx={{ bgcolor: "#42A5F5", color: "white", width: "100%", p: "10px", borderRadius: "10px", fontFamily: "nunito", "&:hover": { bgcolor: "white", color: "#42A5F5" } }} onClick={onClick} type={type} disabled={disabled}>{title}</Button>
+    <Button sx={{ bgcolor: disabled? "rgba(128, 128, 128, 0.496)" : "#42A5F5", color: "white", width: "100%", p: "10px", borderRadius: "10px", fontFamily: "nunito", "&:hover": { bgcolor: "white", color: "#42A5F5" } }} onClick={onClick} type={type} disabled={disabled}>{title}</Button>
   )
 }
