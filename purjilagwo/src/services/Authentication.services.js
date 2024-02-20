@@ -31,7 +31,7 @@ const VerifyOtp = async(otpData) =>{
     try {
         const response = await axiosClient({
             method: 'POST',
-            url: `VerifyOtp`, // Give your API endpoint
+            url: "Registration/OTPVerification", // Give your API endpoint
             data: JSON.stringify(otpData),
         });
         return response.data;

@@ -75,14 +75,10 @@ function EditProfile() {
   }
 
   useEffect(() => {
-    if (localStorage.getItem('id') !== undefined) {
-      setID(localStorage.getItem('id'));
-      //console.log(localStorage.getItem('id'))
-    }
-    if (localStorage.getItem('isDocotrsOrPatiets')) {
-      setIsDoctor(localStorage.getItem('isDocotrsOrPatiets'));
-    }
-  }, [])
+    setID(localStorage.getItem('id'));
+    setIsDoctor(localStorage.getItem('isDocotrsOrPatiets'));
+
+  }, [localStorage])
 
 
   //Function for get the profile data 
@@ -90,7 +86,8 @@ function EditProfile() {
   useEffect(() => {
     (async () => {
       try {
-        if (id !== undefined && isDoctor ) {
+        console.log(isDoctor)
+        if (isDoctor === true) {
           setLoading(true)
           const responseData = await ProfileUpdate.GetProfileData(`DoctorsInformation/DoctorsProfileById?id=${id}`);
 
@@ -98,15 +95,15 @@ function EditProfile() {
             console.log('Profile data:', responseData);
             setImage(responseData.image);
             setDob(dayjs(responseData.dateofbirth));
-            if(responseData.lunchTime !== null){
+            if (responseData.lunchTime !== null) {
 
               setLunchTime(responseData.lunchTime.split('/').map((time) => dayjs(time)));
             }
-            if(responseData.availableTime !== null){
+            if (responseData.availableTime !== null) {
 
               setAvailableTime(responseData.availableTime.split('/').map((time) => dayjs(time)));
             }
-            if(responseData.days !== null){
+            if (responseData.days !== null) {
               responseData.days.forEach((day) => {
                 setDays((prevDays) => ({
                   ...prevDays,
@@ -139,15 +136,15 @@ function EditProfile() {
           }
         }
         else {
-          console.log(id)
-          const response = await ProfileUpdate.GetProfileData(`PatientDetails/Get-Patientd-Details?id=${id}`);
-          if (response.ok) {
-            console.log(response)
-            const responseData = await response.json();
-            console.log(responseData);
+         
+          const responseData = await ProfileUpdate.GetProfileData(`PatientDetails/Get-Patientd-Details?id=${id}`);
+          console.log(responseData)
+          if (responseData !== null) {
             console.log('Profile data:', responseData);
             setImage(responseData.profile_Picture);
-            setDob(dayjs(responseData.dateOfBirth));
+            if(responseData.dateOfBirth !== null){
+              setDob(dayjs(responseData.dateOfBirth));
+            }
             setValue({
               name: responseData.user_Name,
               gender: responseData.gender,
@@ -214,12 +211,12 @@ function EditProfile() {
     const doctor_profile_data = DoctorProfileData;
     doctor_profile_data.Id = parseInt(id, 10);
     doctor_profile_data.Image = image;
-     doctor_profile_data.Name = value.name;
+    doctor_profile_data.Name = value.name;
     doctor_profile_data.PhoneNumber = phoneNumber;
     doctor_profile_data.Email = email;
     doctor_profile_data.Gender = value.gender;
     doctor_profile_data.DateOfBirth = dob.format('YYYY-MM-DD')
-     doctor_profile_data.Education = value.education;
+    doctor_profile_data.Education = value.education;
     doctor_profile_data.Experience = value.experience;
     doctor_profile_data.Specialization = value.specialization;
     doctor_profile_data.Description = value.description;
@@ -473,7 +470,7 @@ function EditProfile() {
         </Container>
 
 
-        {isDoctor && (<>
+        {isDoctor === true && (<>
 
           <Container sx={{ backgroundColor: "white" }}>
             <Typography fontSize={"13px"} sx={{ pt: 4 }}>
@@ -914,7 +911,7 @@ const SpecializationPicker = (props) => {
   }
 
   useEffect(() => {
-    if (props.value !==null && props.value.length !== 0) {
+    if (props.value !== null && props.value.length !== 0) {
       setValue(props.value)
     }
   }, [props])
@@ -947,7 +944,7 @@ const SpecializationPicker = (props) => {
               cursor: "pointer"
             }}
             onClick={() => setOpen(true)}
-            value={props.value !==null ? props.value.toString() : ""}
+            value={props.value !== null ? props.value.toString() : ""}
           />
 
         </Box>

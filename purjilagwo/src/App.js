@@ -71,8 +71,8 @@ function App() {
       maxSnack={3}
       autoHideDuration={3000}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "center",
+        vertical: "bottom",
+        horizontal: "right",
       }}
       hideIconVariant
       action={(snackbarId) => (

@@ -16,6 +16,9 @@ import ErrorMessage from '../../components/ErrorMessage';
 import MessageBar from '../../components/MessageBar';
 import BackdropLoading from '../../components/BackdropLoading';
 import { OtpVerificationDialogBox } from '../../components/DialogBox';
+import LoginService from '../../services/Login.services';
+import { enqueueSnackbar, useSnackbar } from 'notistack';
+
 
 
 const LoginForm = () => {
@@ -79,6 +82,7 @@ const LoginForm = () => {
   };
 
   const handleLogin = async (loginData) => {
+    debugger;
     let value = LoginValue;
     debugger;
     value.emailOrPhoneNumber = loginData.emailOrPhoneNumber;
@@ -321,6 +325,7 @@ const LoginForm = () => {
 const Login = () => {
 
   const navigate = useNavigate();
+  const {enqueueSnackbar} = useSnackbar();
   const [activeTab, setActiveTab] = useState('login');
   const [isDoctor, setIsDoctor] = useState(false);
   const [inputValues, setInputValues] = useState({
@@ -503,7 +508,7 @@ const Login = () => {
 
   };
 
-  const handleSubmitOtp = () => {
+  const handleSubmitOtp = async () => {
     const otp_Data = {
       otp: otp,
       mobileNumber: ""
@@ -518,16 +523,24 @@ const Login = () => {
 
     try {
       setBackdropLoading(true);
-      const response = AuthenticationService.VerifyOtp(otp_Data);
+      const response = await AuthenticationService.VerifyOtp(otp_Data);
+      console.log(response)
       if (response !== undefined) {
         if (response.isSuccess === true) {
           setOpenLoginOtpBox(false);
           setBackdropLoading(false);
-          localStorage.setItem("token", response.token);
-          localStorage.setItem("fullName", response.fullName);
-          localStorage.setItem("phoneNumber", response.phoneNumber);
-          localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
-          navigate("/")
+          if(activeTab === 'register'){
+            enqueueSnackbar("Verification Success", {variant: "success"})
+            setActiveTab('login')
+          }else if (activeTab === 'login'){
+            enqueueSnackbar("Verification Success", {variant: "success"})
+            localStorage.setItem("token", response.token);
+            localStorage.setItem("fullName", response.fullName);
+            localStorage.setItem("phoneNumber", response.phoneNumber);
+            localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
+            navigate("/")
+          }
+
         } else {
           setBackdropLoading(false);
           setMessageProperty({
