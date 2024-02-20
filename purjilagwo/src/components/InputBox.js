@@ -15,7 +15,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import dayjs from 'dayjs';
 import "./style/InputBox.css";
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function InputBox(props) {
@@ -251,7 +250,7 @@ function InputBox(props) {
                   fontFamily: "nunito",
                 }}
                 value={props.value}
-                onChange={props.onChange} />
+                onChange={props.onChange}/>
             </Box>
           </Box>
         </>
