@@ -188,6 +188,7 @@ function InputBox(props) {
                 }}
                 name={props.name}
                 onChange={props.onChange}
+                value={props.value}
               />
             </Box>
 

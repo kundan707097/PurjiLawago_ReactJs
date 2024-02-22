@@ -13,11 +13,13 @@ import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
 import { CustomizedButton } from "../../components/Button";
 import { parse } from "url";
+import { useSnackbar } from "notistack";
 
 function EditProfile() {
   // debugger;
   const [id, setID] = useState(localStorage.getItem('id'));
   const [isDoctor, setIsDoctor] = useState(localStorage.getItem('isDocotrsOrPatiets'));
+  const {enqueueSnackbar} = useSnackbar();
   const [value, setValue] = useState({
     name: "",
     gender: "",
@@ -87,7 +89,7 @@ function EditProfile() {
     (async () => {
       try {
         console.log(isDoctor)
-        if (isDoctor === true) {
+        if (isDoctor === "true") {
           setLoading(true)
           const responseData = await ProfileUpdate.GetProfileData(`DoctorsInformation/DoctorsProfileById?id=${id}`);
 
@@ -103,6 +105,7 @@ function EditProfile() {
 
               setAvailableTime(responseData.availableTime.split('/').map((time) => dayjs(time)));
             }
+            console.log(responseData.days)
             if (responseData.days !== null) {
               responseData.days.forEach((day) => {
                 setDays((prevDays) => ({
@@ -111,6 +114,22 @@ function EditProfile() {
                 }));
               });
             }
+
+            console.log(day)
+
+            setDays(prevDays => {
+              const updatedDays = { ...prevDays };
+            
+              responseData.days.forEach(day => {
+                if (updatedDays.hasOwnProperty(day)) {
+                  updatedDays[day] = true;
+                }
+              });
+            
+              return updatedDays;
+            });
+
+            console.log(day)
 
             setValue({
               name: responseData.name,
@@ -128,14 +147,16 @@ function EditProfile() {
               pincode: responseData.pincode,
               extraphonenumbers: responseData.extraPhoneNumbers,
               language: responseData.language,
+              
 
             })
             setEmail(responseData.email);
             setPhoneNumber(responseData.phoneNumber);
             setLoading(false);
+            console.log(value)
           }
         }
-        else {
+        else if (isDoctor ==="false") {
          
           const responseData = await ProfileUpdate.GetProfileData(`PatientDetails/Get-Patientd-Details?id=${id}`);
           console.log(responseData)
@@ -172,10 +193,10 @@ function EditProfile() {
 
   const handleUpdateProfile = async () => {
     debugger;
-    if (isDoctor) {
+    if (isDoctor === "true") {
       handleDoctorUpdateProfile();
     }
-    else {
+    else if (isDoctor === "false"){
       handlePatientUpdateProfile();
     }
   };
@@ -235,17 +256,16 @@ function EditProfile() {
     console.log(doctor_profile_data);
 
     try {
-      const response = await ProfileUpdate.UpdateProfile(doctor_profile_data);
-
-      if (response.ok) {
+      const response = await ProfileUpdate.UpdateProfile(doctor_profile_data,"/DoctorsInformation/update");
+      console.log(response)
+      if (response.status == 200) {
         debugger;
-        const responseData = await response.json();
-        console.log('Profile updated successfully:', responseData);
+        enqueueSnackbar("Updates Successfully", {variant: "success"})
       } else {
-        console.error('Error updating profile:', response.statusText);
+        enqueueSnackbar("Error", {variant: "error"})
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
+      enqueueSnackbar("Server Error", {variant: "error"})
     }
   }
 
@@ -265,16 +285,15 @@ function EditProfile() {
     patient_profile_data.dateOfBirth = dob.format('YYYY-MM-DD');
 
     try {
-      const response = await ProfileUpdate.UpdateProfile(patient_profile_data, 'PatientDetails/Update-Patient-Details');
-      if (response.ok) {
+      const response = await ProfileUpdate.UpdateProfile(patient_profile_data, 'https://localhost:44324/PatientDetails/Update-Patient-Details');
+      if (response.status == 200) {
         debugger;
-        const responseData = await response.json();
-        console.log('Profile updated successfully:', responseData);
+        enqueueSnackbar("Updated Successfully", {variant: "success"})
       } else {
-        console.error('Error updating profile:', response.statusText);
+        enqueueSnackbar("Error", {variant: "error"})
       }
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar("Internal Server Error", {variant: "error"})
     }
   }
 
@@ -470,7 +489,7 @@ function EditProfile() {
         </Container>
 
 
-        {isDoctor === true && (<>
+        {isDoctor === "true" && (<>
 
           <Container sx={{ backgroundColor: "white" }}>
             <Typography fontSize={"13px"} sx={{ pt: 4 }}>
