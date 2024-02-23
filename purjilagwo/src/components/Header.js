@@ -232,7 +232,7 @@ function Header() {
                     </ul> */}
                   </div>
                 ) : (
-                  <Link to="/login">
+                  <Link to="/authentication">
                     <Paper
                       sx={{
                         backgroundColor: "#42a5f5",

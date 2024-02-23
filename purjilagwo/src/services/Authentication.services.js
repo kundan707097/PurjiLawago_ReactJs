@@ -27,20 +27,60 @@ const Register = async (registerData) => {
     }
 };
 
-const VerifyOtp = async(otpData) =>{
+const VerifyOtp = async (otpData, endpoint) => {
     try {
         const response = await axiosClient({
             method: 'POST',
-            url: "Registration/OTPVerification", // Give your API endpoint
+            url: endpoint, // Give your API endpoint
             data: JSON.stringify(otpData),
         });
-        return response.data;
+        return response;
     } catch (error) {
         return error;
     }
 }
 
+const LoginViaOtp = async (number) => {
+    try {
+        const response = await axiosClient({
+            method: 'POST',
+            url: `/Registration/Login-with-otp?mobileNumber=${number}`,
+            data: JSON.stringify({ mobileNumber: number }),
+        });
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const ForgotPassword = async (number) => {
+    try {
+        const response = await axiosClient({
+            method: 'POST',
+            url: `/Registration/ForgotPassword-MobileNumber?mobileNumber=${number}`,
+            data: JSON.stringify({ mobileNumber: number }),
+        });
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const LoginWithNewPassword = async (data) => {
+    try {
+        const response = await axiosClient({
+            method: 'POST',
+            url: `Registration/ForgotPassword-WithNewPassword`,
+            data: JSON.stringify(data),
+        });
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 const AuthenticationService = {
-    Login, Register, VerifyOtp
+    Login, Register, VerifyOtp, LoginViaOtp, ForgotPassword, LoginWithNewPassword
 };
 export default AuthenticationService;

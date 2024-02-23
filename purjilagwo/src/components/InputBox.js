@@ -19,19 +19,19 @@ import { useEffect, useState } from "react";
 
 function InputBox(props) {
 
-  
-      //This usestate is for calender
 
-      const [open, setOpen] = useState(false);
-      const [value, setValue] = useState(dayjs('2022-04-17'));
+  //This usestate is for calender
 
-      useEffect(() => {
-        if (props.value != null) {
-          setValue(dayjs(props.value))
-        }
-      }, [props])
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(dayjs('2022-04-17'));
 
-      const [openEditDialog, setOpenEditDialog] = useState(false);
+  useEffect(() => {
+    if (props.value != null) {
+      setValue(dayjs(props.value))
+    }
+  }, [props])
+
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   switch (props.boxType) {
 
@@ -225,8 +225,7 @@ function InputBox(props) {
         <>
           <FormGroup>
             <FormControlLabel
-              id={props.id}
-              control={<Checkbox checked={props.checked} onChange={props.handleChange} />}
+              control={<Checkbox id={props.id} checked={props.checked} onClick={props.onClick} />}
               label={props.label}
             />
           </FormGroup>
@@ -251,7 +250,7 @@ function InputBox(props) {
                   fontFamily: "nunito",
                 }}
                 value={props.value}
-                onChange={props.onChange}/>
+                onChange={props.onChange} />
             </Box>
           </Box>
         </>
