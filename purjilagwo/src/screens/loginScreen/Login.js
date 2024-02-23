@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { yupResolver } from '@hookform/resolvers/yup';
 import AuthenticationService from "../../services/Authentication.services";
 import { Register, LoginValue } from "../../models/Index";
@@ -20,7 +20,7 @@ import { useSnackbar } from 'notistack';
 const Login = () => {
 
   const navigate = useNavigate();
-  const {enqueueSnackbar} = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const [activeTab, setActiveTab] = useState('login');
   const [isDoctor, setIsDoctor] = useState(false);
   const [inputValues, setInputValues] = useState({
@@ -29,6 +29,7 @@ const Login = () => {
     emailOrPhoneNumber: '',
     loginPassword: '',
     password: '',
+    newPassword: "",
   });
   const [buttonDisabled, setButtonDisabled] = useState({
     ForLogin: false,
@@ -36,23 +37,38 @@ const Login = () => {
 
   });
   const [backdropLoading, setBackdropLoading] = useState(false);
-
   const [otp, setOtp] = useState("");
-  const [openLoginOtpBox, setOpenLoginOtpBox] = useState(false);
-  const [openRegisterOtpBox, setOpenRegisterOtpBox] = useState(false);
+  const [openLoginOtpBox, setOpenLoginOtpBox] = useState({
+    open: false,
+    endpoint: "",
+    title: "",
+    content: ""
+  });
+  const [openRegisterOtpBox, setOpenRegisterOtpBox] = useState({
+    open: false,
+    endpoint: "",
+    title: "",
+    content: ""
+  });
   const [messageProperty, setMessageProperty] = useState({
     openDialog: false,
     dialogTitle: "",
     dialogContent: "",
     variant: "",
   });
+  const [loginWithOtp, setLoginWithOtp] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false); // this usestate is for switching between login with password and forgot password
+  const [newPasswordInput, setNewPasswordInput] = useState(false);
 
   const validationSchema = (activeTab = 'login') => {
     return yup.object().shape({
       emailOrPhoneNumber: activeTab === 'login'
         ? yup.string().required('Email or Phone Number is required')
         : yup.string(),
-      loginPassword: activeTab === 'login'
+      loginPassword: activeTab === 'login' && !loginWithOtp && !forgotPassword
+        ? yup.string().required('Password is required')
+        : yup.string(),
+      newPassword: activeTab === 'login' && newPasswordInput
         ? yup.string().required('Password is required')
         : yup.string(),
       fullName: activeTab === 'register'
@@ -67,7 +83,7 @@ const Login = () => {
     });
   };
 
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+  const { handleSubmit, formState: { errors }, setValue } = useForm({
     resolver: yupResolver(validationSchema(activeTab)),
   });
 
@@ -88,17 +104,25 @@ const Login = () => {
     setValue(name, value, { shouldValidate: true });
   };
 
-  const toggleDoctorStatus = () => {
-    setIsDoctor(!isDoctor);
-  }
-
   const onSubmit = async (data) => {
     console.log(data);
     // debugger
     if (activeTab === "register") {
       handleRegistration(data);
     } else {
-      handleLogin(data);
+      if (loginWithOtp) {
+        console.log("login with otp")
+        handleLoginViaOtp(data);
+      } else if (forgotPassword && !newPasswordInput) {
+        console.log("handle forgot password")
+        handleforgotPassord(data);
+      } else if (newPasswordInput) {
+        console.log("login with new password")
+        handleLoginWithNewPassword(data);
+      }
+      else {
+        handleLogin(data);
+      }
     }
   };
 
@@ -110,12 +134,11 @@ const Login = () => {
     value.password = loginData.loginPassword;
     setBackdropLoading(true);
     const response = await AuthenticationService.Login(value);
-    // setOpenLoginOtpBox(true);
     if (response !== undefined) {
-      if (response.requiresVerification === true && response.isSuccess === false)  {
+      if (response.requiresVerification === true && response.isSuccess === false) {
         // this means we need to verify the user
-        setOpenLoginOtpBox(false);
-      } else if(response.requiresVerification === false && response.isSuccess === true){
+        setOpenLoginOtpBox({ open: true, endpoint: "/Registration/OTPVerification", title: "Verify your account", content: "We have sent your a verification code to your email or phone number. Please enter the code to verify your account." });
+      } else if (response.requiresVerification === false && response.isSuccess === true) {
         localStorage.setItem("token", response.token);
         localStorage.setItem("fullName", response.fullName);
         localStorage.setItem("phoneNumber", response.phoneNumber);
@@ -157,8 +180,8 @@ const Login = () => {
       if (response !== undefined) {
         if (response.requiresVerification === true && response.isSuccess === true) {
           setBackdropLoading(false);
-          setOpenRegisterOtpBox(true);
-        }else if(response.isSuccess === false){
+          setOpenRegisterOtpBox({ open: true, endpoint: "/Registration/OTPVerification", title: "Verify your account", content: "We have sent your a verification code to your phone number. Please enter the code to verify your account." });
+        } else if (response.isSuccess === false) {
           setBackdropLoading(false);
           setMessageProperty({
             openDialog: true,
@@ -203,7 +226,7 @@ const Login = () => {
 
   };
 
-  const handleSubmitOtp = async () => {
+  const handleSubmitOtp = async (endpoint) => {
     const otp_Data = {
       otp: otp,
       mobileNumber: ""
@@ -214,26 +237,29 @@ const Login = () => {
       otp_Data.mobileNumber = inputValues.emailOrPhoneNumber;
     }
 
-    console.log(otp_Data);
+    console.log(otp_Data, endpoint);
 
     try {
       setBackdropLoading(true);
-      const response = await AuthenticationService.VerifyOtp(otp_Data);
-      console.log(response)
-      if (response !== undefined) {
+      const response = await AuthenticationService.VerifyOtp(otp_Data, endpoint);
+      if (response.status === 200) {
         if (response.isSuccess === true) {
-          setOpenLoginOtpBox(false);
+          setOpenLoginOtpBox({ open: false, endpoint: "" });
           setBackdropLoading(false);
-          if(activeTab === 'register'){
-            enqueueSnackbar("Verification Success", {variant: "success"})
+          if (activeTab === 'register') {
+            enqueueSnackbar("Verification Success", { variant: "success" })
             setActiveTab('login')
-          }else if (activeTab === 'login'){
-            enqueueSnackbar("Verification Success", {variant: "success"})
-            localStorage.setItem("token", response.token);
-            localStorage.setItem("fullName", response.fullName);
-            localStorage.setItem("phoneNumber", response.phoneNumber);
-            localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
-            navigate("/")
+          } else if (activeTab === 'login') {
+            if (forgotPassword) {
+              setNewPasswordInput(true);
+            } else {
+              enqueueSnackbar("Verification Success", { variant: "success" })
+              localStorage.setItem("token", response.token);
+              localStorage.setItem("fullName", response.fullName);
+              localStorage.setItem("phoneNumber", response.phoneNumber);
+              localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
+              navigate("/")
+            }
           }
 
         } else {
@@ -247,19 +273,168 @@ const Login = () => {
             setMessageProperty({ openDialog: false });
           }, 3000);
         }
+      } else {
+        setBackdropLoading(false);
+        setMessageProperty({
+          openDialog: true,
+          dialogTitle: "Error",
+          dialogContent: "Server is busy",
+          variant: "error"
+        })
+
+        setTimeout(() => {
+          setMessageProperty({ openDialog: false });
+        }, 3000);
+
       }
 
     } catch (error) {
-      setMessageProperty({
-        openDialog: true,
-        dialogContent: "Internal Server Error",
-        variant: "error"
-      })
-      setTimeout(() => {
-        setMessageProperty({ openDialog: false });
-      }, 3000);
+      setBackdropLoading(false);
+      enqueueSnackbar("Internal Server Error", { variant: "error" })
     }
 
+  }
+
+  const handleLoginViaOtp = async (formData) => {
+    try {
+      setButtonDisabled({ ForLogin: true })
+      setBackdropLoading(true);
+      const response = await AuthenticationService.LoginViaOtp(formData.emailOrPhoneNumber);
+      if (response.status === 200) {
+        setBackdropLoading(false);
+        if (response.data.isSuccess === true) {
+          setOpenLoginOtpBox({ open: true, endpoint: "/Registration/Login-with-otp-token", title: "Login Via Otp", content: "We have sent your a verification code to your register phone number. Please enter the code to login your account." });
+        } else {
+          setMessageProperty({
+            openDialog: true,
+            dialogTitle: "Error",
+            dialogContent: response.data.errorMessage,
+            variant: "error"
+          })
+
+          setTimeout(() => {
+            setMessageProperty({ openDialog: false });
+          }, 3000);
+        }
+      } else {
+        setBackdropLoading(false);
+        setMessageProperty({
+          openDialog: true,
+          dialogTitle: "Error",
+          dialogContent: "Server is busy",
+          variant: "error"
+        })
+
+        setTimeout(() => {
+          setMessageProperty({ openDialog: false });
+        }, 3000);
+
+      }
+    } catch (error) {
+      setBackdropLoading(false);
+      enqueueSnackbar("Internal Server Error", { variant: "error" })
+    }
+  }
+
+  const handleforgotPassord = async (formData) => {
+    try {
+      setBackdropLoading(true);
+      const response = await AuthenticationService.ForgotPassword(formData.emailOrPhoneNumber);
+      if (response.status === 200) {
+        setBackdropLoading(false);
+        if (response.data.isSuccess === true) {
+          setOpenLoginOtpBox({ open: true, endpoint: "/Registration/ForgotPassword-MobileNumberOTP", title: "Forgot Password Otp", content: "We have sent your a verification code to your register phone number. Please enter the code to reset your password." });
+        } else {
+          setMessageProperty({
+            openDialog: true,
+            dialogTitle: "Error",
+            dialogContent: response.data.errorMessage,
+            variant: "error"
+          })
+
+          setTimeout(() => {
+            setMessageProperty({ openDialog: false });
+          }, 3000);
+        }
+      } else {
+        setBackdropLoading(false);
+        setMessageProperty({
+          openDialog: true,
+          dialogTitle: "Error",
+          dialogContent: "Server is busy",
+          variant: "error"
+        })
+
+        setTimeout(() => {
+          setMessageProperty({ openDialog: false });
+        }, 3000);
+      }
+    } catch (error) {
+      setBackdropLoading(false);
+      enqueueSnackbar("Internal Server Error", { variant: "error" })
+    }
+  }
+
+  const handleLoginWithNewPassword = async (formData) => {
+    try {
+      setButtonDisabled({ ForLogin: true });
+      setBackdropLoading(true);
+      const login_data = {
+        mobileNumber: formData.emailOrPhoneNumber,
+        newPassword: formData.newPassword
+      }
+      const response = await AuthenticationService.LoginWithNewPassword(login_data);
+      if (response.status === 200) {
+        setBackdropLoading(false);
+        if (response.data.isSuccess === true) {
+          // localStorage.setItem("token", response.token);
+          // localStorage.setItem("fullName", response.fullName);
+          // localStorage.setItem("phoneNumber", response.phoneNumber);
+          // localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
+          // navigate("/")
+          enqueueSnackbar("Password changed successfully", { variant: "success" })
+        } else {
+          setMessageProperty({
+            openDialog: true,
+            dialogTitle: "Error",
+            dialogContent: response.data.errorMessage,
+            variant: "error"
+          })
+
+          setTimeout(() => {
+            setMessageProperty({ openDialog: false });
+          }, 3000);
+        }
+      }else{
+        setBackdropLoading(false);
+        setMessageProperty({
+          openDialog: true,
+          dialogTitle: "Error",
+          dialogContent: "Server is busy",
+          variant: "error"
+        })
+
+        setTimeout(() => {
+          setMessageProperty({ openDialog: false });
+        }, 3000);
+      }
+    } catch (error) {
+      setBackdropLoading(false);
+      enqueueSnackbar("Internal Server Error", { variant: "error" })
+    }
+  }
+
+  const toggleDoctorStatus = () => {
+    setIsDoctor(!isDoctor);
+  }
+
+  const loginViaOtpToggler = () => {
+    setLoginWithOtp(!loginWithOtp);
+  }
+
+  const forgotPasswordToggler = () => {
+    setForgotPassword(!forgotPassword);
+    setNewPasswordInput(false);
   }
 
   return (
@@ -340,17 +515,47 @@ const Login = () => {
 
                   {/* Password input */}
 
-                  <Box sx={{ width: "100%", mt: 2 }} >
-                    <InputBox
-                      name="loginPassword"
-                      type="text"
-                      title={"Password"}
-                      value={inputValues.loginPassword}
-                      onChange={handleInputChange}
-                    />
-                    {errors.loginPassword && (
-                      <ErrorMessage message={errors.loginPassword.message} />
+                  {(!loginWithOtp && !forgotPassword) && (
+                    <Box sx={{ width: "100%", mt: 2 }} >
+                      <InputBox
+                        name="loginPassword"
+                        type="text"
+                        title={"Password"}
+                        value={inputValues.loginPassword}
+                        onChange={handleInputChange}
+                      />
+                      {errors.loginPassword && (
+                        <ErrorMessage message={errors.loginPassword.message} />
+                      )}
+                    </Box>
+                  )}
+
+                  {newPasswordInput && (
+                    <Box sx={{ width: "100%", mt: 2 }} >
+                      <InputBox
+                        name="newPassword"
+                        type="text"
+                        title={"New Password"}
+                        value={inputValues.newPassword}
+                        onChange={handleInputChange}
+                      />
+                      {errors.newPassword && (
+                        <ErrorMessage message={errors.newPassword.message} />
+                      )}
+                    </Box>
+                  )}
+
+
+
+                  {/* Box for forgot password and login with otp */}
+
+                  <Box sx={{ display: "flex", mt: 2, justifyContent: "space-between", }}>
+                    {!forgotPassword && (<Typography component={"button"} type='button' sx={{ color: "#1C4188", fontSize: "15px", fontWeight: 600, border: "none", bgcolor: "transparent", textAlign: "left" }} onClick={loginViaOtpToggler}>{loginWithOtp ? "Login via password" : "Login via otp"}</Typography>)}
+
+                    {!loginWithOtp && (
+                      <Typography component={"button"} type='button' sx={{ color: "#42A5F5", fontSize: "15px", fontWeight: 600, border: "none", bgcolor: "transparent" }} onClick={forgotPasswordToggler}>{forgotPassword ? "Login via old password" : " Forgot Password ?"}</Typography>
                     )}
+
                   </Box>
 
                   {/* Button for login */}
@@ -360,7 +565,7 @@ const Login = () => {
 
                 </form>
 
-                <OtpVerificationDialogBox openDialog={openLoginOtpBox} closeDialog={() => setOpenLoginOtpBox(false)} handleSubmitOtp={handleSubmitOtp} setOtpMain={setOtp} />
+                <OtpVerificationDialogBox openDialog={openLoginOtpBox.open} closeDialog={() => setOpenLoginOtpBox({ open: false, endpoint: "" })} handleSubmitOtp={() => handleSubmitOtp(openLoginOtpBox.endpoint)} setOtpMain={setOtp} title={openLoginOtpBox.title} content={openLoginOtpBox.content} />
 
 
               </Box>
@@ -435,7 +640,7 @@ const Login = () => {
 
                 </form>
 
-                <OtpVerificationDialogBox openDialog={openRegisterOtpBox} closeDialog={() => setOpenRegisterOtpBox(false)} handleSubmitOtp={handleSubmitOtp} setOtpMain={setOtp} />
+                <OtpVerificationDialogBox openDialog={openRegisterOtpBox.open} closeDialog={() => setOpenRegisterOtpBox({ open: false, endpoint: "" })} handleSubmitOtp={() => handleSubmitOtp(openRegisterOtpBox.endpoint)} setOtpMain={setOtp} title={openRegisterOtpBox.title} content={openRegisterOtpBox.content} />
 
               </Box>
             )}

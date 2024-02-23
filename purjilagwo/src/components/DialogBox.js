@@ -5,7 +5,7 @@ import { Close, InformationFilled, } from '@carbon/icons-react';
 import OtpBox from './OtpBox';
 import { CustomizedButton } from './Button';
 
-export const OtpVerificationDialogBox = ({ openDialog, closeDialog, variant, handleSubmitOtp, setOtpMain }) => {
+export const OtpVerificationDialogBox = ({ openDialog, closeDialog, variant, handleSubmitOtp, setOtpMain, title, content }) => {
     const [otp, setOtp] = useState("");
 
     useEffect(() => {
@@ -19,7 +19,7 @@ export const OtpVerificationDialogBox = ({ openDialog, closeDialog, variant, han
         <>
             <Dialog open={openDialog} maxWidth="xs" fullWidth >
                 <DialogTitle sx={{  position: "relative" }}>
-                    <Typography sx={{textAlign: "center", fontWeight: 600, fontSize:"24px"}}>Verify your account</Typography>
+                    <Typography sx={{textAlign: "center", fontWeight: 600, fontSize:"24px"}}>{title}</Typography>
                     <Button sx={{position: "absolute", right: 0, top:0}} onClick={closeDialog}><Close style={{width: 30, height: 30, color: "black"}} /></Button>
                 </DialogTitle>
                 <DialogContent sx={{ px: 4, mx: 2, borderRadius: "12px", py: 0 }} >
@@ -28,7 +28,7 @@ export const OtpVerificationDialogBox = ({ openDialog, closeDialog, variant, han
                         <Avatar sx={{ bgcolor: "white", width: 60, height: 60, }}>
                             <InformationFilled size={"100%"} color={"#42A5F5"} />
                         </Avatar>
-                        <Typography sx={{ py: 1, fontSize: "18px", color: "#42A5F5", textAlign: "center", fontWeight: 600 }}>We have sent your a verification code to your email or phone number. Please enter the code to verify your account.</Typography>
+                        <Typography sx={{ py: 1, fontSize: "18px", color: "#42A5F5", textAlign: "center", fontWeight: 600 }}>{content}</Typography>
 
                         <Box>
                             <OtpBox setOtp={setOtp} />
