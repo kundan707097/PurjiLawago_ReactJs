@@ -209,7 +209,7 @@ function EditProfile() {
     doctor_profile_data.City = value.city;
     doctor_profile_data.State = value.state;
     doctor_profile_data.Country = value.country;
-    doctor_profile_data.Days = selectedDays.toString();
+    doctor_profile_data.Days = selectedDays;
     doctor_profile_data.Pincode = value.pincode;
     doctor_profile_data.ExtraPhoneNumbers = value.extraphonenumbers;
     doctor_profile_data.Language = value.language;
@@ -217,6 +217,7 @@ function EditProfile() {
 
     try {
       const response = await ProfileUpdate.UpdateProfile(doctor_profile_data, "/DoctorsInformation/update");
+      debugger;
       console.log(response)
       if (response.status === 200) {
         debugger;

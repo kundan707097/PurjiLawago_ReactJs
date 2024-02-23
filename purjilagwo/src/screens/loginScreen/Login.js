@@ -242,8 +242,9 @@ const Login = () => {
     try {
       setBackdropLoading(true);
       const response = await AuthenticationService.VerifyOtp(otp_Data, endpoint);
+      debugger;
       if (response.status === 200) {
-        if (response.isSuccess === true) {
+        if (response.data.isSuccess === true) {
           setOpenLoginOtpBox({ open: false, endpoint: "" });
           setBackdropLoading(false);
           if (activeTab === 'register') {
@@ -254,10 +255,10 @@ const Login = () => {
               setNewPasswordInput(true);
             } else {
               enqueueSnackbar("Verification Success", { variant: "success" })
-              localStorage.setItem("token", response.token);
-              localStorage.setItem("fullName", response.fullName);
-              localStorage.setItem("phoneNumber", response.phoneNumber);
-              localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
+              localStorage.setItem("token", response.data.token);
+              localStorage.setItem("fullName", response.data.fullName);
+              localStorage.setItem("phoneNumber", response.data.phoneNumber);
+              localStorage.setItem("isDocotrsOrPatiets", response.data.isDocotrsOrPatiets);
               navigate("/")
             }
           }
@@ -303,7 +304,7 @@ const Login = () => {
       if (response.status === 200) {
         setBackdropLoading(false);
         if (response.data.isSuccess === true) {
-          setOpenLoginOtpBox({ open: true, endpoint: "/Registration/Login-with-otp-token", title: "Login Via Otp", content: "We have sent your a verification code to your register phone number. Please enter the code to login your account." });
+          setOpenLoginOtpBox({ open: true, endpoint: "Registration/Login-with-otp-token", title: "Login Via Otp", content: "We have sent your a verification code to your register phone number. Please enter the code to login your account." });
         } else {
           setMessageProperty({
             openDialog: true,
@@ -343,7 +344,7 @@ const Login = () => {
       if (response.status === 200) {
         setBackdropLoading(false);
         if (response.data.isSuccess === true) {
-          setOpenLoginOtpBox({ open: true, endpoint: "/Registration/ForgotPassword-MobileNumberOTP", title: "Forgot Password Otp", content: "We have sent your a verification code to your register phone number. Please enter the code to reset your password." });
+          setOpenLoginOtpBox({ open: true, endpoint: "Registration/ForgotPassword-MobileNumberOTP", title: "Forgot Password Otp", content: "We have sent your a verification code to your register phone number. Please enter the code to reset your password." });
         } else {
           setMessageProperty({
             openDialog: true,
