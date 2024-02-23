@@ -19,7 +19,7 @@ function EditProfile() {
   // debugger;
   const [id, setID] = useState(localStorage.getItem('id'));
   const [isDoctor, setIsDoctor] = useState(localStorage.getItem('isDocotrsOrPatiets'));
-  const {enqueueSnackbar} = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const [value, setValue] = useState({
     name: "",
     gender: "",
@@ -88,7 +88,6 @@ function EditProfile() {
   useEffect(() => {
     (async () => {
       try {
-        console.log(isDoctor)
         if (isDoctor === "true") {
           setLoading(true)
           const responseData = await ProfileUpdate.GetProfileData(`DoctorsInformation/DoctorsProfileById?id=${id}`);
@@ -96,7 +95,9 @@ function EditProfile() {
           if (responseData != null) {
             console.log('Profile data:', responseData);
             setImage(responseData.image);
-            setDob(dayjs(responseData.dateofbirth));
+            if(responseData.dateofbirth !== null){
+              setDob(dayjs(responseData.dateofbirth));
+            }
             if (responseData.lunchTime !== null) {
 
               setLunchTime(responseData.lunchTime.split('/').map((time) => dayjs(time)));
@@ -105,31 +106,15 @@ function EditProfile() {
 
               setAvailableTime(responseData.availableTime.split('/').map((time) => dayjs(time)));
             }
-            console.log(responseData.days)
             if (responseData.days !== null) {
-              responseData.days.forEach((day) => {
-                setDays((prevDays) => ({
-                  ...prevDays,
-                  [day]: true,
-                }));
-              });
+
+              const newObj = {};
+              for (const key in day) {
+                responseData.days.includes(key) ? (newObj[key] = true) : (newObj[key] = false);
+              }
+              setDays(newObj);
+
             }
-
-            console.log(day)
-
-            setDays(prevDays => {
-              const updatedDays = { ...prevDays };
-            
-              responseData.days.forEach(day => {
-                if (updatedDays.hasOwnProperty(day)) {
-                  updatedDays[day] = true;
-                }
-              });
-            
-              return updatedDays;
-            });
-
-            console.log(day)
 
             setValue({
               name: responseData.name,
@@ -147,7 +132,7 @@ function EditProfile() {
               pincode: responseData.pincode,
               extraphonenumbers: responseData.extraPhoneNumbers,
               language: responseData.language,
-              
+
 
             })
             setEmail(responseData.email);
@@ -156,14 +141,14 @@ function EditProfile() {
             console.log(value)
           }
         }
-        else if (isDoctor ==="false") {
-         
+        else if (isDoctor === "false") {
+
           const responseData = await ProfileUpdate.GetProfileData(`PatientDetails/Get-Patientd-Details?id=${id}`);
           console.log(responseData)
           if (responseData !== null) {
             console.log('Profile data:', responseData);
             setImage(responseData.profile_Picture);
-            if(responseData.dateOfBirth !== null){
+            if (responseData.dateOfBirth !== null) {
               setDob(dayjs(responseData.dateOfBirth));
             }
             setValue({
@@ -196,38 +181,13 @@ function EditProfile() {
     if (isDoctor === "true") {
       handleDoctorUpdateProfile();
     }
-    else if (isDoctor === "false"){
+    else if (isDoctor === "false") {
       handlePatientUpdateProfile();
     }
   };
-  const [DoctorProfileData] = useState({
 
-    Id: 0,
-    Image: "",
-    Name: "",
-    PhoneNumber: "",
-    Email: "",
-    Gender: "",
-    DateOfBirth: "",
-    Education: "",
-    Experience: "",
-    Specialization: "",
-    Description: "",
-    LunchTime: "",
-    AvailableTime: "",
-    ConsultantFee: "",
-    HouseNoStreetArea: "",
-    ColonyStreetLocality: "",
-    City: "",
-    State: "",
-    Country: "",
-    Days: "",
-    Pincode: "",
-    ExtraPhoneNumbers: "",
-    Language: "",
-    //inputdays: ""
-  });
   const handleDoctorUpdateProfile = async () => {
+    const selectedDays = Object.keys(day).filter((key) => day[key] === true);
     debugger;
     const doctor_profile_data = DoctorProfileData;
     doctor_profile_data.Id = parseInt(id, 10);
@@ -249,23 +209,23 @@ function EditProfile() {
     doctor_profile_data.City = value.city;
     doctor_profile_data.State = value.state;
     doctor_profile_data.Country = value.country;
-    doctor_profile_data.Days = value.days;
+    doctor_profile_data.Days = selectedDays.toString();
     doctor_profile_data.Pincode = value.pincode;
     doctor_profile_data.ExtraPhoneNumbers = value.extraphonenumbers;
     doctor_profile_data.Language = value.language;
     console.log(doctor_profile_data);
 
     try {
-      const response = await ProfileUpdate.UpdateProfile(doctor_profile_data,"/DoctorsInformation/update");
+      const response = await ProfileUpdate.UpdateProfile(doctor_profile_data, "/DoctorsInformation/update");
       console.log(response)
-      if (response.status == 200) {
+      if (response.status === 200) {
         debugger;
-        enqueueSnackbar("Updates Successfully", {variant: "success"})
+        enqueueSnackbar("Updates Successfully", { variant: "success" })
       } else {
-        enqueueSnackbar("Error", {variant: "error"})
+        enqueueSnackbar("Error", { variant: "error" })
       }
     } catch (error) {
-      enqueueSnackbar("Server Error", {variant: "error"})
+      enqueueSnackbar("Server Error", { variant: "error" })
     }
   }
 
@@ -285,15 +245,15 @@ function EditProfile() {
     patient_profile_data.dateOfBirth = dob.format('YYYY-MM-DD');
 
     try {
-      const response = await ProfileUpdate.UpdateProfile(patient_profile_data, 'https://localhost:44324/PatientDetails/Update-Patient-Details');
-      if (response.status == 200) {
+      const response = await ProfileUpdate.UpdateProfile(patient_profile_data, '/PatientDetails/Update-Patient-Details');
+      if (response.status === 200) {
         debugger;
-        enqueueSnackbar("Updated Successfully", {variant: "success"})
+        enqueueSnackbar("Updated Successfully", { variant: "success" })
       } else {
-        enqueueSnackbar("Error", {variant: "error"})
+        enqueueSnackbar("Error", { variant: "error" })
       }
     } catch (error) {
-      enqueueSnackbar("Internal Server Error", {variant: "error"})
+      enqueueSnackbar("Internal Server Error", { variant: "error" })
     }
   }
 
@@ -304,20 +264,10 @@ function EditProfile() {
       [e.target.name]: e.target.value
     }));
 
-    console.log(value);
   };
-  const handleDayChange = (id) => {
-    setDays((prevDays) => ({
-      ...prevDays,
-      [id]: !prevDays[id], // Toggle the checkbox state
-    }));
-    const selectedDays = Object.keys(day).filter((key) => day[key]);
-    debugger;
-    setValue({
-      ...value,
-      days: selectedDays,
-    });
-
+  const handleDayChange = (event) => {
+    day[event.target.id] = event.target.checked;
+    setDays({ ...day });
   };
   const handleImageChange = (e) => {
     const selectedImage = e.target.files[0];
@@ -577,15 +527,15 @@ function EditProfile() {
                   boxType="checkbox"
                   type="checkbox"
                   checked={day.monday}
-                  handleChange={() => handleDayChange("monday")}
+                  onClick={handleDayChange}
                 />
                 <InputBox
                   id="tuesday"
                   label="Tuesday"
                   boxType="checkbox"
                   type="checkbox"
-                  value={day.tuesday}
-                  handleChange={() => handleDayChange("tuesday")}
+                  checked={day.tuesday}
+                  onClick={handleDayChange}
                 />
 
                 <InputBox
@@ -593,40 +543,40 @@ function EditProfile() {
                   label="Wednesday"
                   boxType="checkbox"
                   type="checkbox"
-                  value={day.wednesday}
-                  handleChange={() => handleDayChange("wednesday")}
+                  checked={day.wednesday}
+                  onClick={handleDayChange}
                 />
                 <InputBox
                   id="thursday"
                   label="Thursday"
                   boxType="checkbox"
                   type="checkbox"
-                  value={day.thursday}
-                  handleChange={() => handleDayChange("thursday")}
+                  checked={day.thursday}
+                  onClick={handleDayChange}
                 />
                 <InputBox
                   id="friday"
                   label="Friday"
                   boxType="checkbox"
                   type="checkbox"
-                  value={day.friday}
-                  handleChange={() => handleDayChange("friday")}
+                  checked={day.friday}
+                  onClick={handleDayChange}
                 />
                 <InputBox
                   id="saturday"
                   label="Saturday"
                   boxType="checkbox"
                   type="checkbox"
-                  value={day.saturday}
-                  handleChange={() => handleDayChange("saturday")}
+                  checked={day.saturday}
+                  onClick={handleDayChange}
                 />
                 <InputBox
                   id="sunday"
                   label="Sunday"
                   boxType="checkbox"
                   type="checkbox"
-                  value={day.sunday}
-                  handleChange={() => handleDayChange("sunday")}
+                  checked={day.sunday}
+                  onClick={handleDayChange}
                 />
               </Box>
             </Box>
