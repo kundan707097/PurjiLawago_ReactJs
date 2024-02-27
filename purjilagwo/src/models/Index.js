@@ -51,3 +51,17 @@ export const PatientProfileData = {
   dateOfBirth: ""
 
 }
+
+export const DoctorAppointmentDashboardTable ={
+  bookingId: 0,
+  time: "",
+  patientName: "",
+  phoneNumber: "",
+  status: "",
+  pagePerRow: 0,
+  totalPateint: 0,
+  thisMonth: 0,
+  totalBooking: 0,
+  totalPending: 0,
+  totalCancel: 0,
+}

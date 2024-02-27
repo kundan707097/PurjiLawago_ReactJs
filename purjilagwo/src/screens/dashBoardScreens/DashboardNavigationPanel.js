@@ -23,15 +23,15 @@ const DashboardNavigationPanel = () => {
   };
   return (
 
-    <Box sx={{ width: "24rem", mt: 6,}}>
+    <Box sx={{ width: "24rem", mt: 6, display:{xs: "none", lg: "block"}}}>
 
       <Box sx={{ background: "white", width: "100%", height: "30rem", borderRadius: "0px 15px 15px 0", py: 5 }}>
 
 
-        <Link to="/dashboard/my_appointment" style={{ my: 1 }}>
-          <Box sx={{ p: 2, pl: 4, bgcolor: location.pathname === "/dashboard/my_appointment" && "#64EBB6", borderRadius: "0 15px 15px 0", my: 1, display: "flex", alignItems: "center", "&:hover": { color: location.pathname === "/dashboard/my_appointment" ? "white" : "black", bgcolor: location.pathname === "/dashboard/my_appointment" ? "#64EBB6" : "#E9FAF3" }, color: location.pathname === "/dashboard/my_appointment" ? "white" : "#5D6566",boxShadow: location.pathname === "/dashboard/my_appointment" && "0 0 4px #D8DEE8" }}>
+        <Link to="/dashboard/appointment&details" style={{ my: 1 }}>
+          <Box sx={{ p: 2, pl: 4, bgcolor: location.pathname === "/dashboard/appointment&details" && "#64EBB6", borderRadius: "0 15px 15px 0", my: 1, display: "flex", alignItems: "center", "&:hover": { color: location.pathname === "/dashboard/appointment&details" ? "white" : "black", bgcolor: location.pathname === "/dashboard/appointment&details" ? "#64EBB6" : "#E9FAF3" }, color: location.pathname === "/dashboard/appointment&details" ? "white" : "#5D6566",boxShadow: location.pathname === "/dashboard/appointment&details" && "0 0 4px #D8DEE8" }}>
             <InventoryManagement style={{ width: "22px", height: "22px", }} />
-            <Typography sx={{ fontWeight: 400, fontSize: "16px", ml: 1, }}>My Appointment</Typography>
+            <Typography sx={{ fontWeight: 400, fontSize: "16px", ml: 1, }}>Appointment & Details</Typography>
           </Box>
         </Link>
 
