@@ -153,7 +153,7 @@ function Header() {
                 </ul>
                 {token ? (
                   <div className="dropdown">
-                    <Link to="/dashboard/edit/profile">
+                    <Link to="/dashboard/appointment&details">
                       <Paper
                         elevation={0}
                         sx={{

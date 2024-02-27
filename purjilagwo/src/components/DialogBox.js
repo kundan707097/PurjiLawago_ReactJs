@@ -52,3 +52,21 @@ export const OtpVerificationDialogBox = ({ openDialog, closeDialog, variant, han
     )
 }
 
+export const CancelDialogBox = ({opendialog, closeDialog, handleCancel}) => {
+    return(
+        <>
+        <Dialog open={opendialog} maxWidth="xs" fullWidth>
+            <DialogTitle>Booking Cancellation</DialogTitle>
+            <DialogContent>
+                <Typography>Are you sure you want to cancel the booking?</Typography>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={closeDialog}>No</Button>
+                <Button onClick={handleCancel}>Confirm</Button>
+            </DialogActions>
+
+        </Dialog>
+        </>
+    )
+}
+
