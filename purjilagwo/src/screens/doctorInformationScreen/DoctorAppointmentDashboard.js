@@ -7,6 +7,7 @@ import TablePaginationDemo from '../../components/Pagination'
 import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import DateRangeSelector from '../../components/DateRangeSelector'
+import DoctorService from '../../services/Doctor.services'
 
 const DoctorAppointmentDashboard = () => {
     const [loading, setLoading] = useState(false);
@@ -16,6 +17,7 @@ const DoctorAppointmentDashboard = () => {
     const [page, setPage] = React.useState(2);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [tableData, setTableData] = useState({});
+    const [id, setID] = useState(localStorage.getItem('id'));
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -42,7 +44,25 @@ const DoctorAppointmentDashboard = () => {
         return { booking, time, name, phone };
     }
 
-    // 
+    useEffect(() => {
+        (async () => {
+            try {
+                setLoading(true)
+                const responseData = await DoctorService.DoctorDashboardData(`DoctorsInformation/DoctorsProfileById?id=${id}`);
+
+                if (responseData.status === 200) {
+                    console.log('Profile data:', responseData);
+                    setTableData(responseData.data)
+                }
+                setLoading(false);
+            } catch (error) {
+                console.log(error);
+                setLoading(false);
+            }
+        })();
+
+    }, [DoctorService.DoctorDashboardData])
+
 
     return (
         <>
@@ -119,9 +139,9 @@ const DoctorAppointmentDashboard = () => {
 
                             <Box sx={{ bgcolor: "#42A5F5", borderTopLeftRadius: "6px", borderTopRightRadius: "6px", p: { xs: 2, sm: 3 }, py: 2, display: "flex", justifyContent: "space-between", alignItems: "center", flexDirection: { xs: "column", md: "row" } }}>
 
-                                <Box sx={{ display: "flex", alignItems: "center", width: { xs: "100%", md: "50%" }, mb: { xs: 1, md: 0 }, justifyContent: { xs: "space-between", md: "initial" }, flexDirection: {xs: "column", md: "row"} }}>
+                                <Box sx={{ display: "flex", alignItems: "center", width: { xs: "100%", md: "50%" }, mb: { xs: 1, md: 0 }, justifyContent: { xs: "space-between", md: "initial" }, flexDirection: { xs: "column", md: "row" } }}>
 
-                                    <Box sx={{ width: { xs: "100%", lg: "50%", }, mb: {xs: 2, md: 0}, border: {xs: "1px solid white", md:"none"}, p:{xs: "6px", md:0}, borderRadius: "12px" }}>
+                                    <Box sx={{ width: { xs: "100%", lg: "50%", }, mb: { xs: 2, md: 0 }, border: { xs: "1px solid white", md: "none" }, p: { xs: "6px", md: 0 }, borderRadius: "12px" }}>
                                         <DateRangeSelector />
                                     </Box>
 
@@ -159,7 +179,7 @@ const DoctorAppointmentDashboard = () => {
                                     </Box>
 
                                 </Box>
-                                
+
                                 <Box sx={{ display: 'flex', alignItems: "center", mx: "auto", mr: 0 }}>
                                     <Box component={"button"} sx={{ border: "1px solid #FFFFFF", borderRadius: "10px", width: "6rem", py: "6px", bgcolor: "#42A5F5", color: "white", display: "flex", justifyContent: "center", alignItems: "center", mr: 2, ":hover": { color: "#42A5F5", bgcolor: "white", transitionDuration: "100ms" } }} >
                                         <img src="../images/DoctorAppointmentDashboard/image29.svg" alt="" />
@@ -214,7 +234,7 @@ const DoctorAppointmentDashboard = () => {
                                 </Table>
 
                             </TableContainer> */}
-                            <Box sx={{display: {xs: "none", md: "block"}}}>
+                            <Box sx={{ display: { xs: "none", md: "block" } }}>
                                 <DoctorTableHeader />
                                 <DoctorTableRow />
                                 <DoctorTableRow />
@@ -223,7 +243,7 @@ const DoctorAppointmentDashboard = () => {
                                 <DoctorTableRow />
                                 <DoctorTableRow />
                             </Box>
-                            <Box sx={{display: {xs: "block", md: "none"}}}>
+                            <Box sx={{ display: { xs: "block", md: "none" } }}>
                                 <DoctorResponsiveCard />
                                 <DoctorResponsiveCard />
                                 <DoctorResponsiveCard />

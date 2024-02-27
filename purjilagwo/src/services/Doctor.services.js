@@ -35,22 +35,21 @@ const AllDocInfo = async (location) => {
     }
 };
 
-const AllDoctorsListInSpeciality =async (groupId) =>{
-    try{
-        const response =await axiosClient({
+const AllDoctorsListInSpeciality = async (groupId) => {
+    try {
+        const response = await axiosClient({
             method: 'GET',
             url: `https://localhost:44324/DoctorsGroup/groupId?groupId=${groupId}`,
         });
         return response.data;
     }
-    catch(error)
-    {
+    catch (error) {
         console.log(error);
     }
 }
 
-const BookSlot =async (slotData) =>{
-    try{
+const BookSlot = async (slotData) => {
+    try {
         const response = await axiosClient({
             method: 'POST',
             url: `BookSlot`, // Give your API endpoint
@@ -58,14 +57,13 @@ const BookSlot =async (slotData) =>{
         });
         return response.data;
     }
-    catch(error)
-    {
+    catch (error) {
         console.log(error);
     }
 }
 
-const VerifyOtp =async (otpData) =>{
-    try{
+const VerifyOtp = async (otpData) => {
+    try {
         const response = await axiosClient({
             method: 'POST',
             url: `VerifyOtp`, // Give your API endpoint
@@ -73,14 +71,24 @@ const VerifyOtp =async (otpData) =>{
         });
         return response.data;
     }
-    catch(error)
-    {
+    catch (error) {
         console.log(error);
     }
 }
 
+const DoctorDashboardData = async (id) => {
+    try {
+        const response = await axiosClient({
+            method: 'GET',
+            url: `DoctorsInformation/${id}`, // Need to change the endpoint
+        });
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
 
 const DoctorService = {
-    DoctorInformation,DocInfoOnLocation,AllDocInfo,AllDoctorsListInSpeciality, BookSlot, VerifyOtp
+    DoctorInformation, DocInfoOnLocation, AllDocInfo, AllDoctorsListInSpeciality, BookSlot, VerifyOtp, DoctorDashboardData
 };
 export default DoctorService;
