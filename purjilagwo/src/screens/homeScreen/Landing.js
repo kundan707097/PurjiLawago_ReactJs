@@ -1,22 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import "./Home.css";
 import { Search } from "@carbon/icons-react";
 
 
+import "./Home.css";
 import DoctorService from '../../services/Doctor.services';
-import svg1 from "../../assets/vectors/Group 270.svg";
-import svg2 from "../../assets/vectors/image 40.svg"
-import svg3 from "../../assets/vectors/image 32.svg"
-import svg4 from "../../assets/vectors/add_location_alt.svg";
-import svg5 from "../../assets/vectors/Mask group.svg"
-import svg6 from "../../assets/vectors/image 38.svg"
-import svg7 from "../../assets/vectors/image 35.svg"
-import svg8 from "../../assets/vectors/Group 370.svg"
-import svg9 from "../../assets/vectors/Group 269.svg"
-import svg10 from "../../assets/vectors/Mask group 1.svg"
-import svg11 from "../../assets/vectors/hero_bg.svg";
 
 const Landing = () => {
   const [locationData, setLocationData] = useState([]);
@@ -109,7 +98,7 @@ const Landing = () => {
         <Box sx={{ width: "50%" }}>
           <Box sx={{ position: "absolute", height: { xs: "30%", lg: "80%" }, width: "40%", top: { xs: "5rem", lg: 0 } }}>
 
-            <img src={svg1} alt="" style={{ height: "100%" }} />
+            <img src="../images/Home/Group270.svg" alt="" style={{ height: "100%" }} />
           </Box>
 
           <Box sx={{ pl: { xs: 2, lg: 10 }, pt: { xs: 0, lg: 4 }, }}>
@@ -117,7 +106,7 @@ const Landing = () => {
             {/* Image and support */}
 
             <Box sx={{ display: { xs: "none", lg: "flex" }, alignItems: "center" }}>
-              <img src={svg2} alt="" />
+              <img src="../images/Home/image40.svg" alt="" />
               <Typography sx={{ color: "#64EBB6", fontSize: "20px", fontWeight: 600, ml: 2 }} >
                 SUPPORT
               </Typography>
@@ -154,7 +143,7 @@ const Landing = () => {
 
               <Link to="/" style={{ marginLeft: 20, zIndex: 999 }}>
                 <Box sx={{ backgroundColor: "white", width: "250px", textAlign: "center", p: 1.3, borderRadius: 3, fontSize: "15px", fontWeight: 500, color: "#42A5F5", border: "2px solid #42A5F5", "&:hover": { backgroundColor: "#42A5F5", color: "white" }, display: { xs: "none", lg: "block" } }}>
-                  <img src={svg3} alt="" height={"20px"} style={{ marginRight: 10 }} />
+                  <img src="../images/Home/image32.svg" alt="" height={"20px"} style={{ marginRight: 10 }} />
                   Buy Medicine
                 </Box>
               </Link>
@@ -187,7 +176,7 @@ const Landing = () => {
                   position: "relative",
                 }}
               >
-                <img src={svg4} alt="" height={"20px"} />
+                <img src="../images/Home/add_location_alt.svg" alt="" height={"20px"} />
                 <input
                   style={{
                     border: "none",
@@ -208,44 +197,59 @@ const Landing = () => {
                 />
 
                 {searchLocation.length >= 3 && filteredLocations.length > 0 && (
-                  <Box
-                    sx={{
-                      display: isVisible.locationVisible ? 'block' : 'none',
-                      position: "absolute",
-                      backgroundColor: "#F5F5F5",
-                      width: "100%",
-                      top: { xs: "40px", sm: "120px", md: "45px" },
-                      borderRadius: "10px",
-                      py: "0.5rem",
-                      left: {xs:3, lg:0}
-                    }}
-                    ref={locationSearchRef}
-                  >
-                    <Box>
-                       {/* put the map function here and remove the all the button and put the onclick on button */}
-                      {filteredLocations.map((location) => (
-                        <button
-                          style={{
-                            padding: "10px",
-                            cursor: "pointer",
-                            width: "100%",
-                            textAlign: "left",
-                            border: "none",
-                          }}
-                           className="landing-dropdown"
-                             onClick={() => {
-                               setSearchLocation(location.city);
-                               setIsVisible({ locationVisible: false });
-                               handleDoctorListSelect(location.city);
-                             }}
-                        // value={location.city}
-                        >
-                          {location.city}   
-                        </button>
-                        
-                      ))}
+                <Box
+                  sx={{
+                    display: isVisible.locationVisible ? 'block' : 'none',
+                    position: "absolute",
+                    //backgroundColor: "#F5F5F5",
+                    width: "100%",
+                    top: { xs: "40px", sm: "120px", md: "45px" },
+                    // borderRadius: "10px",
+                    // py: "0.5rem",
+                    left: { xs: 3, lg: 0 },
+                    // border: "1px solid black",
+                  }}
+                  ref={locationSearchRef}
+                >
+                  {filteredLocations.map((location) => (
+                    <Box component={"button"} sx={{
+                      display: "flex", alignItems: "center", px: 1, bgcolor: "white", ":hover": {
+                        backgroundColor: "#F5F5F5"
+                      }, width: "100%", border: "1px solid #F5F5F5"
+                    }} onClick={() => {
+                      setSearchLocation(location.city);
+                      setIsVisible({ locationVisible: false });
+                      handleDoctorListSelect(location.city);
+                    }} key={location}>
+                      {/* put the map function here and remove the all the button and put the onclick on button */}
+                      {/* {filteredLocations.map((location) => ( */}
+
+                      <Box sx={{ bgcolor: "#F5F5F5", p: .5, borderRadius: "100px", px: 1 }}>
+                        <Search size={15} />
+                      </Box>
+                      <Box
+                        sx={{
+                          p: "10px",
+                          cursor: "pointer",
+                          width: "100%",
+                          textAlign: "left",
+                        }}
+                      //  className="landing-dropdown"
+                      // onClick={() => {
+                      //   setSearchLocation(location.city);
+                      //   setIsVisible({ locationVisible: false });
+                      //   handleDoctorListSelect(location.city);
+                      // }}
+                      // value={location.city}
+                      >
+                        <Typography sx={{ color: "black", fontSize: { xs: "14px", md: "16px" } }}>{location.city}</Typography>
+                      </Box>
+                      {/* ))} */}
                     </Box>
-                  </Box>
+                  ))}
+
+
+                </Box>
                 )}
               </Box>
 
@@ -275,46 +279,57 @@ const Landing = () => {
                   }}
                 />
                 {searchName.length >= 3 && filteredLocations.length > 0 && (
-                // <datalist id="locationList">
-                <Box
-                  sx={{
-                    display: isVisible.nameVisible ? 'block' : 'none',
-                    position: "absolute",
-                    backgroundColor: "#F5F5F5",
-                    width: { xs: "98%", sm: "89%", md: "55%" },
-                    top: { xs: "45px", sm: "160px", md: "55px" },
-                    borderRadius: "10px",
-                    py: "0.5rem",
-                    left: {xs:3, lg:"16rem"},
-                  }}
-                  ref={locationSearchRef}
-                >
-                  <Box>
+                  <Box
+                    sx={{
+                      display: isVisible.nameVisible ? 'block' : 'none',
+                      position: "absolute",
+                      // backgroundColor: "#F5F5F5",
+                      width: { xs: "98%", sm: "89%", md: "55%" },
+                      top: { xs: "45px", sm: "160px", md: "55px" },
+                      // borderRadius: "10px",
+                      // py: "0.5rem",
+                      left: { xs: 3, lg: "16rem" },
+                    }}
+                    ref={locationSearchRef}
+                  >
                     {/*  put the map function here and remove the all the button and put the onclick on button */}
                     {filteredName.map((name) => (
-                      <button
-                        style={{
-                          padding: "10px",
-                          cursor: "pointer",
-                          width: "100%",
-                          textAlign: "left",
-                          border: "none",
-                        }}
-                        className="landing-dropdown"
-                         onClick={() => {
-                           setSearchName(name.user_Name);
-                           setIsVisible({ nameVisible: false });
-                           handledoctorNameSelect(name.id);
-                         }}
+                      <Box component={"button"} sx={{
+                        display: "flex", alignItems: "center", px: 1, bgcolor: "white", ":hover": {
+                          backgroundColor: "#F5F5F5"
+                        }, width: "100%", border: "1px solid #F5F5F5"
+                      }} onClick={() => {
+                        setSearchName(name.user_Name);
+                        setIsVisible({ nameVisible: false });
+                        handledoctorNameSelect(name.id);
+                      }}>
+
+                        <Box sx={{ bgcolor: "#F5F5F5", p: .5, borderRadius: "100px", px: 1 }}>
+                          <Search size={15} />
+                        </Box>
+                        <Box
+                          style={{
+                            padding: "10px",
+                            cursor: "pointer",
+                            width: "100%",
+                            textAlign: "left",
+                          }}
+                        // className="landing-dropdown"
+                        //  onClick={() => {
+                        //    setSearchName(name.user_Name);
+                        //    setIsVisible({ nameVisible: false });
+                        //    handledoctorNameSelect(name.id);
+                        //  }}
                         // value={location.city}
-                      >
-                        {name.user_Name}
-                      </button>
+                        >
+                          <Typography sx={{ color: "black" }}>{name.user_Name}</Typography>
+                        </Box>
+
+                      </Box>
 
                     ))}
 
                   </Box>
-                </Box>
                 )}
                 {searchName.length >= 3 && (
                   <datalist id="doctorsList">
@@ -342,26 +357,26 @@ const Landing = () => {
 
         <Box sx={{ width: "50%", overflow: "hidden" }}>
           <Box sx={{ position: "absolute", top: "0", zIndex: 1, right: "-4.3rem", height: { xs: "18rem", lg: "46.9rem" }, }}>
-            <img src={svg11} alt="" height={"100%"} />
+            <img src="../images/Home/hero_bg.svg" alt="" height={"100%"} />
           </Box>
           <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "5.8rem", lg: "7.07rem" }, right: 2, height: { xs: "12rem", lg: "40rem" } }}>
-            <img src={svg5} alt="" style={{ height: "100%" }} />
+            <img src="../images/Home/Maskgroup.svg" alt="" style={{ height: "100%" }} />
           </Box>
           <Box sx={{ zIndex: 3, position: "absolute", top: "180px", overflow: "hidden", display: { xs: "none", lg: "initial" } }}>
-            <img src={svg6} alt="img" style={{ height: "3.3rem" }} />
+            <img src="../images/Home/image38.svg" alt="img" style={{ height: "3.3rem" }} />
             <Typography sx={{ fontSize: "12px", color: '#42A5F5' }}>Daily Visit</Typography>
           </Box>
           <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "9rem", lg: "24rem" }, right: { xs: "11rem", lg: "36.5rem" }, height: { xs: "2rem", lg: "3.5rem" } }}>
-            <img src={svg7} alt="" style={{ height: "100%" }} />
+            <img src="../images/Home/image35.svg" alt="" style={{ height: "100%" }} />
           </Box>
           <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "15rem", lg: "32rem" }, right: { xs: 0, lg: "35.4rem" }, height: { xs: "2rem", lg: "3.5rem" } }}>
-            <img src={svg8} alt="" style={{ height: "100%" }} />
+            <img src="../images/Home/Group370.svg" alt="" style={{ height: "100%" }} />
           </Box>
           <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "13rem", lg: "38rem" }, right: "0", height: { xs: "2rem", lg: "3.5rem" } }}>
-            <img src={svg9} alt="" style={{ height: "100%" }} />
+            <img src="../images/Home/Group269.svg" alt="" style={{ height: "100%" }} />
           </Box>
           <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "7rem", lg: "12rem" }, right: "0", height: { xs: "3rem", lg: "8rem" } }}>
-            <img src={svg10} alt="" style={{ height: "100%" }} />
+            <img src="../images/Home/Maskgroup1.svg" alt="" style={{ height: "100%" }} />
           </Box>
 
         </Box>

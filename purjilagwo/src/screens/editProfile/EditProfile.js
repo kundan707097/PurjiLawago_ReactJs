@@ -22,7 +22,7 @@ function EditProfile() {
   const { enqueueSnackbar } = useSnackbar();
   const [value, setValue] = useState({
     name: "",
-    gender: "",
+    gender: "Male",
     education: "",
     experience: "",
     specialization: [],
@@ -32,11 +32,11 @@ function EditProfile() {
     colonyStreetLocality: "",
     city: "",
     state: "",
-    country: "",
+    country: "India",
     days: "",
     pincode: "",
     extraphonenumbers: "",
-    language: "",
+    language: "Hindi",
   });
   const [day, setDays] = useState({
     monday: false,

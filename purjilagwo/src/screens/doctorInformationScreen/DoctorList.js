@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Box, Typography, Container, Paper, Stack, Avatar } from '@mui/material';
+import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
+import { Search } from '@carbon/icons-react';
+
+
 import '../../style/DoctorList.css';
 import DoctorService from '../../services/Doctor.services';
-import { Box, Typography, Container, Paper } from '@mui/material';
-import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
 import Footer from '../../components/Footer';
 import Loading from '../../components/Loading';
 import DataNotFound from '../../components/DataNotFound';
-import AccessAlarmsIcon from '@mui/icons-material/AccessAlarms';
 import LiveCounter from '../../components/LiveCounter';
 
 function Doctors() {
@@ -18,6 +19,13 @@ function Doctors() {
     const [doctorInfo, setDoctorInfo] = useState(null);
     const [doctorName, setDoctorName] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [isVisible, setIsVisible] = useState({
+        locationVisible: false,
+        nameVisible: false,
+    });
+
+    const locationSearchRef = useRef(null);
+    const nameSearchRef = useRef(null);
 
     useEffect(() => {
         (async () => {
@@ -48,6 +56,44 @@ function Doctors() {
             }
         })();
     }, [location]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (locationSearchRef.current && !locationSearchRef.current.contains(event.target)) {
+                // Clicked outside the container
+                setIsVisible({ locationVisible: false });
+            }
+            if (nameSearchRef.current && !nameSearchRef.current.contains(event.target)) {
+                // Clicked outside the container
+                setIsVisible({ nameVisible: false });
+            }
+        };
+
+        // Add event listener on mount
+        document.addEventListener('click', handleClickOutside);
+
+        // Cleanup: remove event listener on unmount
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (nameSearchRef.current && !nameSearchRef.current.contains(event.target)) {
+                // Clicked outside the container
+                setIsVisible({ nameVisible: false });
+            }
+        };
+
+        // Add event listener on mount
+        document.addEventListener('click', handleClickOutside);
+
+        // Cleanup: remove event listener on unmount 
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
 
 
     const handleLocationChange = (newLocation) => {
@@ -111,7 +157,8 @@ function Doctors() {
                                             mx: { md: "10px" },
                                             width: "30%",
                                             py: { xs: 0, lg: "2px" },
-                                            px: { xs: "2px", md: 0 }
+                                            px: { xs: "2px", md: 0 },
+                                            position: "relative",
                                         }}
                                     >
                                         <img src="../../images/DoctorList/location.svg" alt="" style={{ height: "18px" }} />
@@ -128,6 +175,7 @@ function Doctors() {
                                             list="locationList"
                                             value={location}
                                             onInput={(e) => {
+                                                setIsVisible({ locationVisible: true });
                                                 const selectedValue = e.target.value;
                                                 setLocation(selectedValue);
                                                 const matchingLocation = filteredLocations.find((data) => data.city === selectedValue);
@@ -140,6 +188,51 @@ function Doctors() {
                                             }}
                                         />
 
+                                        <Box
+                                            sx={{
+                                                display: isVisible.locationVisible ? 'block' : 'none',
+                                                position: "absolute",
+                                                width: "100%",
+                                                top: { xs: "40px", sm: "120px", md: "45px" },
+                                                left: { xs: 3, lg: 0 },
+                                            }}
+                                            ref={locationSearchRef}
+                                        >
+                                            {/* put the map function here and remove the all the button and put the onclick on button */}
+
+                                            {/* {filteredLocations.map((location) => ( */}
+                                            <Box component={"button"} sx={{
+                                                display: "flex", alignItems: "center", px: 1, bgcolor: "white", ":hover": {
+                                                    backgroundColor: "#e3e3e3"
+                                                }, width: "100%", border: "1px solid #F5F5F5"
+                                            }}
+                                                // onClick={() => {
+                                                //     setSearchLocation(location.city);
+                                                //     setIsVisible({ locationVisible: false });
+                                                //     handleDoctorListSelect(location.city);
+                                                // }} 
+                                                key={location}>
+
+                                                <Box sx={{ bgcolor: "#F5F5F5", p: .5, borderRadius: "100px", px: 1 }}>
+                                                    <Search size={15} />
+                                                </Box>
+                                                <Box
+                                                    sx={{
+                                                        p: "10px",
+                                                        cursor: "pointer",
+                                                        width: "100%",
+                                                        textAlign: "left",
+                                                    }}
+
+                                                >
+                                                    <Typography sx={{ color: "black", fontSize: { xs: "14px", md: "16px" } }}>{"Siwan"}</Typography>
+                                                </Box>
+                                            </Box>
+                                            {/* ))} */}
+
+
+                                        </Box>
+
 
                                     </Box>
 
@@ -148,7 +241,8 @@ function Doctors() {
                                             my: "10px",
                                             width: "60%",
                                             mx: { md: "5px" },
-                                            py: { xs: 0, lg: "2px" }
+                                            py: { xs: 0, lg: "2px" },
+                                            position: "relative",
                                         }}
                                     >
                                         <img src="../../images/DoctorList/policy.svg" alt="" height={"18px"} />
@@ -166,6 +260,7 @@ function Doctors() {
                                             value={doctorName}
                                             onInput={(e) => {
                                                 setDoctorName(e.target.value);
+                                                setIsVisible({ nameVisible: true });
                                                 const arrayOfWords = e.target.value.split(" ");
                                                 const matchingLocation = filteredLocations.find((data) => data.user_Name === e.target.value);
 
@@ -175,6 +270,59 @@ function Doctors() {
                                             }}
 
                                         />
+
+                                        <Box
+                                            sx={{
+                                                display: isVisible.nameVisible ? 'block' : 'none',
+                                                position: "absolute",
+                                                // backgroundColor: "#F5F5F5",
+                                                width: "100%",
+                                                // top: { xs: "45px", sm: "0px", md: "55px" },
+                                                // borderRadius: "10px",
+                                                // py: "0.5rem",
+                                                // left: { xs: 3, lg: "16rem" },
+                                                top: { xs: "40px", sm: "120px", md: "45px" },
+                                            }}
+                                            ref={locationSearchRef}
+                                        >
+                                            {/*  put the map function here and remove the all the button and put the onclick on button */}
+
+                                            {/* {filteredName.map((name) => ( */}
+
+                                            <Box component={"button"} sx={{
+                                                display: "flex", alignItems: "center", px: 1, bgcolor: "white", ":hover": {
+                                                    backgroundColor: "#F5F5F5"
+                                                }, width: "100%", border: "1px solid #F5F5F5"
+                                            }}
+                                            // onClick={() => {
+                                            //     setSearchName(name.user_Name);
+                                            //     setIsVisible({ nameVisible: false });
+                                            //     handledoctorNameSelect(name.id);
+                                            // }}
+                                            >
+
+                                                <Box sx={{ bgcolor: "#F5F5F5", p: .5, borderRadius: "100px", px: 1 }}>
+                                                    <Search size={15} />
+                                                </Box>
+                                                <Box
+                                                    style={{
+                                                        padding: "10px",
+                                                        cursor: "pointer",
+                                                        width: "100%",
+                                                        textAlign: "left",
+                                                    }}
+                                                >
+                                                    <Typography sx={{ color: "black" }}>{"Vicky"}</Typography>
+                                                </Box>
+
+                                            </Box>
+
+
+                                            {/* ))} */}
+
+                                        </Box>
+
+
 
                                     </Box>
 
