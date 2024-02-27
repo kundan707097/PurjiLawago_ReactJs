@@ -48,39 +48,45 @@ const AllDoctorsListInSpeciality = async (groupId) => {
     }
 }
 
-const BookSlot = async (slotData) => {
-    try {
+const BookSlot =async (slotData) =>{
+    debugger;
+    try{
         const response = await axiosClient({
             method: 'POST',
-            url: `BookSlot`, // Give your API endpoint
+            url: `/PatientsConform/PatientBooking`, // Give your API endpoint
             data: JSON.stringify(slotData),
         });
         return response.data;
     }
-    catch (error) {
+    catch(error)
+    {
         console.log(error);
     }
 }
 
-const VerifyOtp = async (otpData) => {
-    try {
+const VerifyOtp =async (otpData) =>{
+    try{
         const response = await axiosClient({
             method: 'POST',
-            url: `VerifyOtp`, // Give your API endpoint
+            url: `/PatientsConform/OTPVerifyByPatients`, // Give your API endpoint
             data: JSON.stringify(otpData),
         });
         return response.data;
     }
-    catch (error) {
+    catch(error)
+    {
         console.log(error);
     }
 }
 
-const DoctorDashboardData = async (id) => {
+
+const DoctorDashboardData = async (data) => {
+    debugger;
     try {
         const response = await axiosClient({
-            method: 'GET',
-            url: `DoctorsInformation/${id}`, // Need to change the endpoint
+            method: 'POST',
+            url: "/DoctorDashboard/GetPatientBookingDetails",
+            data: JSON.stringify(data),
         });
         return response;
     } catch (error) {

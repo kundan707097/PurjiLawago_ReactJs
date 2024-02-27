@@ -8,6 +8,7 @@ import { styled } from '@mui/material/styles';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import DateRangeSelector from '../../components/DateRangeSelector'
 import DoctorService from '../../services/Doctor.services'
+import { DoctorAppointmentDashboardTable } from '../../models/Index'
 
 const DoctorAppointmentDashboard = () => {
     const [loading, setLoading] = useState(false);
@@ -18,6 +19,12 @@ const DoctorAppointmentDashboard = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [tableData, setTableData] = useState({});
     const [id, setID] = useState(localStorage.getItem('id'));
+    useEffect(() => {
+      if(localStorage.getItem('id') !==null){
+        setID(localStorage.getItem('id'))
+      }
+    }, [localStorage.getItem('id')]);
+    
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -47,14 +54,20 @@ const DoctorAppointmentDashboard = () => {
     useEffect(() => {
         (async () => {
             try {
-                setLoading(true)
-                const responseData = await DoctorService.DoctorDashboardData(`DoctorsInformation/DoctorsProfileById?id=${id}`);
-
-                if (responseData.status === 200) {
-                    console.log('Profile data:', responseData);
-                    setTableData(responseData.data)
+                if(parseInt(id) !== 0){
+                    setLoading(true)
+            
+                const data= DoctorAppointmentDashboardTable;
+                data.Id = parseInt(id);
+                console.log(data)
+                const response = await DoctorService.DoctorDashboardData(data);
+                
+                if (response.status === 200) {
+                    console.log('Profile data:', response.data);
+                    //setTableData(response.data)
                 }
                 setLoading(false);
+                }
             } catch (error) {
                 console.log(error);
                 setLoading(false);

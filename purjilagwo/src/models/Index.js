@@ -53,15 +53,12 @@ export const PatientProfileData = {
 }
 
 export const DoctorAppointmentDashboardTable ={
-  bookingId: 0,
-  time: "",
-  patientName: "",
-  phoneNumber: "",
-  status: "",
-  pagePerRow: 0,
-  totalPateint: 0,
-  thisMonth: 0,
-  totalBooking: 0,
-  totalPending: 0,
-  totalCancel: 0,
+  Id: 0,
+  // StartDate: null,
+  // EndDate: null,
+  // Sorting: null,
+  // FilterText: null,
+  // MaxResultCount: null,
+  // SkipCount: null
+  
 }
