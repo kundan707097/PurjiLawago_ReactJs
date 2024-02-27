@@ -175,7 +175,7 @@ const PateintAppointmentDashboard = () => {
                                     </Box>
                                 </Box>
 
-                                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
                                     <Box sx={{
                                         color: "#00B69B", p: "8px", borderRadius: "12px", border: "1px solid #00B69B", width: "48%"
                                     }}>
@@ -187,6 +187,24 @@ const PateintAppointmentDashboard = () => {
                                         }, width: "48%"
                                     }} component={"button"}>
                                         <Typography sx={{ fontSize: "16px", fontWeight: 600, textAlign: "center", }}>Book Again</Typography>
+                                    </Box>
+
+                                </Box>
+
+                                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                                    <Box sx={{
+                                        color: "#42A5F5", my: "auto", p: "8px", borderRadius: "12px", border: "1px solid #42A5F5", bgcolor: "white", ":hover": {
+                                            color: "white", bgcolor: "#42A5F5", transition: "0.3s"
+                                        }, width: "48%"
+                                    }} component={"button"}>
+                                        <Typography sx={{ fontSize: "16px", fontWeight: 600, textAlign: "center", }}>View Details</Typography>
+                                    </Box>
+                                    <Box sx={{
+                                        color: "#EB5757", my: "auto", p: "8px", borderRadius: "12px", border: "1px solid #EB5757", bgcolor: "white", ":hover": {
+                                            color: "white", bgcolor: "#EB5757", transition: "0.3s"
+                                        }, width: "48%"
+                                    }} component={"button"} onClick={() => setOpenCancelDialog(true)}>
+                                        <Typography sx={{ fontSize: "16px", fontWeight: 600, textAlign: "center", }}>Cancel</Typography>
                                     </Box>
 
                                 </Box>
