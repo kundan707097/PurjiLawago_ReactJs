@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ChevronDown } from '@carbon/icons-react'
 import { Box, Typography } from '@mui/material'
-
-import PropTypes from 'prop-types';
 import { Dropdown } from '@mui/base/Dropdown';
 import { Menu } from '@mui/base/Menu';
 import { MenuButton as BaseMenuButton } from '@mui/base/MenuButton';
@@ -13,7 +11,7 @@ import { styled } from '@mui/system';
 export const DoctorTableHeader = () => {
   return (
     <>
-      <Box sx={{ p: "4px", mb: 2, display: "flex", alignContent: "center", width: "100%", bgcolor: "#1C4188", color: "white", }}>
+      <Box sx={{ p: "4px", mb: 2, display: { xs: "none", md: "flex" }, alignContent: "center", width: "100%", bgcolor: "#1C4188", color: "white", }}>
 
         <Box sx={{ width: "25%", }}>
           <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, textAlign: "left" }}>Booking No.</Typography>
@@ -24,15 +22,9 @@ export const DoctorTableHeader = () => {
         <Box sx={{ width: "20%" }}>
           <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>Pateint Name</Typography>
         </Box>
-        {/* <Box sx={{ width: "11%", textAlign: "center" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>Age</Typography>
-        </Box> */}
         <Box sx={{ width: "20%" }}>
           <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>Phone No.</Typography>
         </Box>
-        {/* <Box sx={{ textAlign: "center", width: "13%" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>Disease</Typography>
-        </Box> */}
         <Box sx={{ width: "15%" }}>
           <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>Status/Update</Typography>
         </Box>
@@ -41,10 +33,13 @@ export const DoctorTableHeader = () => {
   )
 }
 
-export const DoctorTableRow = () => {
+export const DoctorTableRow = ({ data }) => {
 
   const [status, setStatus] = useState("Pending");
   const [cssProperty, setCssProperty] = useState("#E8C804");
+  const [time, setTime] = useState("");
+
+  //This function is used to change the status of the patient
 
   const createHandleMenuClick = (menuItem, color) => {
     return () => {
@@ -55,117 +50,97 @@ export const DoctorTableRow = () => {
   };
 
 
-  return (
-    <>
-      <Box sx={{ borderRadius: "6px", border: `1px solid #64EBB6`, p: "4px", my: 2, display: "flex", justifyContent: "space-between", alignContent: "center", width: "100%", bgcolor: "white", color: "#8E999A", ":hover": { bgcolor: "#8BC8F7", transition: "0.3s", color: "white", position: "relative" } }} component={"button"}>
-        <Box sx={{ width: "25%" }} >
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, textAlign: "left" }}>1234567891123456</Typography>
-        </Box>
-        <Box sx={{ width: "20%", textAlign: "left" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, }}>10am - 11am</Typography>
-        </Box>
-        <Box sx={{ color: "#64EBB6", width: "20%", textAlign: "left" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>Vicky Jaiswal</Typography>
-        </Box>
-        {/* <Box sx={{ width: "8%" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>45 Yrs</Typography>
-        </Box> */}
-        <Box sx={{ width: "20%", textAlign: "left" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>6205316232</Typography>
-        </Box>
-        {/* <Box sx={{ width: "13%" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>Diabetes ,er</Typography>
-        </Box> */}
-        {/* <Box sx={{
-          color: "#EB5757", width: "13%", my: "auto", mr: 2, p: "8px", borderRadius: "12px", border: "1px solid #EB5757", bgcolor: "white", ":hover": {
-            color: "white", bgcolor: "#EB5757", transition: "0.3s"
-          }
-        }} component={"button"}>
-          <Typography sx={{ fontSize: "16px", fontWeight: 600, textAlign: "center", }}>Emergency<ChevronDown style={{ width: '25px', marginLeft: "4px" }} /></Typography>
-        </Box> */}
-        {/* <Box sx={{
-          color: "#E8C804", width: "13%", my: "auto", mr: 2, p: "8px", borderRadius: "12px", border: "1px solid #E8C804", bgcolor: "white", ":hover": {
-            color: "white", bgcolor: "#E8C804", transition: "0.3s"
-          }
-        }} component={"button"}>
-          <Typography sx={{ fontSize: "16px", fontWeight: 600, textAlign: "center", }}>Pending<ChevronDown style={{ width: '25px', marginLeft: "4px" }} /></Typography>
-        </Box> */}
-
-        <Dropdown>
-          <MenuButton sx={{ color: cssProperty, border: `1px solid ${cssProperty}`, ":hover": { bgcolor: cssProperty } }}>
-            {status}<ChevronDown style={{ marginLeft: "4px" }} />
-          </MenuButton>
-          <Menu slots={{ listbox: Listbox }}>
-            <MenuItem onClick={createHandleMenuClick('Pending', "#E8C804")} sx={{ color: status === "Pending" ? "white" : "#E8C804", bgcolor: status === "Pending" && "#E8C804" }}>Pending</MenuItem>
-            <MenuItem onClick={createHandleMenuClick('Completed', "#00B69B")} sx={{ color: status === "Completed" ? "white" : "#00B69B", bgcolor: status === "Completed" && "#00B69B" }}>
-              Completed
-            </MenuItem>
-            <MenuItem onClick={createHandleMenuClick('Cancel', "#EB5757")} sx={{ color: status === "Cancel" ? "white" : "#EB5757", bgcolor: status === "Cancel" && "#EB5757" }}>Cancel</MenuItem>
-          </Menu>
-        </Dropdown>
-
-
-      </Box>
-    </>
-  )
-}
-
-export const DoctorResponsiveCard = () => {
-
-  const [status, setStatus] = useState("Pending");
-  const [cssProperty, setCssProperty] = useState("#E8C804");
-
-  const createHandleMenuClick = (menuItem, color) => {
-    return () => {
-      setStatus(menuItem);
-      setCssProperty(color);
-      console.log(`Clicked on ${menuItem}`);
-    };
-  };
-
+  useEffect(() => {
+    if (data !== null) {
+      setStatus(data.patient_Status);
+      const dateObj = new Date(data.bookingDateAndTime);
+      const options = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+      };
+      const formattedDate = new Intl.DateTimeFormat('en-IN', options).format(dateObj);
+      setTime(formattedDate);
+    }
+  }, [data])
 
   return (
     <>
-      <Box sx={{border: `1px solid ${cssProperty}`, my:2, borderRadius: "6px", p:4, }}>
-
-        <Box sx={{display: "flex", justifyContent: "space-between",mb:2 }}>
-          <Box sx={{width: "50%"}}>
-            <Typography sx={{color: "#1C4188", fontSize: "16px"}}>Booking No.</Typography>
-            <Typography sx={{fontSize: "14px"}}>1234567890123456</Typography>
+      {data !== null && (
+        <>
+          <Box sx={{ borderRadius: "6px", border: `1px solid #64EBB6`, p: "4px", my: 2, justifyContent: "space-between", alignContent: "center", width: "100%", bgcolor: "white", color: "#8E999A", ":hover": { bgcolor: "#8BC8F7", transition: "0.3s", color: "white", position: "relative" }, display: { xs: "none", md: "flex" } }} component={"button"}>
+            <Box sx={{ width: "25%" }} >
+              <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, textAlign: "left" }}>{data.bookingNumber}</Typography>
+            </Box>
+            <Box sx={{ width: "20%", textAlign: "left" }}>
+              <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, }}>{time}</Typography>
+            </Box>
+            <Box sx={{ color: "#64EBB6", width: "20%", textAlign: "left" }}>
+              <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>{data.patient_Name}</Typography>
+            </Box>
+            <Box sx={{ width: "20%", textAlign: "left" }}>
+              <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>{data.patient_MobileNumber}</Typography>
+            </Box>
+            <Dropdown>
+              <MenuButton sx={{ color: cssProperty, border: `1px solid ${cssProperty}`, ":hover": { bgcolor: cssProperty } }}>
+                {status}<ChevronDown style={{ marginLeft: "4px" }} />
+              </MenuButton>
+              <Menu slots={{ listbox: Listbox }}>
+                <MenuItem onClick={createHandleMenuClick('Pending', "#E8C804")} sx={{ color: status === "Pending" ? "white" : "#E8C804", bgcolor: status === "Pending" && "#E8C804" }}>Pending</MenuItem>
+                <MenuItem onClick={createHandleMenuClick('Completed', "#00B69B")} sx={{ color: status === "Completed" ? "white" : "#00B69B", bgcolor: status === "Completed" && "#00B69B" }}>
+                  Completed
+                </MenuItem>
+                <MenuItem onClick={createHandleMenuClick('Cancel', "#EB5757")} sx={{ color: status === "Cancel" ? "white" : "#EB5757", bgcolor: status === "Cancel" && "#EB5757" }}>Cancel</MenuItem>
+              </Menu>
+            </Dropdown>
           </Box>
-          <Box  sx={{width: "50%"}}>
-            <Typography sx={{color: "#1C4188", fontSize: "16px"}}>Time</Typography>
-            <Typography sx={{fontSize: "14px"}}>10am - 11am</Typography>
+
+          <Box sx={{ border: `1px solid ${cssProperty}`, my: 2, borderRadius: "6px", p: 4, display: { xs: "block", md: "none" } }}>
+
+            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+              <Box sx={{ width: "50%" }}>
+                <Typography sx={{ color: "#1C4188", fontSize: "16px" }}>Booking No.</Typography>
+                <Typography sx={{ fontSize: "14px" }}>{data.bookingNumber}</Typography>
+              </Box>
+              <Box sx={{ width: "50%" }}>
+                <Typography sx={{ color: "#1C4188", fontSize: "16px" }}>Time</Typography>
+                <Typography sx={{ fontSize: "14px" }}>{time}</Typography>
+              </Box>
+            </Box>
+
+            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+              <Box sx={{ width: "50%" }}>
+                <Typography sx={{ color: "#1C4188", fontSize: "16px" }}>Pateint Name</Typography>
+                <Typography sx={{ fontSize: "14px" }}>{data.patient_Name}</Typography>
+              </Box>
+              <Box sx={{ width: "50%" }}>
+                <Typography sx={{ color: "#1C4188", fontSize: "16px" }}>Phone No.</Typography>
+                <Typography sx={{ fontSize: "14px" }}>{data.patient_MobileNumber}</Typography>
+              </Box>
+
+            </Box>
+
+
+            <Dropdown>
+              <MenuButton sx={{ color: cssProperty, border: `1px solid ${cssProperty}`, ":hover": { bgcolor: cssProperty }, width: { xs: "100%", sm: "50%", md: "inital" } }}>
+                {status}<ChevronDown style={{ marginLeft: "4px" }} />
+              </MenuButton>
+              <Menu slots={{ listbox: Listbox }}>
+                <MenuItem onClick={createHandleMenuClick('Pending', "#E8C804")} sx={{ color: status === "Pending" ? "white" : "#E8C804", bgcolor: status === "Pending" && "#E8C804" }}>Pending</MenuItem>
+                <MenuItem onClick={createHandleMenuClick('Completed', "#00B69B")} sx={{ color: status === "Completed" ? "white" : "#00B69B", bgcolor: status === "Completed" && "#00B69B" }}>
+                  Completed
+                </MenuItem>
+                <MenuItem onClick={createHandleMenuClick('Cancel', "#EB5757")} sx={{ color: status === "Cancel" ? "white" : "#EB5757", bgcolor: status === "Cancel" && "#EB5757" }}>Cancel</MenuItem>
+              </Menu>
+            </Dropdown>
+
           </Box>
-        </Box>
+        </>
 
-        <Box sx={{display: "flex", justifyContent: "space-between",mb:2 }}>
-          <Box  sx={{width: "50%"}}>
-            <Typography sx={{color: "#1C4188", fontSize: "16px"}}>Pateint Name</Typography>
-            <Typography sx={{fontSize: "14px"}}>Vicky Jaiswal</Typography>
-          </Box>
-          <Box  sx={{width: "50%"}}>
-            <Typography sx={{color: "#1C4188", fontSize: "16px"}}>Phone No.</Typography>
-            <Typography sx={{fontSize: "14px"}}>6205316232</Typography>
-          </Box>
-
-        </Box>
-
-
-        <Dropdown>
-          <MenuButton sx={{ color: cssProperty, border: `1px solid ${cssProperty}`, ":hover": { bgcolor: cssProperty }, width: {xs: "100%", sm: "50%", md: "inital"} }}>
-            {status}<ChevronDown style={{ marginLeft: "4px" }} />
-          </MenuButton>
-          <Menu slots={{ listbox: Listbox }}>
-            <MenuItem onClick={createHandleMenuClick('Pending', "#E8C804")} sx={{ color: status === "Pending" ? "white" : "#E8C804", bgcolor: status === "Pending" && "#E8C804" }}>Pending</MenuItem>
-            <MenuItem onClick={createHandleMenuClick('Completed', "#00B69B")} sx={{ color: status === "Completed" ? "white" : "#00B69B", bgcolor: status === "Completed" && "#00B69B" }}>
-              Completed
-            </MenuItem>
-            <MenuItem onClick={createHandleMenuClick('Cancel', "#EB5757")} sx={{ color: status === "Cancel" ? "white" : "#EB5757", bgcolor: status === "Cancel" && "#EB5757" }}>Cancel</MenuItem>
-          </Menu>
-        </Dropdown>
-
-      </Box>
+      )}
     </>
   )
 }
