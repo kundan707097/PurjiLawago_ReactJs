@@ -11,7 +11,7 @@ export const LoginValue = {
 };
 
 
-export const DoctorProfileData ={
+export const DoctorProfileData = {
   Id: 0,
   Image: "",
   Name: "",
@@ -38,7 +38,7 @@ export const DoctorProfileData ={
 }
 
 export const PatientProfileData = {
-  id : 0,
+  id: 0,
   user_Name: "",
   profile_Picture: "",
   moblie_Number: "",
@@ -52,13 +52,13 @@ export const PatientProfileData = {
 
 }
 
-export const DoctorAppointmentDashboardTable ={
+export const DoctorAppointmentDashboardTable = {
   Id: 0,
-  // StartDate: null,
-  // EndDate: null,
-  // Sorting: null,
-  // FilterText: null,
-  // MaxResultCount: null,
-  // SkipCount: null
-  
+  StartDate: new Date(),
+  EndDate: new Date(),
+  Sorting: null,
+  FilterText: "",
+  MaxResultCount: 0,
+  SkipCount: 0
+
 }

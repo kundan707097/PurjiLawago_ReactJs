@@ -94,7 +94,21 @@ const DoctorDashboardData = async (data) => {
     }
 }
 
+const StatusUpdateByDoctor = async(data) =>{
+    debugger;
+    try {
+        const response = await axiosClient({
+            method: 'POST',
+            url: "/DoctorDashboard/GetPatientBookingDetails",  // change the endpoint
+            data: JSON.stringify(data),
+        });
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
+
 const DoctorService = {
-    DoctorInformation, DocInfoOnLocation, AllDocInfo, AllDoctorsListInSpeciality, BookSlot, VerifyOtp, DoctorDashboardData
+    DoctorInformation, DocInfoOnLocation, AllDocInfo, AllDoctorsListInSpeciality, BookSlot, VerifyOtp, DoctorDashboardData,StatusUpdateByDoctor
 };
 export default DoctorService;
