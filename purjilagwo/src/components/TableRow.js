@@ -7,6 +7,9 @@ import { Menu } from '@mui/base/Menu';
 import { MenuButton as BaseMenuButton } from '@mui/base/MenuButton';
 import { MenuItem as BaseMenuItem, menuItemClasses } from '@mui/base/MenuItem';
 import { styled } from '@mui/system';
+import { useSnackbar } from 'notistack';
+
+import DoctorService from '../services/Doctor.services';
 
 export const DoctorTableHeader = () => {
   return (
@@ -38,21 +41,55 @@ export const DoctorTableRow = ({ data }) => {
   const [status, setStatus] = useState("Pending");
   const [cssProperty, setCssProperty] = useState("#E8C804");
   const [time, setTime] = useState("");
+  const {enqueueSnackbar} = useSnackbar()
+  const [id, setID] = useState(parseInt(localStorage.getItem('id')));
+  // setting the id from the local storage
+  useEffect(() => {
+    if (localStorage.getItem('id') !== null) {
+      setID(parseInt(localStorage.getItem('id')))
+    }
+  }, [localStorage.getItem('id')]);
+
 
   //This function is used to change the status of the patient
 
-  const createHandleMenuClick = (menuItem, color) => {
-    return () => {
-      setStatus(menuItem);
-      setCssProperty(color);
-      console.log(`Clicked on ${menuItem}`);
-    };
+  const handleUpdateStatus = async (menuItem, color, bookingNumber) => {
+    try {
+      if (id !== 0 || id !== null) {
+        const data = {
+          id: id,
+          patient_Status: menuItem,
+          bookingNumber : bookingNumber,
+        }
+        console.log(data);
+        const response = await DoctorService.StatusUpdateByDoctor(data);
+        if (response.status === 200) {
+          setStatus(menuItem); //this property need to set after the we success true response
+          setCssProperty(color);
+          console.log(response.data)
+        }else{
+          enqueueSnackbar("Server not responding", {variant: "error"})
+        }
+      }
+    } catch (error) {
+      console.log(error)
+      enqueueSnackbar("Server not responding", {variant: "error"})
+    }
+
   };
+
 
 
   useEffect(() => {
     if (data !== null) {
       setStatus(data.patient_Status);
+      if (data.patient_Status === "Pending") {
+        setCssProperty("#E8C804");
+      } else if (data.patient_Status === "Success") {
+        setCssProperty("#00B69B");
+      } else if (data.patient_Status === "Cancel") {
+        setCssProperty("#EB5757");
+      }
       const dateObj = new Date(data.bookingDateAndTime);
       const options = {
         year: 'numeric',
@@ -89,11 +126,11 @@ export const DoctorTableRow = ({ data }) => {
                 {status}<ChevronDown style={{ marginLeft: "4px" }} />
               </MenuButton>
               <Menu slots={{ listbox: Listbox }}>
-                <MenuItem onClick={createHandleMenuClick('Pending', "#E8C804")} sx={{ color: status === "Pending" ? "white" : "#E8C804", bgcolor: status === "Pending" && "#E8C804" }}>Pending</MenuItem>
-                <MenuItem onClick={createHandleMenuClick('Completed', "#00B69B")} sx={{ color: status === "Completed" ? "white" : "#00B69B", bgcolor: status === "Completed" && "#00B69B" }}>
-                  Completed
+                <MenuItem onClick={() => handleUpdateStatus('Pending', "#E8C804", data.bookingNumber)} sx={{ color: status === "Pending" ? "white" : "#E8C804", bgcolor: status === "Pending" && "#E8C804" }}>Pending</MenuItem>
+                <MenuItem onClick={() => handleUpdateStatus('Success', "#00B69B", data.bookingNumber)} sx={{ color: status === "Success" ? "white" : "#00B69B", bgcolor: status === "Success" && "#00B69B" }}>
+                  Success
                 </MenuItem>
-                <MenuItem onClick={createHandleMenuClick('Cancel', "#EB5757")} sx={{ color: status === "Cancel" ? "white" : "#EB5757", bgcolor: status === "Cancel" && "#EB5757" }}>Cancel</MenuItem>
+                <MenuItem onClick={() => handleUpdateStatus('Cancel', "#EB5757", data.bookingNumber)} sx={{ color: status === "Cancel" ? "white" : "#EB5757", bgcolor: status === "Cancel" && "#EB5757" }}>Cancel</MenuItem>
               </Menu>
             </Dropdown>
           </Box>
@@ -129,11 +166,11 @@ export const DoctorTableRow = ({ data }) => {
                 {status}<ChevronDown style={{ marginLeft: "4px" }} />
               </MenuButton>
               <Menu slots={{ listbox: Listbox }}>
-                <MenuItem onClick={createHandleMenuClick('Pending', "#E8C804")} sx={{ color: status === "Pending" ? "white" : "#E8C804", bgcolor: status === "Pending" && "#E8C804" }}>Pending</MenuItem>
-                <MenuItem onClick={createHandleMenuClick('Completed', "#00B69B")} sx={{ color: status === "Completed" ? "white" : "#00B69B", bgcolor: status === "Completed" && "#00B69B" }}>
-                  Completed
+                <MenuItem onClick={() => handleUpdateStatus('Pending', "#E8C804", data.bookingNumber)} sx={{ color: status === "Pending" ? "white" : "#E8C804", bgcolor: status === "Pending" && "#E8C804" }}>Pending</MenuItem>
+                <MenuItem onClick={() => handleUpdateStatus('Success', "#00B69B", data.bookingNumber)} sx={{ color: status === "Success" ? "white" : "#00B69B", bgcolor: status === "Success" && "#00B69B" }}>
+                  Success
                 </MenuItem>
-                <MenuItem onClick={createHandleMenuClick('Cancel', "#EB5757")} sx={{ color: status === "Cancel" ? "white" : "#EB5757", bgcolor: status === "Cancel" && "#EB5757" }}>Cancel</MenuItem>
+                <MenuItem onClick={() => handleUpdateStatus('Cancel', "#EB5757", data.bookingNumber)} sx={{ color: status === "Cancel" ? "white" : "#EB5757", bgcolor: status === "Cancel" && "#EB5757" }}>Cancel</MenuItem>
               </Menu>
             </Dropdown>
 

@@ -4,24 +4,14 @@ import { Box, Typography } from '@mui/material'
 import { Menu } from '@mui/base/Menu';
 import { Dropdown } from '@mui/base/Dropdown';
 import { MenuButton as BaseMenuButton } from '@mui/base/MenuButton';
-import { MenuItem as BaseMenuItem, menuItemClasses } from '@mui/base/MenuItem';
 import { styled } from '@mui/material/styles';
 import { CalendarHeatMap, ChevronDown } from '@carbon/icons-react'
-import dayjs from 'dayjs';
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-import { MobileDateRangePicker } from '@mui/x-date-pickers-pro/MobileDateRangePicker';
-import { DesktopDateRangePicker } from '@mui/x-date-pickers-pro/DesktopDateRangePicker';
-import { StaticDateRangePicker } from '@mui/x-date-pickers-pro/StaticDateRangePicker';
-import { pickersLayoutClasses } from '@mui/x-date-pickers/PickersLayout';
 import { DateRangePicker } from 'react-date-range';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
-const DateRangeSelector = () => {
+const DateRangeSelector = ({setDateRange}) => {
 
   const [todayDate, setTodayDate] = useState("");
   const [startDate, setStartDate] = useState(new Date());
@@ -38,7 +28,8 @@ const DateRangeSelector = () => {
     setEndDate(date.selection.endDate);
   }
 
-  console.log(startDate)
+  //just for displaying the date range
+
   useEffect(() => {
     const options = { day: 'numeric', month: 'short', year: 'numeric' };
     const startFormattedDate = new Intl.DateTimeFormat('en-US', options).format(startDate);
@@ -46,6 +37,12 @@ const DateRangeSelector = () => {
     setTodayDate(startFormattedDate + " - " + endFormattedDate);
   }, [handleSelect]);
 
+
+  // useEffect for setting the date range in the parent component
+  useEffect(() => {
+    setDateRange({startDate: startDate, endDate: endDate})
+  }, [endDate])
+  
   return (
     <>
       <Dropdown>
@@ -60,31 +57,6 @@ const DateRangeSelector = () => {
 
         </MenuButton>
         <Menu slots={{ listbox: Listbox }}>
-          {/* <Box sx={{ width: "100%" }}>
-            <MenuItem >Today</MenuItem>
-            <MenuItem>
-              Yesterday
-            </MenuItem>
-            <MenuItem>Last 7 day</MenuItem>
-            <MenuItem>Last 30 day</MenuItem>
-            <MenuItem>Last 90 day</MenuItem>
-            <MenuItem>
-              Custom Date
-            </MenuItem>
-
-          </Box> */}
-          {/* <Box sx={{ bgcolor: "green" }}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <StaticDateRangePicker
-                    defaultValue={[dayjs('2022-04-17'), dayjs('2022-04-21')]}
-                    sx={{
-                      [`.${pickersLayoutClasses.contentWrapper}`]: {
-                        alignItems: 'center',
-                      },
-                    }}
-                  />
-            </LocalizationProvider>
-          </Box> */}
           <Box sx={{width: {xs: "23rem", sm:"100%"}}}>
             <DateRangePicker
               ranges={[selectionRange]}
@@ -143,35 +115,6 @@ const Listbox = styled('ul')(
     `,
 );
 
-const MenuItem = styled(BaseMenuItem)(
-  ({ theme }) => `
-    list-style: none;
-    padding: 8px;
-    border-radius: 8px;
-    cursor: default;
-    user-select: none;
-    font-family: "Nunito Sans", "Plaster", sans-serif;
-    cursor: pointer;
-    &:last-of-type {
-      border-bottom: none;
-    }
-  
-    &.${menuItemClasses.focusVisible} {
-      outline: 3px solid #99CCF3;
-      background-color: #E5EAF2;
-      color: #1C2025;
-    }
-  
-    &.${menuItemClasses.disabled} {
-      color: #B0B8C4;
-    }
-  
-    &:hover:not(.${menuItemClasses.disabled}) {
-      background-color: #F0F7FF;
-      color: #003A75;
-    }
-    `,
-);
 
 const MenuButton = styled(BaseMenuButton)(
   ({ theme }) => `

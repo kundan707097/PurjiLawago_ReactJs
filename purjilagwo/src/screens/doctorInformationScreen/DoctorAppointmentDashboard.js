@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Loading from '../../components/Loading'
-import { Box, Typography, TablePagination } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { Search } from '@carbon/icons-react'
 import { DoctorTableHeader, DoctorTableRow } from '../../components/TableRow'
 import TablePaginationDemo from '../../components/Pagination'
@@ -11,60 +11,64 @@ import DataNotFound from '../../components/DataNotFound'
 
 const DoctorAppointmentDashboard = () => {
     const [loading, setLoading] = useState(false);
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [page, setPage] = React.useState(2);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [id, setID] = useState(localStorage.getItem('id'));
     const [tableData, setTableData] = useState([]);
     const [statistics, setstatistics] = useState({});
-    const [id, setID] = useState(localStorage.getItem('id'));
+    const [dateRange, setDateRange] = useState({
+        startDate: new Date(),
+        endDate: new Date(),
+    })
+    const [searching, setSearching] = useState("");
+    const [pagination, setPagination] = useState({
+        MaxResultCount: 0,
+        SkipCount: 10,
+    })
+    const [maxCount, setMaxCount] = useState(0);
+
+    // setting the id from the local storage
     useEffect(() => {
         if (localStorage.getItem('id') !== null) {
             setID(localStorage.getItem('id'))
         }
     }, [localStorage.getItem('id')]);
 
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-
     useEffect(() => {
         (async () => {
             try {
                 if (parseInt(id) !== 0) {
-                    setLoading(true)
+                    if (searching === "" ||  (searching !== ""  && searching.length >= 3)) {
+                        setLoading(true);
+                        const data = DoctorAppointmentDashboardTable;
+                        data.Id = parseInt(id);
+                        data.StartDate = dateRange.startDate;
+                        data.EndDate = dateRange.endDate;
+                        data.FilterText = searching;
+                        data.SkipCount = pagination.SkipCount;
+                        data.MaxResultCount = pagination.MaxResultCount;
+                        console.log(data);
+                        const response = await DoctorService.DoctorDashboardData(data);
 
-                    const data = DoctorAppointmentDashboardTable;
-                    data.Id = parseInt(id);
-                    console.log(data)
-                    const response = await DoctorService.DoctorDashboardData(data);
-
-                    if (response.status === 200) {
-                        console.log('Profile data:', response.data);
-                        setTableData(response.data.doctorsDashboardRecords.items)
-                        setstatistics(response.data.doctorsDashboardRecords.statics)
+                        if (response.status === 200) {
+                            console.log('Profile data:', response.data);
+                            setTableData(response.data.doctorsDashboardRecords.items)
+                            setstatistics(response.data.statistics)
+                            setMaxCount(parseInt(response.data.doctorsDashboardRecords.totalCount))
+                        }
+                        setLoading(false);
                     }
-                    setLoading(false);
                 }
-            } catch (error) {
+            } catch (error) {   
                 console.log(error);
                 setLoading(false);
             }
         })();
 
-    }, [DoctorService.DoctorDashboardData])
+    }, [DoctorService.DoctorDashboardData, dateRange, id, searching, pagination])
 
 
     return (
         <>
-            {loading ? (<Loading />) : (
+            {statistics === undefined || statistics === null ? (<Loading />) : (
                 <Box sx={{ backgroundColor: "#F8FCFB", width: "100%", p: { xs: 1, sm: 2, md: 4 }, my: 2, display: "flex" }}>
                     <Box sx={{ width: "100%" }}>
                         {/* Top Box */}
@@ -78,7 +82,7 @@ const DoctorAppointmentDashboard = () => {
                                         </Box>
                                     </Box>
                                     <Typography sx={{ color: "#3A3F51", fontSize: "28px", fontWeight: 700, }}>4500</Typography>
-                                    <Typography sx={{ color: "#CBCCCE", fontSize: "15px", fontWeight: 500, pt: 2.6 }}>Total {" "}<span style={{ color: "#64EBB6", fontWeight: 600 }}>{statistics.totalBookingInLast30Days? statistics.totalBookingInLast30Days : (0)}</span> Booking In Last 30 Days</Typography>
+                                    <Typography sx={{ color: "#CBCCCE", fontSize: "15px", fontWeight: 500, pt: 2.6 }}>Total {" "}<span style={{ color: "#64EBB6", fontWeight: 600 }}>{statistics.totalBookingInLast30Days ? statistics.totalBookingInLast30Days : (0)}</span> Booking In Last 30 Days</Typography>
                                 </Box>
                                 <Box sx={{ p: 2, bgcolor: "white", borderRadius: "5px", boxShadow: "0 0 1px #00000040", width: { xs: "100%", md: "27%" }, mr: 2.5, mb: { xs: 2, md: 0 } }}>
                                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "3rem" }}>
@@ -92,7 +96,7 @@ const DoctorAppointmentDashboard = () => {
                                 </Box>
                                 <Box sx={{ p: 2, bgcolor: "white", borderRadius: "5px", boxShadow: "0 0 1px #00000040", width: { xs: "100%", md: "46%" }, position: "relative" }}>
                                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "3rem" }}>
-                                        <Typography sx={{ color: "#898989", fontSize: "15px" }}>My Today Treatment</Typography>
+                                        <Typography sx={{ color: "#898989", fontSize: "15px" }}>My Today Performance</Typography>
                                         <Box sx={{ position: "absolute", right: 0, top: 0 }}>
                                             <img src="../images/DoctorAppointmentDashboard/Group265.svg" alt="img" />
                                         </Box>
@@ -144,7 +148,7 @@ const DoctorAppointmentDashboard = () => {
                                 <Box sx={{ display: "flex", alignItems: "center", width: { xs: "100%", md: "50%" }, mb: { xs: 1, md: 0 }, justifyContent: { xs: "space-between", md: "initial" }, flexDirection: { xs: "column", md: "row" } }}>
 
                                     <Box sx={{ width: { xs: "100%", lg: "50%", }, mb: { xs: 2, md: 0 }, border: { xs: "1px solid white", md: "none" }, p: { xs: "6px", md: 0 }, borderRadius: "12px" }}>
-                                        <DateRangeSelector />
+                                        <DateRangeSelector setDateRange={setDateRange} />
                                     </Box>
 
                                     <Box
@@ -167,12 +171,11 @@ const DoctorAppointmentDashboard = () => {
                                                 backgroundColor: "#F0F6FF",
                                                 fontSize: "14px",
                                             }}
-                                            placeholder="Search Patients "
+                                            placeholder="Search Patients Name"
                                             list="doctorsList"
-                                            // value={searchName}
+                                            value={searching}
                                             onInput={(e) => {
-                                                // setSearchName(e.target.value);
-                                                // setIsVisible({ nameVisible: true });
+                                                setSearching(e.target.value);
                                             }}
                                         />
                                         <Search />
@@ -196,36 +199,35 @@ const DoctorAppointmentDashboard = () => {
                                     </Box>
                                 </Box>
                             </Box>
+                            <DoctorTableHeader />
+                            {loading ? (
+                                <Loading />
+                            ) : (
 
-                            <Box>
-                                <DoctorTableHeader />
-                                {tableData.length === 0 ? (
-                                    <DataNotFound />
-                                ) : (
-                                    <>
-                                        {tableData.map((data, index) => {
-                                            return (
-                                                <DoctorTableRow key={index} data={tableData[index]} />
-                                            )
-                                        })}
-                                    </>
-                                )}
+                                <>
+                                    <Box sx={{ mb: 4, }}>
+                                        {tableData.length === 0 ? (
+                                            <DataNotFound />
+                                        ) : (
+                                            <>
+                                                {tableData.map((data, index) => {
+                                                    return (
+                                                        <DoctorTableRow key={index} data={tableData[index]} />
+                                                    )
+                                                })}
+                                            </>
+                                        )}
 
-                            </Box>
+                                    </Box>
+
+                                    <TablePaginationDemo maxCount={maxCount} setPagination={setPagination} pagination={pagination} />
+                                </>
+                            )}
 
                         </Box>
 
-                        <TablePagination
-                            component="div"
-                            count={100}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            rowsPerPage={rowsPerPage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                            sx={{ ".css-ew7dpx-MuiTablePagination-selectLabel": { mb: 0 }, ".css-3wlpfe-MuiTablePagination-displayedRows ": { mb: 0 }, ".css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar": { alignItems: "center" }, }}
-                        />
-
                     </Box>
+
                     {/* Doctor Image and details */}
                     {/* <Box sx={{ width: "30%", bgcolor: "red" }}>
                         Doctor image and details
