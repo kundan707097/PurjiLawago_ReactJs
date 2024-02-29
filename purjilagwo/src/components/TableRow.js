@@ -109,14 +109,14 @@ export const DoctorTableRow = ({ data }) => {
     <>
       {data !== null && (
         <>
-          <Box sx={{ borderRadius: "6px", border: `1px solid #64EBB6`, p: "4px", my: 2, justifyContent: "space-between", alignContent: "center", width: "100%", bgcolor: "white", color: "#8E999A", ":hover": { bgcolor: "#8BC8F7", transition: "0.3s", color: "white", position: "relative" }, display: { xs: "none", md: "flex" } }} component={"button"}>
+          <Box sx={{ borderRadius: "6px", border: `1px solid #64EBB6`, my: 1, justifyContent: "space-between", alignContent: "center", width: "100%", bgcolor: "white", color: "#8E999A", ":hover": { bgcolor: "#8BC8F7", transition: "0.3s", color: "white", position: "relative" }, display: { xs: "none", md: "flex" } }} component={"button"}>
             <Box sx={{ width: "25%" }} >
               <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, textAlign: "left" }}>{data.bookingNumber}</Typography>
             </Box>
             <Box sx={{ width: "20%", textAlign: "left" }}>
               <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, }}>{time}</Typography>
             </Box>
-            <Box sx={{ color: "#64EBB6", width: "20%", textAlign: "left" }}>
+            <Box sx={{ color: "black", width: "20%", textAlign: "left" }}>
               <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>{data.patient_Name}</Typography>
             </Box>
             <Box sx={{ width: "20%", textAlign: "left" }}>
@@ -187,7 +187,7 @@ const Listbox = styled('ul')(
   ({ theme }) => `
   box-sizing: border-box;
   padding: 6px;
-  margin: 12px 0;
+  margin: 4px 0;
   min-width: 200px;
   border-radius: 12px;
   overflow: auto;
