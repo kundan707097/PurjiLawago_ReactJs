@@ -63,6 +63,7 @@ export const DoctorTableRow = ({ data }) => {
         }
         console.log(data);
         const response = await DoctorService.StatusUpdateByDoctor(data);
+        debugger;
         if (response.status === 200) {
           setStatus(menuItem); //this property need to set after the we success true response
           setCssProperty(color);

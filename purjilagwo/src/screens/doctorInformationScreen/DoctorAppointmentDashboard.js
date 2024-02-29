@@ -21,7 +21,7 @@ const DoctorAppointmentDashboard = () => {
     const [searching, setSearching] = useState("");
     const [pagination, setPagination] = useState({
         MaxResultCount: 0,
-        SkipCount: 10,
+        SkipCount: 0,
     })
     const [maxCount, setMaxCount] = useState(0);
 

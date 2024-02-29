@@ -99,7 +99,7 @@ const StatusUpdateByDoctor = async(data) =>{
     try {
         const response = await axiosClient({
             method: 'POST',
-            url: "/DoctorDashboard/GetPatientBookingDetails",  // change the endpoint
+            url: "/DoctorDashboard/UpdatepatientStatus",  // change the endpoint
             data: JSON.stringify(data),
         });
         return response;
