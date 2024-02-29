@@ -108,7 +108,7 @@ const DoctorAppointmentDashboard = () => {
                                             <img src="../images/DoctorAppointmentDashboard/icon.svg" alt="img" />
                                         </Box>
                                     </Box>
-                                    <Typography sx={{ color: "#3A3F51", fontSize: "28px", fontWeight: 700, }}>4500</Typography>
+                                    <Typography sx={{ color: "#3A3F51", fontSize: "28px", fontWeight: 700, }}>{maxCount? maxCount :(0)}</Typography>
                                     <Typography sx={{ color: "#CBCCCE", fontSize: "15px", fontWeight: 500, pt: 2.6 }}>Total {" "}<span style={{ color: "#64EBB6", fontWeight: 600 }}>{statistics.totalBookingInLast30Days ? statistics.totalBookingInLast30Days : (0)}</span> Booking In Last 30 Days</Typography>
                                 </Box>
                                 <Box sx={{ p: 2, bgcolor: "white", borderRadius: "5px", boxShadow: "0 0 1px #00000040", width: { xs: "100%", md: "27%" }, mr: 2.5, mb: { xs: 2, md: 0 } }}>
