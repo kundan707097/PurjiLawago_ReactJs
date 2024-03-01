@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TabScrollButton, Typography, Avatar, AccordionSummary, AccordionDetails, Accordion, Tooltip } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TabScrollButton, Typography, Avatar, AccordionSummary, AccordionDetails, Accordion, Tooltip, Stack } from '@mui/material';
 import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import '../../style/DoctorsDetails.css'
@@ -211,6 +211,30 @@ export default function Doctor() {
                           <img src="../../images/DoctorList/language.svg" alt="" style={{ height: 18., marginTop: 3 }} />
                           <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Language : Hindi , English</Typography>
                         </Box>
+
+                        <Stack spacing={1} direction="row" useFlexGap flexWrap="wrap" maxWidth={"90%"} mt={"4px"}>
+                          {/* Put your map function here */}
+                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC", px: 2 }}>
+                            <Typography sx={{ fontSize: "14px", }}>जुकाम</Typography>
+                          </Box>
+                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC",  px: 2 }}>
+                            <Typography sx={{ fontSize: "14px", }}>निमोनिया</Typography>
+                          </Box>
+                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC",  px: 2 }}>
+                            <Typography sx={{ fontSize: "14px", }}>पार्किंसंस रोग</Typography>
+                          </Box>
+                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC", px: 2 }}>
+                            <Typography sx={{ fontSize: "14px", }}>ऑस्टियोपोरोसिस</Typography>
+                          </Box>
+                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC",  px: 2 }}>
+                            <Typography sx={{ fontSize: "14px", }}>ऑस्टियोपोरोसिस</Typography>
+                          </Box>
+                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC", px: 2 }}>
+                            <Typography sx={{ fontSize: "14px", }}>ऑस्टियोपोरोसिस</Typography>
+                          </Box>
+
+
+                        </Stack>
                       </Box>
 
                     </Box>
