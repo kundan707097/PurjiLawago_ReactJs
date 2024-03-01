@@ -9,7 +9,6 @@ import About from '../screens/about/about';
 import Contact from '../screens/contact/contact';
 const DoctorDetails = lazy(() => import('../screens/doctorInformationScreen/DoctorsDetails'));
 const DoctorList = lazy(() => import('../screens/doctorInformationScreen/DoctorList'));
-const DoctorAppointment = lazy(() => import('../screens/doctorInformationScreen/DoctorAppointment'));
 export const commonroutes = [
   {
     path: '/doctorsdetails/:id',
@@ -30,10 +29,6 @@ export const commonroutes = [
   {
     path: '/doctorlist',
     element: <DoctorList />,
-  },
-  {
-    path: '/doctorAppointment',
-    element: <DoctorAppointment />,
   },
   {
     path: '/videoConsult',

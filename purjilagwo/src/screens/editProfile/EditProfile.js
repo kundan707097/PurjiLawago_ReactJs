@@ -12,8 +12,8 @@ import { DoctorProfileData, PatientProfileData } from "../../models/Index";
 import Loading from "../../components/Loading";
 import ErrorMessage from "../../components/ErrorMessage";
 import { CustomizedButton } from "../../components/Button";
-import { parse } from "url";
 import { useSnackbar } from "notistack";
+import { medicalSpecialties, searchkeywords } from "../../constants/doctors";
 
 function EditProfile() {
   // debugger;
@@ -26,6 +26,7 @@ function EditProfile() {
     education: "",
     experience: "",
     specialization: [],
+    keywords: [],
     description: "",
     consultantFee: "",
     houseNoStreetArea: "",
@@ -95,7 +96,7 @@ function EditProfile() {
           if (responseData != null) {
             console.log('Profile data:', responseData);
             setImage(responseData.image);
-            if(responseData.dateofbirth !== null){
+            if (responseData.dateofbirth !== null) {
               setDob(dayjs(responseData.dateofbirth));
             }
             if (responseData.lunchTime !== null) {
@@ -132,6 +133,7 @@ function EditProfile() {
               pincode: responseData.pincode,
               extraphonenumbers: responseData.extraPhoneNumbers,
               language: responseData.language,
+              keywords: responseData.keywords,
 
 
             })
@@ -200,6 +202,7 @@ function EditProfile() {
     doctor_profile_data.Education = value.education;
     doctor_profile_data.Experience = value.experience;
     doctor_profile_data.Specialization = value.specialization;
+    doctor_profile_data.Keywords = value.keywords;
     doctor_profile_data.Description = value.description;
     doctor_profile_data.LunchTime = dateCoverter(lunchTime[0].$d) + "/" + dateCoverter(lunchTime[1].$d);
     doctor_profile_data.AvailableTime = dateCoverter(availableTime[0].$d) + "/" + dateCoverter(availableTime[1].$d);
@@ -440,192 +443,213 @@ function EditProfile() {
         </Container>
 
 
-        {isDoctor === "true" && (<>
+        {isDoctor === "true" && (
 
-          <Container sx={{ backgroundColor: "white" }}>
-            <Typography fontSize={"13px"} sx={{ pt: 4 }}>
-              Doctor's Details
-            </Typography>
-            <Box sx={{ py: 3, pb: { xs: 0, lg: 3 } }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
-                }}
-              >
+          <>
+            {/* Container for Doctor's Details */}
 
-                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+            <Container sx={{ backgroundColor: "white" }}>
+              <Typography fontSize={"13px"} sx={{ pt: 4 }}>
+                Doctor's Details
+              </Typography>
+              <Box sx={{ py: 3, pb: { xs: 0, lg: 3 } }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
+                  }}
+                >
+
+                  <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+                    <InputBox
+                      name="education"
+                      title="Education"
+                      boxType="text"
+                      type="text"
+                      value={value.education}
+                      onChange={handleChange}
+                    />
+
+                  </Box>
+
+                  <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                    <InputBox
+                      name="experience"
+                      title="Experience"
+                      boxType="dropdown"
+                      type="dropdown"
+                      value={value.experience}
+                      onChange={handleChange}
+                      array={experienceArray}
+                    />
+
+                  </Box>
+
+                  <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                    <SpecializationPicker title="Specialization" setValue={setValue} value={value.specialization} />
+
+                  </Box>
+
+                </Box>
+              </Box>
+
+              <Box sx={{ pb: { xs: 0, lg: 3 } }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
+                  }}
+                >
+
+                  <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                    <KeywordPicker title="Searching Keywords" setValue={setValue} value={value.keywords} />
+
+                  </Box>
+
+                </Box>
+              </Box>
+
+              <Box sx={{ borderBottom: "1px solid #dedede", pb: 5, display: "flex", justifyContent: { xs: "center", lg: "start" }, }}>
+                <Box
+                  sx={{
+                    width: "87% ",
+                  }}
+                >
                   <InputBox
-                    name="education"
-                    title="Education"
-                    boxType="text"
-                    type="text"
-                    value={value.education}
+                    name="description"
+                    title="Description"
+                    boxType="textarea"
+                    type="textarea"
+                    value={value.description}
                     onChange={handleChange}
                   />
-
                 </Box>
+              </Box>
+            </Container>
 
-                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+            {/* Container for Availability Details */}
+
+            <Container sx={{ backgroundColor: "white" }}>
+              <Typography fontSize={"13px"} sx={{ pt: 4 }}>
+                Availability
+              </Typography>
+              <Box sx={{ pt: 2, display: "flex", justifyContent: { xs: "center", lg: "start" } }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "87%", flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "start", md: "left" }
+                  }}
+                >
+                  <InputBox
+                    id="monday"
+                    label="Monday"
+                    boxType="checkbox"
+                    type="checkbox"
+                    checked={day.monday}
+                    onClick={handleDayChange}
+                  />
+                  <InputBox
+                    id="tuesday"
+                    label="Tuesday"
+                    boxType="checkbox"
+                    type="checkbox"
+                    checked={day.tuesday}
+                    onClick={handleDayChange}
+                  />
 
                   <InputBox
-                    name="experience"
-                    title="Experience"
-                    boxType="dropdown"
-                    type="dropdown"
-                    value={value.experience}
-                    onChange={handleChange}
-                    array={experienceArray}
+                    id="wednesday"
+                    label="Wednesday"
+                    boxType="checkbox"
+                    type="checkbox"
+                    checked={day.wednesday}
+                    onClick={handleDayChange}
                   />
-
-                </Box>
-
-                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
-
-                  <SpecializationPicker title="Specialization" setValue={setValue} value={value.specialization} />
-
-                </Box>
-
-              </Box>
-            </Box>
-
-            <Box sx={{ borderBottom: "1px solid #dedede", pb: 5, display: "flex", justifyContent: { xs: "center", lg: "start" }, }}>
-              <Box
-                sx={{
-                  width: "87% ",
-                }}
-              >
-                <InputBox
-                  name="description"
-                  title="Description"
-                  boxType="textarea"
-                  type="textarea"
-                  value={value.description}
-                  onChange={handleChange}
-                />
-              </Box>
-            </Box>
-          </Container>
-
-          {/* Container for Availability Details */}
-
-          <Container sx={{ backgroundColor: "white" }}>
-            <Typography fontSize={"13px"} sx={{ pt: 4 }}>
-              Availability
-            </Typography>
-            <Box sx={{ pt: 2, display: "flex", justifyContent: { xs: "center", lg: "start" } }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "87%", flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "start", md: "left" }
-                }}
-              >
-                <InputBox
-                  id="monday"
-                  label="Monday"
-                  boxType="checkbox"
-                  type="checkbox"
-                  checked={day.monday}
-                  onClick={handleDayChange}
-                />
-                <InputBox
-                  id="tuesday"
-                  label="Tuesday"
-                  boxType="checkbox"
-                  type="checkbox"
-                  checked={day.tuesday}
-                  onClick={handleDayChange}
-                />
-
-                <InputBox
-                  id="wednesday"
-                  label="Wednesday"
-                  boxType="checkbox"
-                  type="checkbox"
-                  checked={day.wednesday}
-                  onClick={handleDayChange}
-                />
-                <InputBox
-                  id="thursday"
-                  label="Thursday"
-                  boxType="checkbox"
-                  type="checkbox"
-                  checked={day.thursday}
-                  onClick={handleDayChange}
-                />
-                <InputBox
-                  id="friday"
-                  label="Friday"
-                  boxType="checkbox"
-                  type="checkbox"
-                  checked={day.friday}
-                  onClick={handleDayChange}
-                />
-                <InputBox
-                  id="saturday"
-                  label="Saturday"
-                  boxType="checkbox"
-                  type="checkbox"
-                  checked={day.saturday}
-                  onClick={handleDayChange}
-                />
-                <InputBox
-                  id="sunday"
-                  label="Sunday"
-                  boxType="checkbox"
-                  type="checkbox"
-                  checked={day.sunday}
-                  onClick={handleDayChange}
-                />
-              </Box>
-            </Box>
-            <Box sx={{ borderBottom: "1px solid #dedede", pb: 5, pt: 3 }}>
-              <Box
-                sx={{
-                  display: "flex", justifyContent: "space-between",
-                  width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
-                }}
-              >
-                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
-
-                  <TimeRangePicker
-                    id="availableTime"
-                    title="Available Time"
-                    time={availableTime}
-                    setTime={setAvailableTime}
-                  />
-
-                </Box>
-
-                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
-
-                  <TimeRangePicker
-                    id="lunchTime"
-                    title="Lunch Time"
-                    time={lunchTime}
-                    setTime={setLunchTime}
-                  />
-
-                </Box>
-
-                <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
                   <InputBox
-                    name="consultantFee"
-                    title="Consultant Fee"
-                    boxType="text"
-                    type="text"
-                    value={value.consultantFee}
-                    onChange={handleChange}
+                    id="thursday"
+                    label="Thursday"
+                    boxType="checkbox"
+                    type="checkbox"
+                    checked={day.thursday}
+                    onClick={handleDayChange}
                   />
+                  <InputBox
+                    id="friday"
+                    label="Friday"
+                    boxType="checkbox"
+                    type="checkbox"
+                    checked={day.friday}
+                    onClick={handleDayChange}
+                  />
+                  <InputBox
+                    id="saturday"
+                    label="Saturday"
+                    boxType="checkbox"
+                    type="checkbox"
+                    checked={day.saturday}
+                    onClick={handleDayChange}
+                  />
+                  <InputBox
+                    id="sunday"
+                    label="Sunday"
+                    boxType="checkbox"
+                    type="checkbox"
+                    checked={day.sunday}
+                    onClick={handleDayChange}
+                  />
+                </Box>
+              </Box>
+              <Box sx={{ borderBottom: "1px solid #dedede", pb: 5, pt: 3 }}>
+                <Box
+                  sx={{
+                    display: "flex", justifyContent: "space-between",
+                    width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
+                  }}
+                >
+                  <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                    <TimeRangePicker
+                      id="availableTime"
+                      title="Available Time"
+                      time={availableTime}
+                      setTime={setAvailableTime}
+                    />
+
+                  </Box>
+
+                  <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+
+                    <TimeRangePicker
+                      id="lunchTime"
+                      title="Lunch Time"
+                      time={lunchTime}
+                      setTime={setLunchTime}
+                    />
+
+                  </Box>
+
+                  <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+                    <InputBox
+                      name="consultantFee"
+                      title="Consultant Fee"
+                      boxType="text"
+                      type="text"
+                      value={value.consultantFee}
+                      onChange={handleChange}
+                    />
+
+                  </Box>
 
                 </Box>
-
               </Box>
-            </Box>
-          </Container>
-        </>)}
+            </Container>
+          </>)}
 
         {/* Container for address */}
 
@@ -954,6 +978,110 @@ const SpecializationPicker = (props) => {
   )
 }
 
+const KeywordPicker = (props) => {
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = React.useState([]);
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleClose = () => {
+    setValue([]);
+    setOpen(false);
+  };
+
+  const handleSet = () => {
+    console.log(value.length)
+    if(value.length > 10){
+      setErrorMessage("You can select maximum 10 keywords")
+      return;
+    }
+    props.setValue((prevValue) => ({
+      ...prevValue,
+      keywords: value,
+    }))
+    setOpen(false)
+  }
+
+  useEffect(() => {
+    if (props.value !== null && props.value.length !== 0) {
+      setValue(props.value)
+    }
+  }, [props])
+
+
+  const handleSelectionChange = (_, newValue) => {
+    setErrorMessage('')
+    setValue(newValue);
+  };
+
+  return (
+    <>
+      <Box>
+        <Typography
+          sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}
+          className={props.required && "required"}
+        >
+          {props.title}
+        </Typography>
+        <Box>
+          <input
+            type="text"
+            style={{
+              border: "1px solid #64EBB6",
+              padding: "10px",
+              backgroundColor: "white",
+              // color: '#42A5F5',
+              borderRadius: "10px",
+              width: "100%",
+              fontFamily: "nunito",
+              cursor: "pointer"
+            }}
+            onClick={() => setOpen(true)}
+            value={props.value !== null ? props.value.toString() : ""}
+          />
+
+        </Box>
+      </Box>
+
+      <Dialog onClose={handleClose} open={open} maxWidth="xs" fullWidth>
+        <DialogContent sx={{ pt: 3., fontSize: "20px", textAlign: "center", fontWeight: 600 }}>Select Keywords</DialogContent>
+        <DialogContent>
+          <Autocomplete
+            multiple
+            // id="tags-outlined"
+            options={searchkeywords}
+            getOptionLabel={(option) => option.toString()}
+            // defaultValue={[medicalSpecialties[0]]}
+            filterSelectedOptions
+            freeSolo
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Keywords"
+                placeholder="Ex. जुकाम, फ्लू, etc."
+              />
+            )}
+            value={value} onChange={handleSelectionChange}
+          />
+          {errorMessage.length > 0 && (<ErrorMessage message={errorMessage} />)}
+          <Box sx={{mt:2}}>
+            <Typography sx={{color: "red",fontSize: "14px",}}>
+              Suggestion: Select keywords belongs to field of specialization for better pateint experience.
+            </Typography>
+          </Box>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
+          <Button autoFocus onClick={handleSet} sx={{ bgcolor: "#F0F6FF" }}>
+            Set
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+    </>
+  )
+}
+
 const UpdatePhoneNumber = (props) => {
 
   const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -1151,30 +1279,6 @@ const UpdateEmail = (props) => {
 
 }
 
-const medicalSpecialties = [
-  "Cardiology",
-  "Dermatology",
-  "Endocrinology",
-  "Gastroenterology",
-  "Hematology",
-  "Infectious Disease",
-  "Internal Medicine",
-  "Nephrology",
-  "Neurology",
-  "Obstetrics and Gynecology",
-  "Ophthalmology",
-  "Orthopedics",
-  "Otolaryngology (ENT)",
-  "Pediatrics",
-  "Physical Medicine and Rehabilitation",
-  "Pulmonology",
-  "Psychiatry",
-  "Radiology",
-  "Rheumatology",
-  "Surgery",
-  "Urology",
-  "Dentist",
-];
 
 
 export default EditProfile;

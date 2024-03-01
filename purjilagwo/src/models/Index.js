@@ -22,6 +22,7 @@ export const DoctorProfileData = {
   Education: "",
   Experience: "",
   Specialization: "",
+  Keywords: "",
   Description: "",
   LunchTime: "",
   AvailableTime: "",
