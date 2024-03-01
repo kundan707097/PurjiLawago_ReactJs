@@ -108,7 +108,31 @@ const StatusUpdateByDoctor = async(data) =>{
     }
 }
 
+const DoctorDownloadExcel = async() =>{
+    try {
+        const response = await axiosClient({
+            method: 'GET',
+            url: "/DoctorDashboard/GetPatientBookingDetails",  // change the endpoint
+        })
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
+
+const DoctorDownloadPdf = async(data) =>{
+    try {
+        const response = await axiosClient({
+            method: 'POST',
+            url: "/DoctorDashboard/GetPatientBookingDetails",  // change the endpoint
+        })
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
+
 const DoctorService = {
-    DoctorInformation, DocInfoOnLocation, AllDocInfo, AllDoctorsListInSpeciality, BookSlot, VerifyOtp, DoctorDashboardData,StatusUpdateByDoctor
+    DoctorInformation, DocInfoOnLocation, AllDocInfo, AllDoctorsListInSpeciality, BookSlot, VerifyOtp, DoctorDashboardData,StatusUpdateByDoctor,DoctorDownloadExcel,DoctorDownloadPdf
 };
 export default DoctorService;
