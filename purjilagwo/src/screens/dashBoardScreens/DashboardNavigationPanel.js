@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
-import { InventoryManagement, Logout, Password, PhoneVoice, ResultDraft } from '@carbon/icons-react';
+import { InventoryManagement, ListDropdown, Logout, Password, PhoneVoice, ResultDraft } from '@carbon/icons-react';
 
 const DashboardNavigationPanel = () => {
 
@@ -26,6 +26,13 @@ const DashboardNavigationPanel = () => {
     <Box sx={{ width: "24rem", mt: 6, display:{xs: "none", lg: "block"}}}>
 
       <Box sx={{ background: "white", width: "100%", height: "30rem", borderRadius: "0px 15px 15px 0", py: 5 }}>
+
+      <Link to="/dashboard/doctor/registration" style={{ my: 1 }}>
+          <Box sx={{ p: 2, pl: 4, bgcolor: location.pathname === "/dashboard/doctor/registration" && "#64EBB6", borderRadius: "0 15px 15px 0", my: 1, display: "flex", alignItems: "center", "&:hover": { color: location.pathname === "/dashboard/doctor/registration" ? "white" : "black", bgcolor: location.pathname === "/dashboard/doctor/registration" ? "#64EBB6" : "#E9FAF3" }, color: location.pathname === "/dashboard/doctor/registration" ? "white" : "#5D6566",boxShadow: location.pathname === "/dashboard/doctor/registration" && "0 0 4px #D8DEE8" }}>
+            <ListDropdown style={{ width: "22px", height: "22px", }} />
+            <Typography sx={{ fontWeight: 400, fontSize: "16px", ml: 1, }}>Doctor Registration List</Typography>
+          </Box>
+        </Link>
 
 
         <Link to="/dashboard/appointment&details" style={{ my: 1 }}>

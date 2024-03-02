@@ -6,6 +6,7 @@ import NotFound from "../proxy/NotFound";
 import { Box } from "@mui/material";
 import DoctorAppointmentDashboard from "../doctorInformationScreen/DoctorAppointmentDashboard";
 import PateintAppointmentDashboard from "../pateintScreens/PateintAppointmentDashboard";
+import AdminDashboard from "../admin/AdminDashboard";
 
 const Dashboard = () => {
     
@@ -19,6 +20,7 @@ const Dashboard = () => {
                     <Route excat path="/edit/profile" element={<EditProfile />} />
                     {localStorage.getItem("isDocotrsOrPatiets") === "true" && (<Route exact path="/appointment&details" element={<DoctorAppointmentDashboard />} />)}
                     {localStorage.getItem("isDocotrsOrPatiets") === "false" && (<Route exact path="/appointment&details" element={<PateintAppointmentDashboard />} />)}
+                    <Route excat path="doctor/registration" element={<AdminDashboard />} />
                     
                     <Route excat path="*" element={<NotFound />} />
 
