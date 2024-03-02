@@ -108,6 +108,7 @@ export default function Doctor() {
         setLoading(true);
         try {
           const response = await DoctorService.DoctorInformation(id);
+          debugger;
           if (response !== undefined) {
             setDoctorData(response); // uncomment this
 
@@ -185,13 +186,13 @@ export default function Doctor() {
 
                     <Box sx={{ display: "flex", justifyContent: { xs: "center", lg: "start" }, flexDirection: { xs: "column", lg: "row" }, pt: 4, alignItems: { xs: "center", lg: "start" } }} >
 
-                      <Box>
-                        <Avatar
-                          alt="Remy Sharp"
-                          src="../../images/doc-1.jpg"
-                          sx={{ width: 130, height: 130, mx: 4, mb: { xs: 2, lg: 0 }, border: "1px solid #64EBB6" }}
-                        />
-                      </Box>
+                    <Box>
+                      <Avatar
+                        alt="Remy Sharp"
+                        src={doctorData.profile_Picture} // Set the base64 encoded profile picture dynamically here
+                        sx={{ width: 130, height: 130, mx: 4, mb: { xs: 2, lg: 0 }, border: "1px solid #64EBB6" }}
+                      />
+                    </Box>
 
                       <Box sx={{ pl: { xs: 0, lg: 5 }, width: { xs: "70%", lg: "100%" } }}>
                         <Typography sx={{ fontSize: "32px", fontWeight: 700, mb: 2, color: "#1C4188" }}>{doctorData?.user_Name} </Typography>
@@ -201,40 +202,25 @@ export default function Doctor() {
                         </Box>
                         <Box sx={{ display: "flex", my: 1 }}>
                           <img src="../../images/DoctorList/science.svg" alt="" style={{ height: 18, marginTop: 3 }} />
-                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Experience : 5 Years</Typography>
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Experience : {doctorData?.experience}</Typography>
                         </Box>
                         <Box sx={{ display: "flex", my: 1 }}>
                           <img src="../../images/DoctorList/ecg.svg" alt="" style={{ height: 18, marginTop: 4 }} />
-                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>{doctorData?.description}</Typography>
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Specialities :{doctorData?.speciality}</Typography>
                         </Box>
-                        <Box sx={{ display: "flex", my: 1 }}>
+                        {/* <Box sx={{ display: "flex", my: 1 }}>
                           <img src="../../images/DoctorList/language.svg" alt="" style={{ height: 18., marginTop: 3 }} />
-                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Language : Hindi , English</Typography>
-                        </Box>
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Language :{doctorData?.language}</Typography>
+                        </Box> */}
 
                         <Stack spacing={1} direction="row" useFlexGap flexWrap="wrap" maxWidth={"90%"} mt={"4px"}>
-                          {/* Put your map function here */}
-                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC", px: 2 }}>
-                            <Typography sx={{ fontSize: "14px", }}>जुकाम</Typography>
-                          </Box>
-                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC",  px: 2 }}>
-                            <Typography sx={{ fontSize: "14px", }}>निमोनिया</Typography>
-                          </Box>
-                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC",  px: 2 }}>
-                            <Typography sx={{ fontSize: "14px", }}>पार्किंसंस रोग</Typography>
-                          </Box>
-                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC", px: 2 }}>
-                            <Typography sx={{ fontSize: "14px", }}>ऑस्टियोपोरोसिस</Typography>
-                          </Box>
-                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC",  px: 2 }}>
-                            <Typography sx={{ fontSize: "14px", }}>ऑस्टियोपोरोसिस</Typography>
-                          </Box>
-                          <Box sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC", px: 2 }}>
-                            <Typography sx={{ fontSize: "14px", }}>ऑस्टियोपोरोसिस</Typography>
-                          </Box>
-
-
+                          {doctorData.keywords.split(',').map((keyword, index) => (
+                            <Box key={index} sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC", px: 2 }}>
+                              <Typography sx={{ fontSize: "14px", }}>{keyword.trim()}</Typography>
+                            </Box>
+                          ))}
                         </Stack>
+
                       </Box>
 
                     </Box>
@@ -243,14 +229,16 @@ export default function Doctor() {
 
                     <Box sx={{ display: "flex", flexDirection: { xs: "column-reverse", lg: "column" }, justifyContent: "space-between", mx: 2 }}>
                       <Box sx={{ mt: 2, display: "flex", flexDirection: { xs: "row", lg: "column" }, justifyContent: "space-between", }}>
-                        <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#1C4188", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
-                          <img src="../../images/DoctorDetails/alarm_on.svg" alt="" height={"20px"} style={{ marginRight: 10 }} />
-                          10am-8pm
-                        </Box>
+                      <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#1C4188", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
+                        <img src={doctorData.alarmIcon} alt="" height={"20px"} style={{ marginRight: 10 }} />
+                        {doctorData?.doctorsTimeAvailability}
+                      </Box>
 
-                        <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#42A5F5", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
-                          FEE $4544
-                        </Box>
+
+                      <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#42A5F5", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
+                        {doctorData?.consultantFee} ₹
+                      </Box>
+
                       </Box>
                       <Box sx={{ display: "flex", justifyContent: "space-evenly", mt: 2 }}>
                         <Box sx={{ padding: ".8rem", backgroundColor: "#F0F6FF", borderRadius: "100px", height: "60px", boxShadow: "4px 4px 10px #00000040" }}>
