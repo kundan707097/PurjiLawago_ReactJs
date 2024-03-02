@@ -47,7 +47,7 @@ const DoctorsList = (props) => {
                 <Box sx={{width: "200px",my: 3, mx:"auto" }}>
                     <Link to="/">
                         <Box sx={{ textAlign: "center", p: 1, borderRadius: 3, fontSize: "15px", fontWeight: 600, color: "#42A5F5", border: "2px solid #42A5F5", "&:hover": { backgroundColor: "#42A5F5", color: "white" }, }}>
-                            Consult Now
+                            Book Now
                         </Box>
                     </Link>
 
