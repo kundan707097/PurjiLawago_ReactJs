@@ -163,7 +163,16 @@ export default function Doctor() {
     }
     setDetails(det);
   }
+  const formatDays = (daysString) => {
+    if (!daysString) return "";
 
+    const days = daysString.split(",");
+    const firstDay = days[0].charAt(0).toUpperCase() + days[0].slice(1);
+    const lastDay = days[days.length - 1].charAt(0).toUpperCase() + days[days.length - 1].slice(1);
+
+    return `${firstDay}-${lastDay}`;
+};
+  const formattedDays = formatDays(doctorData?.days);
   return (
     <>
 
@@ -423,25 +432,25 @@ export default function Doctor() {
                           <img src="../../images/DoctorDetails/distance.svg" alt="" style={{ height: 25 }} />
                           <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, mx: 2, color: "#1C4188" }}>ADDRESS</Typography>
                         </Box>
-                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mt: 2, }}>Manipal Hospital</Typography>
-                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mb: 2 }}>435 Cedar St, City , Country</Typography>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mt: 2, }}>{doctorData?.remarkArea}</Typography>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mb: 2 }}>{doctorData?.doctor_Address}</Typography>
                       </Box>
                       <Box sx={{ m: 2, width: { xs: "100%", lg: "33%" } }}>
                         <Box sx={{ display: "flex", alignItems: "center", }}>
                           <img src="../../images/DoctorDetails/alarm.svg" alt="" style={{ height: 25 }} />
                           <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, mx: 2, color: "#1C4188" }}>TIMING</Typography>
                         </Box>
-                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mt: 2, }}>Mon, Fri</Typography>
-                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", }}>11.00 AM - 05.00 PM</Typography>
-                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mt: 2, }}>Tue - Thu, Sat</Typography>
-                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mb: 2 }}>07.00 AM - 05.00 PM</Typography>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mt: 2, }}> {formattedDays}</Typography>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", }}>{doctorData?.doctorsTimeAvailability}</Typography>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mt: 2, }}>Lunch Time</Typography>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#626262", mb: 2 }}>{doctorData?.doctorsLunchTime}</Typography>
                       </Box>
                       <Box sx={{ m: 2, width: { xs: "100%", lg: "33%" } }}>
                         <Box sx={{ display: "flex", alignItems: "center", }}>
                           <img src="../../images/DoctorDetails/add_card.svg" alt="" style={{ height: 25 }} />
-                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, mx: 2, color: "#1C4188" }}>Consolation Free</Typography>
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, mx: 2, color: "#1C4188" }}>Doctor Fee</Typography>
                         </Box>
-                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#1C4188", mt: 2, }}>$75454</Typography>
+                        <Typography sx={{ fontSize: "18px", fontWeight: 400, color: "#1C4188", mt: 2, }}>{doctorData?.consultantFee} ₹</Typography>
                         <Box sx={{ display: "flex", alignItems: "center", }}>
                           <img src="../../images/DoctorDetails/Group690.svg" alt="" style={{ height: 20 }} />
                           <Typography sx={{ fontSize: { xs: "14px", lg: "16px" }, fontWeight: 500, ml: 1, color: "#626262", my: 1 }}>Prime</Typography>
@@ -619,7 +628,7 @@ export default function Doctor() {
                     <Typography sx={{ textAlign: "center", py: 2, fontSize: "14px", color: "black" }}>Book an appointment for Consultation</Typography>
 
                     <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: .6, borderRadius: "5px", fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", mx: "auto", mb: 2 }}>
-                      Clinic appointment 650₹
+                      Clinic appointment {doctorData?.consultantFee} ₹
                     </Box>
 
                     {currentDate != null && timeSlots.length !== 0 ? (
@@ -736,8 +745,8 @@ export default function Doctor() {
 
                     </Box>
                     <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", pb: 1 }}>
-                      <Box sx={{ display: "flex", justifyContent: "space-between", }}><Typography sx={{ fontSize: "14px", fontWeight: 600 }}>Manipal Hospital</Typography></Box>
-                      <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}><Typography sx={{ fontSize: "12px" }}>Jayanagar 9 block</Typography><Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography></Box>
+                      <Box sx={{ display: "flex", justifyContent: "space-between", }}><Typography sx={{ fontSize: "14px", fontWeight: 600 }}>{doctorData?.remarkArea}</Typography></Box>
+                      <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}><Typography sx={{ fontSize: "12px" }}>{doctorData?.doctor_Address}</Typography><Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography></Box>
 
                     </Box>
 
@@ -903,7 +912,7 @@ const SlotBookDialog = ({ open, onClose, details }) => {
                 {/* <Box sx={{ px: "1rem", py: 3,  }}> */}
                 <Box sx={{ display: "flex", textAlign: "left", alignItems: "center", }}>
                   <Typography width="50%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>
-                    Name
+                    Doctor Name
                   </Typography>
                   <span style={{ marginRight: "2rem" }}>:</span>
                   <Typography width="100%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>{details.name}</Typography>
@@ -917,10 +926,10 @@ const SlotBookDialog = ({ open, onClose, details }) => {
                 </Box>
                 <Box sx={{ display: "flex", textAlign: "left", }}>
                   <Typography width="50%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>
-                    Consultant fee
+                    Doctor fee
                   </Typography>
                   <span style={{ marginRight: "2rem" }}>:</span>
-                  <Typography width="100%" sx={{ color: "black", fontSize: 15, pr: 1, lineHeight: 2 }}>₹600</Typography>
+                  <Typography width="100%" sx={{ color: "black", fontSize: 15, pr: 1, lineHeight: 2 }}>{details.consultantFee} ₹</Typography>
                 </Box>
 
                 <Box sx={{ display: "flex", textAlign: "left", mt: 2, justifyContent: "space-between" }}>
