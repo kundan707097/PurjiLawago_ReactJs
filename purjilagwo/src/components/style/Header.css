@@ -1,0 +1,16 @@
+.specialities-box{
+    /* display: none; */
+    translate: 0px -40px;
+    transition: all 0.3s ease-in-out;
+    scale: 0;
+    z-index: 999;
+}
+
+.specialities-hover:hover .specialities-box{
+    translate: 0px 0px;
+    /* display: block; */
+    scale: 1;
+    /* transition-duration: 1000ms; */
+    transition: all 0.3s ease-in-out;
+    z-index: 999;
+}

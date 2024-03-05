@@ -30,7 +30,7 @@ function Doctors() {
     useEffect(() => {
         (async () => {
             try {
-                if (location.length > 2) {
+                if (location === "" || (location !== "" && location.length > 2)) {
                     setLoading(true);
                     let response = null;
                     if (groupId) {
@@ -50,19 +50,19 @@ function Doctors() {
                     }
                     setLoading(false);
                 }
-                else{
-                    let response = null;
-                    response =await DoctorService.AllDocInfo();
-                    if(response !==undefined){
-                        setDoctorInfo(response);
-                    }
-                }
+                // else{
+                //     let response = null;
+                //     response =await DoctorService.AllDocInfo();
+                //     if(response !==undefined){
+                //         setDoctorInfo(response);
+                //     }
+                // }
 
             } catch (error) {
                 console.error(`Error fetching doctor information: ${error.message}`);
             }
         })();
-    }, [location]);
+    }, [location,groupId]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -127,14 +127,14 @@ function Doctors() {
         <>
             {/* {loading ? (<Loading />) : ( */}
             <>
-                <Box sx={{ backgroundColor: "#F5F5F5", position: "absolute", width: "100%" }}>
+                <Box sx={{ backgroundColor: "#F5F5F5", width: "100%", }}>
 
 
-                    <Container  >
+                    <Container >
 
-                        <Box sx={{ position: "sticky", top: 0, backgroundColor: "#F5F5F5", zIndex: 999 }}>
+                        <Box sx={{ position: "sticky", top: 0, backgroundColor: "#F5F5F5", }}>
 
-                            <Typography sx={{ fontSize: { xs: "16px", md: "30px" }, fontWeight: 700, color: "#1C4188", mb: 2, mt: 3, pt: 3 }}>
+                            <Typography sx={{ fontSize: { xs: "16px", md: "30px" }, fontWeight: 700, color: "#1C4188", mb: 2, pt: 3 }}>
                                 GET POPULAR DOCTORS AND APPOINTMENT
                             </Typography>
 

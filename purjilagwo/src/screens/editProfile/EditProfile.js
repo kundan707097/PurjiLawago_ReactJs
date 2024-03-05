@@ -14,6 +14,7 @@ import ErrorMessage from "../../components/ErrorMessage";
 import { CustomizedButton } from "../../components/Button";
 import { useSnackbar } from "notistack";
 import { medicalSpecialties, searchkeywords } from "../../constants/doctors";
+import ImageCropper from "../../components/ImageCropper";
 
 function EditProfile() {
   // debugger;
@@ -38,6 +39,7 @@ function EditProfile() {
     pincode: "",
     extraphonenumbers: "",
     language: "Hindi",
+    hospitalName: ""
   });
   const [day, setDays] = useState({
     monday: false,
@@ -61,6 +63,8 @@ function EditProfile() {
     dayjs('2022-04-17T13:00'),
     dayjs('2022-04-17T14:30'),
   ]);
+  const [imgCurrentState, setImgCurrentState] = useState("choose-img")
+  const [afterCrop, setAfterCrop] = useState("")
 
   function dateCoverter(inputDate) {
     const dateObject = new Date(inputDate);
@@ -281,6 +285,7 @@ function EditProfile() {
       debugger;
       const base64Image = upload.target.result;
       setImage(base64Image);
+      setImgCurrentState('crop-img')
 
       // Update the 'image' property in the 'value' state with base64 format
       // setValue((prevValue) => ({
@@ -294,6 +299,27 @@ function EditProfile() {
       // You can also send the image to the backend here (as base64 or other format)
     }
   };
+
+  const onCrop = (imgCroppedArea) => {
+    const canvasEle = document.createElement('canvas');
+    canvasEle.width = imgCroppedArea.width;
+    canvasEle.height = imgCroppedArea.height;
+
+    const context = canvasEle.getContext("2d");
+
+    let imgObj1 = new Image();
+    imgObj1.src = image;
+    imgObj1.onload = function () {
+      context.drawImage(imgObj1, imgCroppedArea.x, imgCroppedArea.y, imgCroppedArea.width, imgCroppedArea.height, 0, 0, imgCroppedArea.width, imgCroppedArea.height)
+    }
+    const dataUrl = canvasEle.toDataURL("image/png");
+    setAfterCrop(dataUrl);
+    setImgCurrentState("img-cropped")
+  }
+
+  const onCropCancel = () => {
+    setImgCurrentState("choose-img")
+  }
 
   const genderArray = ["Male", "Female", "Other"];
   const languageArray = ["Hindi", "English", "Other"];
@@ -500,10 +526,22 @@ function EditProfile() {
                 <Box
                   sx={{
                     display: "flex",
-                    justifyContent: "space-between",
+                    
                     width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
                   }}
                 >
+                  <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
+                    <InputBox
+                      name="hospitalName"
+                      title="Hospital Name"
+                      boxType="text"
+                      type="text"
+                      value={value.hospitalName}
+                      onChange={handleChange}
+                    />
+
+                  </Box>
+                  <Box mx="1.5rem" />
 
                   <Box sx={{ width: { xs: "85%", lg: "30%" }, mb: { xs: 3, lg: 0 } }}>
 
@@ -990,7 +1028,7 @@ const KeywordPicker = (props) => {
 
   const handleSet = () => {
     console.log(value.length)
-    if(value.length > 10){
+    if (value.length > 10) {
       setErrorMessage("You can select maximum 10 keywords")
       return;
     }
@@ -1063,8 +1101,8 @@ const KeywordPicker = (props) => {
             value={value} onChange={handleSelectionChange}
           />
           {errorMessage.length > 0 && (<ErrorMessage message={errorMessage} />)}
-          <Box sx={{mt:2}}>
-            <Typography sx={{color: "red",fontSize: "14px",}}>
+          <Box sx={{ mt: 2 }}>
+            <Typography sx={{ color: "red", fontSize: "14px", }}>
               Suggestion: Select keywords belongs to field of specialization for better pateint experience.
             </Typography>
           </Box>

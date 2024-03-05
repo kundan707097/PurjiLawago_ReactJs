@@ -5,8 +5,10 @@ import VideoConsult from '../screens/videoconsult/VideoConsult';
 import Medicine from '../screens/medicine/Medicine';
 import LabTest from '../screens/labtest/LabTest';
 import Surgeries from '../screens/surgeries/surgeries';
-import About from '../screens/about/about';
 import Contact from '../screens/contact/contact';
+import Cardiology from '../screens/specialistScreen s/Cardiology';
+import EyeCare from '../screens/specialistScreen s/EyeCare';
+import About from '../screens/about/about';
 const DoctorDetails = lazy(() => import('../screens/doctorInformationScreen/DoctorsDetails'));
 const DoctorList = lazy(() => import('../screens/doctorInformationScreen/DoctorList'));
 export const commonroutes = [
@@ -47,12 +49,20 @@ export const commonroutes = [
     element: <Surgeries />,
   },
   {
-    path: '/aboutus',
+    path: '/about_us',
     element: <About />,
   },
   {
-    path: '/contactus',
+    path: '/contact_us',
     element: <Contact />,
+  },
+  {
+    path: '/cardiology',
+    element: <Cardiology />,
+  },
+  {
+    path: '/eyecare',
+    element: <EyeCare />,
   },
 ];
 
