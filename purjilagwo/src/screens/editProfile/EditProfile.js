@@ -81,105 +81,102 @@ function EditProfile() {
     return outputDate;
   }
 
-  useEffect(() => {
-    setID(localStorage.getItem('id'));
-    setIsDoctor(localStorage.getItem('isDocotrsOrPatiets'));
-
-  }, [localStorage])
-
 
   //Function for get the profile data 
 
   useEffect(() => {
     (async () => {
-      try {
-        if (isDoctor === "true") {
-          setLoading(true)
-          const responseData = await ProfileUpdate.GetProfileData(`DoctorsInformation/DoctorsProfileById?id=${id}`);
+      if (isDoctor !== null || isDoctor !== undefined) {
+        try {
+          if (isDoctor === "true") {
+            setLoading(true)
+            const responseData = await ProfileUpdate.GetProfileData(`DoctorsInformation/DoctorsProfileById?id=${id}`);
 
-          if (responseData != null) {
-            console.log('Profile data:', responseData);
-            setImage(responseData.image);
-            if (responseData.dateofbirth !== null) {
-              setDob(dayjs(responseData.dateofbirth));
-            }
-            if (responseData.lunchTime !== null) {
-
-              setLunchTime(responseData.lunchTime.split('/').map((time) => dayjs(time)));
-            }
-            if (responseData.availableTime !== null) {
-
-              setAvailableTime(responseData.availableTime.split('/').map((time) => dayjs(time)));
-            }
-            if (responseData.days !== null) {
-
-              const newObj = {};
-              for (const key in day) {
-                responseData.days.includes(key) ? (newObj[key] = true) : (newObj[key] = false);
+            if (responseData != null) {
+              console.log('Profile data:', responseData);
+              setImage(responseData.image);
+              if (responseData.dateofbirth !== null) {
+                setDob(dayjs(responseData.dateofbirth));
               }
-              setDays(newObj);
+              if (responseData.lunchTime !== null) {
 
+                setLunchTime(responseData.lunchTime.split('/').map((time) => dayjs(time)));
+              }
+              if (responseData.availableTime !== null) {
+
+                setAvailableTime(responseData.availableTime.split('/').map((time) => dayjs(time)));
+              }
+              if (responseData.days !== null) {
+
+                const newObj = {};
+                for (const key in day) {
+                  responseData.days.includes(key) ? (newObj[key] = true) : (newObj[key] = false);
+                }
+                setDays(newObj);
+
+              }
+
+              setValue({
+                name: responseData.name,
+                gender: responseData.gender,
+                education: responseData.education,
+                experience: responseData.experience,
+                specialization: responseData.specialization,
+                description: responseData.description,
+                consultantFee: responseData.consultantFee,
+                houseNoStreetArea: responseData.houseNoStreetArea,
+                colonyStreetLocality: responseData.colonyStreetLocality,
+                city: responseData.city,
+                state: responseData.state,
+                country: responseData.country,
+                pincode: responseData.pincode,
+                extraphonenumbers: responseData.extraPhoneNumbers,
+                language: responseData.language,
+                keywords: responseData.keywords,
+
+
+              })
+              setEmail(responseData.email);
+              setPhoneNumber(responseData.phoneNumber);
+              setLoading(false);
+              console.log(value)
             }
-
-            setValue({
-              name: responseData.name,
-              gender: responseData.gender,
-              education: responseData.education,
-              experience: responseData.experience,
-              specialization: responseData.specialization,
-              description: responseData.description,
-              consultantFee: responseData.consultantFee,
-              houseNoStreetArea: responseData.houseNoStreetArea,
-              colonyStreetLocality: responseData.colonyStreetLocality,
-              city: responseData.city,
-              state: responseData.state,
-              country: responseData.country,
-              pincode: responseData.pincode,
-              extraphonenumbers: responseData.extraPhoneNumbers,
-              language: responseData.language,
-              keywords: responseData.keywords,
-
-
-            })
-            setEmail(responseData.email);
-            setPhoneNumber(responseData.phoneNumber);
-            setLoading(false);
-            console.log(value)
           }
-        }
-        else if (isDoctor === "false") {
+          else if (isDoctor === "false") {
 
-          const responseData = await ProfileUpdate.GetProfileData(`PatientDetails/Get-Patientd-Details?id=${id}`);
-          console.log(responseData)
-          if (responseData !== null) {
-            console.log('Profile data:', responseData);
-            setImage(responseData.profile_Picture);
-            if (responseData.dateOfBirth !== null) {
-              setDob(dayjs(responseData.dateOfBirth));
+            const responseData = await ProfileUpdate.GetProfileData(`PatientDetails/Get-Patientd-Details?id=${id}`);
+            console.log(responseData)
+            if (responseData !== null) {
+              console.log('Profile data:', responseData);
+              setImage(responseData.profile_Picture);
+              if (responseData.dateOfBirth !== null) {
+                setDob(dayjs(responseData.dateOfBirth));
+              }
+              setValue({
+                name: responseData.user_Name,
+                gender: responseData.gender,
+                houseNoStreetArea: responseData.patient_Address,
+                colonyStreetLocality: responseData.colonyStreetLocality,
+                city: responseData.city,
+                state: responseData.state,
+                country: responseData.country,
+                pincode: responseData.pincode,
+
+              })
+              setEmail(responseData.email);
+              setPhoneNumber(responseData.moblie_Number);
             }
-            setValue({
-              name: responseData.user_Name,
-              gender: responseData.gender,
-              houseNoStreetArea: responseData.patient_Address,
-              colonyStreetLocality: responseData.colonyStreetLocality,
-              city: responseData.city,
-              state: responseData.state,
-              country: responseData.country,
-              pincode: responseData.pincode,
-
-            })
-            setEmail(responseData.email);
-            setPhoneNumber(responseData.moblie_Number);
           }
+          setLoading(false);
+        } catch (error) {
+          console.log(error);
+          setLoading(false);
         }
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
       }
+
     })();
 
-  }, [ProfileUpdate.GetProfileData])
+  }, [])
 
 
   const handleUpdateProfile = async () => {
@@ -526,7 +523,7 @@ function EditProfile() {
                 <Box
                   sx={{
                     display: "flex",
-                    
+
                     width: { xs: "100%", lg: "87%" }, flexDirection: { xs: "column", md: "row" }, alignItems: { xs: "center", md: "left" }
                   }}
                 >

@@ -115,7 +115,7 @@ function Header() {
 
   const first_row=[
     {
-      img: "../images/HomeVector/Header/heart.svg",
+      img: "/images/HomeVector/Header/heart.svg",
       label: "Cadiology",
       to : "/cardiology",
       hindiLabel :"हृदय"
@@ -127,7 +127,7 @@ function Header() {
       hindiLabel: "आंखों की देखभाल"
     },
     {
-      img: "../images/HomeVector/Header/mother.svg",
+      img: "/images/HomeVector/Header/mother.svg",
       label: "Paediatric",
       to : "",
       hindiLabel: "बाल चिकित्सा"

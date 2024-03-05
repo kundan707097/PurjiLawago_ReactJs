@@ -171,7 +171,7 @@ export default function Doctor() {
     const lastDay = days[days.length - 1].charAt(0).toUpperCase() + days[days.length - 1].slice(1);
 
     return `${firstDay}-${lastDay}`;
-};
+  };
   const formattedDays = formatDays(doctorData?.days);
   return (
     <>
@@ -195,13 +195,13 @@ export default function Doctor() {
 
                     <Box sx={{ display: "flex", justifyContent: { xs: "center", lg: "start" }, flexDirection: { xs: "column", lg: "row" }, pt: 4, alignItems: { xs: "center", lg: "start" } }} >
 
-                    <Box>
-                      <Avatar
-                        alt="Remy Sharp"
-                        src={doctorData.profile_Picture} // Set the base64 encoded profile picture dynamically here
-                        sx={{ width: 130, height: 130, mx: 4, mb: { xs: 2, lg: 0 }, border: "1px solid #64EBB6" }}
-                      />
-                    </Box>
+                      <Box>
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={doctorData.profile_Picture} // Set the base64 encoded profile picture dynamically here
+                          sx={{ width: 130, height: 130, mx: 4, mb: { xs: 2, lg: 0 }, border: "1px solid #64EBB6" }}
+                        />
+                      </Box>
 
                       <Box sx={{ pl: { xs: 0, lg: 5 }, width: { xs: "70%", lg: "100%" } }}>
                         <Typography sx={{ fontSize: "32px", fontWeight: 700, mb: 2, color: "#1C4188" }}>{doctorData?.user_Name} </Typography>
@@ -237,16 +237,16 @@ export default function Doctor() {
                     {/* Time and fee */}
 
                     <Box sx={{ display: "flex", flexDirection: { xs: "column-reverse", lg: "column" }, justifyContent: "space-between", mx: 2 }}>
-                      <Box sx={{ mt: 2, display: "flex", flexDirection: { xs: "row", lg: "column" }, justifyContent: "space-between", }}>
-                      <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#1C4188", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
-                        <img src={doctorData.alarmIcon} alt="" height={"20px"} style={{ marginRight: 10 }} />
-                        {doctorData?.doctorsTimeAvailability}
-                      </Box>
+                      <Box sx={{ mt: 2, display: "flex", flexDirection: { xs: "row", lg: "column" }, justifyContent: "space-between",alignItems:{xs: "center"} }}>
+                        <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#1C4188", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
+                          
+                          {doctorData?.doctorsTimeAvailability}
+                        </Box>
 
 
-                      <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#42A5F5", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
-                        {doctorData?.consultantFee} ₹
-                      </Box>
+                        <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#42A5F5", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
+                          {doctorData?.consultantFee} ₹
+                        </Box>
 
                       </Box>
                       <Box sx={{ display: "flex", justifyContent: "space-evenly", mt: 2 }}>
@@ -461,6 +461,27 @@ export default function Doctor() {
                     </Box>
 
                   </Box>
+
+                  {doctorData?.description !== "" && (
+                    <Box sx={{ mx: { xs: 3, lg: 6 }, mt: 2, }}>
+
+                      {/* Description heading */}
+
+
+                      <Box sx={{ display: "flex", mx: 2 }}>
+                        <Box sx={{ pb: { xs: 2, lg: 3 }, borderBottom: "2px dashed #64EBB6", }}>
+                          <Typography sx={{ color: "#1C4188", fontSize: { xs: 20, lg: 22 }, fontWeight: 600, pr: 2, }}>ABOUT</Typography>
+                        </Box>
+                      </Box>
+
+                      {/* Content */}
+
+                      <Box sx={{ my: 4 }}>
+                        <Typography sx={{ fontSize: { xs: "16px", lg: "17px" }, width:"90%", fontWeight: 500, mx: 2, color: "#5D6566", textAlign: "justify" }}>{doctorData.description}</Typography>
+                      </Box>
+
+                    </Box>
+                  )}
 
                   {/* Experince */}
 
@@ -744,9 +765,14 @@ export default function Doctor() {
                       After you have submitted the appointment request, we might call to confirm the preferred appointment slot.
 
                     </Box>
-                    <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", pb: 1 }}>
-                      <Box sx={{ display: "flex", justifyContent: "space-between", }}><Typography sx={{ fontSize: "14px", fontWeight: 600 }}>{doctorData?.remarkArea}</Typography></Box>
-                      <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}><Typography sx={{ fontSize: "12px" }}>{doctorData?.doctor_Address}</Typography><Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography></Box>
+                    <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, borderRadius: "4px", pb: 1 }}>
+                      <Box sx={{ display: "flex", justifyContent: "space-between", }}>
+                        <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>{doctorData?.remarkArea}</Typography>
+                        </Box>
+                      <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}>
+                        <Typography sx={{ fontSize: "12px" }}>{doctorData?.doctor_Address}</Typography>
+                        <Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography>
+                        </Box>
 
                     </Box>
 
