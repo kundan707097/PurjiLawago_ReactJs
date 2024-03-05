@@ -823,7 +823,7 @@ const SlotBookDialog = ({ open, onClose, details }) => {
 
     try {
       const response = await DoctorService.BookSlot(booking_data);
-      if (!response.IsSuccess) {
+      if (!response.isSuccess) {
         enqueueSnackbar(response.ErrorMessage, { variant: 'error' });
         return;
       } else {
@@ -870,7 +870,7 @@ const SlotBookDialog = ({ open, onClose, details }) => {
     }
     try {
       const response = await DoctorService.VerifyOtp(otp_Data);
-      if (!response.IsSuccess) {
+      if (!response.isSuccess) {
         enqueueSnackbar(response.ErrorMessage, { variant: 'error' });
         return;
       } else {
