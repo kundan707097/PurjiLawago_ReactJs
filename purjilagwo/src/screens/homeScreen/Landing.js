@@ -197,59 +197,46 @@ const Landing = () => {
                 />
 
                 {searchLocation.length >= 3 && filteredLocations.length > 0 && (
-                <Box
-                  sx={{
-                    display: isVisible.locationVisible ? 'block' : 'none',
-                    position: "absolute",
-                    //backgroundColor: "#F5F5F5",
-                    width: "100%",
-                    top: { xs: "40px", sm: "120px", md: "45px" },
-                    // borderRadius: "10px",
-                    // py: "0.5rem",
-                    left: { xs: 3, lg: 0 },
-                    // border: "1px solid black",
-                  }}
-                  ref={locationSearchRef}
-                >
-                  {filteredLocations.map((location) => (
-                    <Box component={"button"} sx={{
-                      display: "flex", alignItems: "center", px: 1, bgcolor: "white", ":hover": {
-                        backgroundColor: "#F5F5F5"
-                      }, width: "100%", border: "1px solid #F5F5F5"
-                    }} onClick={() => {
-                      setSearchLocation(location.city);
-                      setIsVisible({ locationVisible: false });
-                      handleDoctorListSelect(location.city);
-                    }} key={location}>
-                      {/* put the map function here and remove the all the button and put the onclick on button */}
-                      {/* {filteredLocations.map((location) => ( */}
+                  <Box
+                    sx={{
+                      display: isVisible.locationVisible ? 'block' : 'none',
+                      position: "absolute",
+                      width: "100%",
+                      top: { xs: "40px", sm: "120px", md: "45px" },
+                      left: { xs: 3, lg: 0 },
+                    }}
+                    ref={locationSearchRef}
+                  >
+                    {filteredLocations.map((location) => (
+                      <Box component={"button"} sx={{
+                        display: "flex", alignItems: "center", px: 1, bgcolor: "white", ":hover": {
+                          backgroundColor: "#F5F5F5"
+                        }, width: "100%", border: "1px solid #F5F5F5"
+                      }} onClick={() => {
+                        setSearchLocation(location.city);
+                        setIsVisible({ locationVisible: false });
+                        handleDoctorListSelect(location.city);
+                      }} key={location}>
+                        {/* put the map function here and remove the all the button and put the onclick on button */}
 
-                      <Box sx={{ bgcolor: "#F5F5F5", p: .5, borderRadius: "100px", px: 1 }}>
-                        <Search size={15} />
+                        <Box sx={{ bgcolor: "#F5F5F5", p: .5, borderRadius: "100px", px: 1 }}>
+                          <Search size={15} />
+                        </Box>
+                        <Box
+                          sx={{
+                            p: "10px",
+                            cursor: "pointer",
+                            width: "100%",
+                            textAlign: "left",
+                          }}
+                        >
+                          <Typography sx={{ color: "black", fontSize: { xs: "14px", md: "16px" } }}>{location.city}</Typography>
+                        </Box>
                       </Box>
-                      <Box
-                        sx={{
-                          p: "10px",
-                          cursor: "pointer",
-                          width: "100%",
-                          textAlign: "left",
-                        }}
-                      //  className="landing-dropdown"
-                      // onClick={() => {
-                      //   setSearchLocation(location.city);
-                      //   setIsVisible({ locationVisible: false });
-                      //   handleDoctorListSelect(location.city);
-                      // }}
-                      // value={location.city}
-                      >
-                        <Typography sx={{ color: "black", fontSize: { xs: "14px", md: "16px" } }}>{location.city}</Typography>
-                      </Box>
-                      {/* ))} */}
-                    </Box>
-                  ))}
+                    ))}
 
 
-                </Box>
+                  </Box>
                 )}
               </Box>
 
@@ -283,11 +270,8 @@ const Landing = () => {
                     sx={{
                       display: isVisible.nameVisible ? 'block' : 'none',
                       position: "absolute",
-                      // backgroundColor: "#F5F5F5",
                       width: { xs: "98%", sm: "89%", md: "55%" },
                       top: { xs: "45px", sm: "160px", md: "55px" },
-                      // borderRadius: "10px",
-                      // py: "0.5rem",
                       left: { xs: 3, lg: "16rem" },
                     }}
                     ref={locationSearchRef}
@@ -314,13 +298,6 @@ const Landing = () => {
                             width: "100%",
                             textAlign: "left",
                           }}
-                        // className="landing-dropdown"
-                        //  onClick={() => {
-                        //    setSearchName(name.user_Name);
-                        //    setIsVisible({ nameVisible: false });
-                        //    handledoctorNameSelect(name.id);
-                        //  }}
-                        // value={location.city}
                         >
                           <Typography sx={{ color: "black" }}>{name.user_Name}</Typography>
                         </Box>
