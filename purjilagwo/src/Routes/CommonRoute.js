@@ -9,6 +9,7 @@ import Contact from '../screens/contact/contact';
 import Cardiology from '../screens/specialistScreen s/Cardiology';
 import EyeCare from '../screens/specialistScreen s/EyeCare';
 import About from '../screens/about/about';
+const EmergencyBooking = lazy(() => import('../screens/emergencyBooking/EmergencyBooking'));
 const DoctorDetails = lazy(() => import('../screens/doctorInformationScreen/DoctorsDetails'));
 const DoctorList = lazy(() => import('../screens/doctorInformationScreen/DoctorList'));
 export const commonroutes = [
@@ -47,6 +48,10 @@ export const commonroutes = [
   {
     path: '/surgeries',
     element: <Surgeries />,
+  },
+  {
+    path: '/emergency_booking',
+    element: <EmergencyBooking />,
   },
   {
     path: '/about_us',

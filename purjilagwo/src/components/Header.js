@@ -115,37 +115,37 @@ function Header() {
 
   const first_row=[
     {
-      img: "/images/HomeVector/Header/heart.svg",
+      img: "/images/Header/heart.svg",
       label: "Cadiology",
       to : "/cardiology",
       hindiLabel :"हृदय"
     },
     {
-      img: "",
+      img: "/images/Header/heart.svg",
       label: "Eye Care",
       to : "/eyecare",
       hindiLabel: "आंखों की देखभाल"
     },
     {
-      img: "/images/HomeVector/Header/mother.svg",
+      img: "/images/Header/mother.svg",
       label: "Paediatric",
       to : "",
       hindiLabel: "बाल चिकित्सा"
     },
     {
-      img: "",
+      img: "/images/Header/heart.svg",
       label: "Fertility",
       to : "",
       hindiLabel: "गर्भधारण"
     },
     {
-      img: "../images/HomeVector/Header/ear.svg",
+      img: "/images/Header/ear.svg",
       label: "Ent",
       to : "",
       hindiLabel: "कान, नाक, गला"
     },
     {
-      img: "",
+      img: "/images/Header/heart.svg",
       label: "Physican & Surgeon",
       to : "",
       hindiLabel: "चिकित्सक एवं सर्जन"
@@ -154,37 +154,37 @@ function Header() {
 
   const second_row=[
     {
-      img :"../images/HomeVector/Header/dentist.svg",
+      img :"/images/Header/dentist.svg",
       label: "Dentist",
       to: "",
       hindiLabel: "दाँतों का डॉक्टर"
     },
     {
-      img :"",
+      img :"/images/Header/heart.svg",
       label: "Trichologist",
       to: "",
       hindiLabel: "बाल"
     },
     {
-      img :"",
+      img :"/images/Header/heart.svg",
       label: "Physiotherapist",
       to: "",
       hindiLabel: "फ़िज़ियोथेरेपिस्ट"
     },
     {
-      img :"",
+      img :"/images/Header/heart.svg",
       label: "Ayurveda",
       to: "",
       hindiLabel: "आयुर्वेद"
     },
     {
-      img :"../images/HomeVector/Header/kidney.svg",
+      img :"/images/Header/kidney.svg",
       label: "Neurologist",
       to: "",
       hindiLabel: "न्यूरोलॉजिस्ट"
     },
     {
-      img :"",
+      img :"/images/Header/heart.svg",
       label: "Homeopathy",
       to: "",
       hindiLabel: "होम्योपैथी"
@@ -257,7 +257,7 @@ function Header() {
                             <Link to={items.to}>
                               <Avatar
                                 alt="Remy Sharp"
-                                src={items.img !== "" ? items.img : "../images/HomeVector/Header/heart.svg"}
+                                src={items.img !== "" ? items.img : "../images/Header/heart.svg"}
                                 sx={{ width: 70, height: 70, mx: "auto", background: "white" }}
                               />
                               <Typography sx={{ fontSize: "16px", fontWeight: 600, mt: 1, color: "black", textAlign: "center" }}>
@@ -375,7 +375,7 @@ const LoginedAction = () => {
     <>
       {token ? (
         <div className="dropdown">
-          <Link to="/dashboard/appointment&details">
+          <Link to={localStorage.getItem('role') === 'Admin'? "/dashboard/doctor/registration" : "/dashboard/appointment&details"}>
             <Paper
               elevation={0}
               sx={{

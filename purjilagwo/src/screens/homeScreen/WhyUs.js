@@ -1,7 +1,5 @@
 import { Box, Typography } from "@mui/material"
 
-import svg1 from "../../assets/vectors/Video Items.svg"
-
 const WhyUs = () => {
 
     const title_1 = [
@@ -50,7 +48,7 @@ const WhyUs = () => {
                     </Box>
                 </Box>
                 <Box sx={{ height: { xs: "18rem", lg: "28rem" }, }} >
-                    <img src={svg1} alt="" style={{ height: "100%" }} />
+                    <img src= "../images/Home/VideoItems.svg" alt="" style={{ height: "100%" }} />
                 </Box>
 
             </Box>
