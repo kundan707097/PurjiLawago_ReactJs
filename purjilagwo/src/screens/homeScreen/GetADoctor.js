@@ -1,12 +1,5 @@
 import { Box, Typography } from '@mui/material';
 
-
-import svg1 from "../../assets/vectors/Hero Image.svg"
-import svg2 from "../../assets/vectors/Choice Doctor.svg";
-import svg3 from "../../assets/vectors/Make Apporintment.svg";
-import svg4 from "../../assets/vectors/Payment Due.svg";
-import svg5 from "../../assets/vectors/Call Now.svg";
-
 const GetADoctor = () => {
     return (
         <>
@@ -19,21 +12,21 @@ const GetADoctor = () => {
                 <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: { xs: "column", lg: "row" } }}>
                     <Box sx={{ mt: { xs: 5, lg: 15 }, mb: { xs: 3, lg: 0 } }} >
                         <Box sx={{ mr: 20, mb: 3 }}>
-                            <img src={svg2} alt="" style={{ height: "150px" }} />
+                            <img src="../images/Home/ChoiceDoctor.svg" alt="" style={{ height: "150px" }} />
                         </Box>
                         <Box sx={{ ml: 10 }}>
-                            <img src={svg3} alt="" style={{ height: "150px" }} />
+                            <img src="../images/Home/MakeApporintment.svg" alt="" style={{ height: "150px" }} />
                         </Box>
                     </Box>
                     <Box sx={{ height: { xs: "25rem", lg: "30rem" } }}>
-                        <img src={svg1} alt="" style={{ height: "100%" }} />
+                        <img src="../images/Home/HeroImage.svg" alt="" style={{ height: "100%" }} />
                     </Box>
                     <Box sx={{ mt: { xs: 5, lg: 15 }, }}>
                         <Box sx={{ ml: 10, mb: 3 }}>
-                            <img src={svg4} alt="" style={{ height: "150px" }} />
+                            <img src="../images/Home/PaymentDue.svg" alt="" style={{ height: "150px" }} />
                         </Box>
                         <Box sx={{ ml: 13 }}>
-                            <img src={svg5} alt="" style={{ height: "150px" }} />
+                            <img src="../images/Home/CallNow.svg" alt="" style={{ height: "150px" }} />
                         </Box>
                     </Box>
                 </Box>

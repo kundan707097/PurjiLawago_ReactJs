@@ -143,6 +143,7 @@ const Login = () => {
         localStorage.setItem("fullName", response.fullName);
         localStorage.setItem("phoneNumber", response.phoneNumber);
         localStorage.setItem("isDocotrsOrPatiets", response.isDocotrsOrPatiets);
+        localStorage.setItem("role", response.role);
         navigate("/")
       }
     }
@@ -259,6 +260,7 @@ const Login = () => {
               localStorage.setItem("fullName", response.data.fullName);
               localStorage.setItem("phoneNumber", response.data.phoneNumber);
               localStorage.setItem("isDocotrsOrPatiets", response.data.isDocotrsOrPatiets);
+              localStorage.setItem("role", response.role);
               navigate("/")
             }
           }

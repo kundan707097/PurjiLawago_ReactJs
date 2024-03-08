@@ -2,15 +2,7 @@ import { Link } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 
 import "./Home.css";
-import svg1 from "../../assets/vectors/Line 23.svg";
-import svg2 from "../../assets/vectors/Ellipse 54.svg";
-import svg3 from "../../assets/vectors/Ellipse 55.svg";
-import svg5 from "../../assets/vectors/Wavy_Lst-11_Single-07-ai 1.svg";
-import svg6 from "../../assets/vectors/calendar_month.svg";
-import svg7 from "../../assets/vectors/respiratory_rate.svg";
-import svg8 from "../../assets/vectors/add_card.svg";
-import svg9 from "../../assets/vectors/blood_pressure.svg";
-import svg10 from "../../assets/vectors/Emergency.svg";
+
 
 const BookingSystem = () => {
   return (
@@ -52,16 +44,16 @@ const BookingSystem = () => {
           >
             OUR <span style={{ color: "#42A5F5" }}>BOOKING</span> SYSTEMS
           </Typography>
-          <img src={svg1} alt="" height={"3px"} />
+          <img src="../images/Home/Line23.svg" alt="" height={"3px"} />
         </Box>
         <Box sx={{ display: "flex", mt: 8, justifyContent: "space-between" ,flexDirection: {xs: "column", lg: 'row'}, alignItems: {xs: "center", lg: "normal"} }}>
 
           <Box sx={{ width: "13%", display: {xs: "none", lg: "initial"} }}>
             <Box sx={{ ml: 3 }}>
-              <img src={svg3} alt="" style={{ height: "30px" }} />
+              <img src="../images/Home/Ellipse55.svg" alt="" style={{ height: "30px" }} />
             </Box>
             <Box sx={{ position: "relative", top: "20rem", right: "-5rem" }}>
-              <img src={svg2} alt="" style={{ height: "60px" }} />
+              <img src="../images/Home/Ellipse54.svg" alt="" style={{ height: "60px" }} />
             </Box>
           </Box>
 
@@ -69,7 +61,7 @@ const BookingSystem = () => {
             <Box sx={{ width: {xs: "100%", lg:  "50%"},  ml: {lg:2 }, mx:{xs:2, lg:0}, }}>
               <Box>
                 <img
-                  src={svg6}
+                  src="../images/Home/calendar_month.svg"
                   alt=""
                   style={{
                     height: "70px",
@@ -107,7 +99,7 @@ const BookingSystem = () => {
 
               <Box sx={{ mt: 8 }}>
                 <img
-                  src={svg8}
+                  src="../images/Home/add_card.svg"
                   alt=""
                   style={{
                     height: "70px",
@@ -146,7 +138,7 @@ const BookingSystem = () => {
             <Box sx={{ width: {xs: "100%", lg:  "50%"}, ml: {xs:1, lg:6}, mt: 6 }}>
               <Box>
                 <img
-                  src={svg7}
+                  src="../images/Home/respiratory_rate.svg"
                   alt=""
                   style={{
                     height: "70px",
@@ -183,7 +175,7 @@ const BookingSystem = () => {
 
               <Box sx={{ mt: 8 }}>
                 <img
-                  src={svg9}
+                  src="../images/Home/blood_pressure.svg"
                   alt=""
                   style={{
                     height: "70px",
@@ -221,14 +213,14 @@ const BookingSystem = () => {
           </Box>
 
           <Box sx={{height: {xs: "30rem", lg:"40rem"}}}>
-            <img src={svg5} alt=""  style={{height: "100%"}} />
+            <img src="../images/Home/Wavy_Lst-11_Single-07-ai1.svg" alt=""  style={{height: "100%"}} />
           </Box>
         </Box>
 
         {/* put emergency number here */}
         <Link to="">
           <Box sx={{position: "absolute", right: 0, top:{xs: "-11rem", lg:"-4rem"} }}>
-            <img src={svg10} alt="" height={200} />
+            <img src="../images/Home/Emergency.svg" alt="" height={200} />
           </Box>
         </Link>
       </Box>

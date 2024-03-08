@@ -21,6 +21,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MobileAppBanner from '../../components/MobileAppBanner';
 import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
+import BackdropLoading from '../../components/BackdropLoading';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -152,14 +153,15 @@ export default function Doctor() {
     return count;
   }
 
-  const handleSlotOpen = (name, address, time, date) => {
+  const handleSlotOpen = (name, address, time, date, fee) => {
     setopenSlot(true);
     console.log(name, time, address,);
     const det = {
       name: name,
       address: address,
       time: time,
-      date: date
+      date: date,
+      fee: fee
     }
     setDetails(det);
   }
@@ -237,9 +239,9 @@ export default function Doctor() {
                     {/* Time and fee */}
 
                     <Box sx={{ display: "flex", flexDirection: { xs: "column-reverse", lg: "column" }, justifyContent: "space-between", mx: 2 }}>
-                      <Box sx={{ mt: 2, display: "flex", flexDirection: { xs: "row", lg: "column" }, justifyContent: "space-between",alignItems:{xs: "center"} }}>
+                      <Box sx={{ mt: 2, display: "flex", flexDirection: { xs: "row", lg: "column" }, justifyContent: "space-between", alignItems: { xs: "center" } }}>
                         <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#1C4188", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
-                          
+
                           {doctorData?.doctorsTimeAvailability}
                         </Box>
 
@@ -477,7 +479,7 @@ export default function Doctor() {
                       {/* Content */}
 
                       <Box sx={{ my: 4 }}>
-                        <Typography sx={{ fontSize: { xs: "16px", lg: "17px" }, width:"90%", fontWeight: 500, mx: 2, color: "#5D6566", textAlign: "justify" }}>{doctorData.description}</Typography>
+                        <Typography sx={{ fontSize: { xs: "16px", lg: "17px" }, width: "90%", fontWeight: 500, mx: 2, color: "#5D6566", textAlign: "justify" }}>{doctorData.description}</Typography>
                       </Box>
 
                     </Box>
@@ -745,7 +747,7 @@ export default function Doctor() {
                                     <>
                                       <Box sx={{ fontSize: "12px", px: 1, py: 1, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index])} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
 
-                                      {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index])}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
+                                      {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index], "600")}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
                                     </>
                                   )
                                 })}
@@ -768,11 +770,11 @@ export default function Doctor() {
                     <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, borderRadius: "4px", pb: 1 }}>
                       <Box sx={{ display: "flex", justifyContent: "space-between", }}>
                         <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>{doctorData?.remarkArea}</Typography>
-                        </Box>
+                      </Box>
                       <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}>
                         <Typography sx={{ fontSize: "12px" }}>{doctorData?.doctor_Address}</Typography>
                         <Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography>
-                        </Box>
+                      </Box>
 
                     </Box>
 
@@ -816,6 +818,7 @@ const SlotBookDialog = ({ open, onClose, details }) => {
   const [openOtpBox, setOpenOtpBox] = useState(false);
   const [date, setDate] = useState();
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   //convert into date string  
   useEffect(() => {
@@ -843,12 +846,13 @@ const SlotBookDialog = ({ open, onClose, details }) => {
       doctor_id: id,
       doctor_name: details.name,
       doctor_address: details.address,
-      fee: "600", // hard coded for now
+      fee: details.fee, // hard coded for now
       slot_time: details.time
     }
 
     try {
       const response = await DoctorService.BookSlot(booking_data);
+      setLoading(true);
       if (!response.isSuccess) {
         enqueueSnackbar(response.ErrorMessage, { variant: 'error' });
         return;
@@ -857,7 +861,9 @@ const SlotBookDialog = ({ open, onClose, details }) => {
         setDisabled(true);
         setOpenOtpBox(true);
       }
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error)
       enqueueSnackbar('Something went wrong', { variant: 'error' });
     }
@@ -921,126 +927,132 @@ const SlotBookDialog = ({ open, onClose, details }) => {
 
   return (
     <>
-      <Dialog open={open} maxWidth="md" fullWidth sx={{ textAlign: "center" }} onClose={() => onClose()} aria-describedby="alert-dialog-slide-description" keepMounted>
-        <DialogTitle fontSize={19} lineHeight={1} fontWeight={600}>Book Slot</DialogTitle>
+      {loading ? (
+        <BackdropLoading />
+      ) : (
+        <Dialog open={open} maxWidth="md" fullWidth sx={{ textAlign: "center" }} onClose={() => onClose()} aria-describedby="alert-dialog-slide-description" keepMounted>
+          <DialogTitle fontSize={19} lineHeight={1} fontWeight={600}>Book Slot</DialogTitle>
 
-        <DialogContent >
-          <Box sx={{ display: "flex", width: "100%", mt: 1, flexDirection: { xs: "column", sm: "row" } }}>
-            {/* Box for Doctor Details */}
-            <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
-              <Paper elevation={10} sx={{ mb: 2 }}>
-                <Typography sx={{ fontWeight: 600, fontSize: 15, textAlign: "left", borderLeft: "3px solid #199FD9", pl: "1rem", lineHeight: 2.5, borderRadius: "4px", color: "black" }}>
-                  In-clinic Appointment
-                </Typography>
-              </Paper>
-              <Paper elevation={10} sx={{ px: "1rem", py: 3, }}>
-                {/* Doctor Details */}
-                {/* <Box sx={{ px: "1rem", py: 3,  }}> */}
-                <Box sx={{ display: "flex", textAlign: "left", alignItems: "center", }}>
-                  <Typography width="50%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>
-                    Doctor Name
+          <DialogContent >
+            <Box sx={{ display: "flex", width: "100%", mt: 1, flexDirection: { xs: "column", sm: "row" } }}>
+              {/* Box for Doctor Details */}
+              <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
+                <Paper elevation={10} sx={{ mb: 2 }}>
+                  <Typography sx={{ fontWeight: 600, fontSize: 15, textAlign: "left", borderLeft: "3px solid #199FD9", pl: "1rem", lineHeight: 2.5, borderRadius: "4px", color: "black" }}>
+                    In-clinic Appointment
                   </Typography>
-                  <span style={{ marginRight: "2rem" }}>:</span>
-                  <Typography width="100%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>{details.name}</Typography>
-                </Box>
-                <Box sx={{ display: "flex", textAlign: "left", }}>
-                  <Typography width="50%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>
-                    Location
-                  </Typography>
-                  <span style={{ marginRight: "2rem" }}>:</span>
-                  <Typography width="100%" sx={{ color: "black", fontSize: 15, pr: 1, lineHeight: 2 }}>{details.address}</Typography>
-                </Box>
-                <Box sx={{ display: "flex", textAlign: "left", }}>
-                  <Typography width="50%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>
-                    Doctor fee
-                  </Typography>
-                  <span style={{ marginRight: "2rem" }}>:</span>
-                  <Typography width="100%" sx={{ color: "black", fontSize: 15, pr: 1, lineHeight: 2 }}>{details.consultantFee} ₹</Typography>
-                </Box>
-
-                <Box sx={{ display: "flex", textAlign: "left", mt: 2, justifyContent: "space-between" }}>
-                  <Typography sx={{ color: "black", fontSize: 16, lineHeight: 2 }}>
-                    On {date}
-                  </Typography>
-                  <Box sx={{ display: "flex", alignItems: "center" }}><AccessTimeIcon sx={{ fontSize: "23px", color: "gray" }} /><Typography sx={{ color: "black", fontSize: 15, pl: 1, lineHeight: 2 }}>At {details.time != null && details.time.split('T')[1]}</Typography></Box>
-                </Box>
-              </Paper>
-
-            </Box>
-
-            {/* Box for verification and pateint details */}
-            <Box sx={{ width: { xs: "100%", sm: "50%" }, textAlign: "left", ml: { xs: 0, sm: 4 }, mt: { xs: 4, sm: 0 }, }}>
-              <Box>
-                <Typography sx={{ color: "black", fontSize: "15px" }} className='required'>Pateint Name</Typography>
-                <input type="text" name="" id="" style={{ width: "100%", marginTop: 4, padding: 6, border: "1px solid gray", fontSize: "14px" }} placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} />
-              </Box>
-              <Box sx={{ mt: 2 }}>
-                <Typography sx={{ color: "black", fontSize: "15px" }} className='required'>Phone No.</Typography>
-                <input type="number" name="" id="" style={{ width: "100%", marginTop: 4, padding: 6, border: "1px solid gray", textDecoration: "none", fontSize: "14px" }} placeholder='Mobile Number' onInput={handleInput} value={phone} onChange={(e) => setPhone(e.target.value)} />
-              </Box>
-              <Box sx={{ mt: 1, mb: 2 }}>
-                <Typography sx={{ color: "black", fontSize: "12px" }} >You will receive an OTP shortly.</Typography>
-                <Typography sx={{ color: "black", fontSize: "12px" }} >We will send appointment-related communications on this number.</Typography>
-              </Box>
-              <CustomeButton title={"Continue"} onClick={handleContinue} disabled={disabled} />
-
-              {openOtpBox && (
-                <>
-                  <Box sx={{ display: "flex", justifyContent: "center", transitionDuration: "100ms" }}>
-
-                    {otp.map((data, index) => {
-                      return (
-                        <input
-                          className="otp-field"
-                          type="text"
-                          name="otp"
-                          maxLength="1"
-                          key={index}
-                          value={data}
-                          onChange={e => handleChangeOtp(e.target, index)}
-                          onFocus={e => e.target.select()}
-                        />
-                      );
-                    })}
-
+                </Paper>
+                <Paper elevation={10} sx={{ px: "1rem", py: 3, }}>
+                  {/* Doctor Details */}
+                  {/* <Box sx={{ px: "1rem", py: 3,  }}> */}
+                  <Box sx={{ display: "flex", textAlign: "left", alignItems: "center", }}>
+                    <Typography width="50%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>
+                      Doctor Name
+                    </Typography>
+                    <span style={{ marginRight: "2rem" }}>:</span>
+                    <Typography width="100%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>{details.name}</Typography>
                   </Box>
-                  <CustomeButton title={"Verify otp"} onClick={handleVerifyOtp} />
-                </>
-              )}
+                  <Box sx={{ display: "flex", textAlign: "left", }}>
+                    <Typography width="50%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>
+                      Location
+                    </Typography>
+                    <span style={{ marginRight: "2rem" }}>:</span>
+                    <Typography width="100%" sx={{ color: "black", fontSize: 15, pr: 1, lineHeight: 2 }}>{details.address}</Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", textAlign: "left", }}>
+                    <Typography width="50%" sx={{ color: "black", fontSize: 15, lineHeight: 2 }}>
+                      Doctor fee
+                    </Typography>
+                    <span style={{ marginRight: "2rem" }}>:</span>
+                    <Typography width="100%" sx={{ color: "black", fontSize: 15, pr: 1, lineHeight: 2 }}>{details.consultantFee} ₹</Typography>
+                  </Box>
 
-
-              {/* <Box sx={{ display: "flex", width: "100%", justifyContent: "space-around" }}>
-              <Box sx={{width: "100%", mr:1}}>
-                <CustomeButton title={"Verify Otp"} onClick={handleVerifyOtp} />
+                  <Box sx={{ display: "flex", textAlign: "left", mt: 2, justifyContent: "space-between" }}>
+                    <Typography sx={{ color: "black", fontSize: 16, lineHeight: 2 }}>
+                      On {date}
+                    </Typography>
+                    <Box sx={{ display: "flex", alignItems: "center" }}><AccessTimeIcon sx={{ fontSize: "23px", color: "gray" }} /><Typography sx={{ color: "black", fontSize: 15, pl: 1, lineHeight: 2 }}>At {details.time != null && details.time.split('T')[1]}</Typography></Box>
+                  </Box>
+                </Paper>
 
               </Box>
-              <Box sx={{width: "100%", ml:1}}>
-              <CustomeButton title={"Verify Otp"} onClick={handleVerifyOtp} />
-                
-              </Box>
-            </Box> */}
 
+              {/* Box for verification and pateint details */}
+              <Box sx={{ width: { xs: "100%", sm: "50%" }, textAlign: "left", ml: { xs: 0, sm: 4 }, mt: { xs: 4, sm: 0 }, }}>
+                <Box>
+                  <Typography sx={{ color: "black", fontSize: "15px" }} className='required'>Pateint Name</Typography>
+                  <input type="text" name="" id="" style={{ width: "100%", marginTop: 4, padding: 6, border: "1px solid gray", fontSize: "14px" }} placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} />
+                </Box>
+                <Box sx={{ mt: 2 }}>
+                  <Typography sx={{ color: "black", fontSize: "15px" }} className='required'>Phone No.</Typography>
+                  <input type="number" name="" id="" style={{ width: "100%", marginTop: 4, padding: 6, border: "1px solid gray", textDecoration: "none", fontSize: "14px" }} placeholder='Mobile Number' onInput={handleInput} value={phone} onChange={(e) => setPhone(e.target.value)} />
+                </Box>
+                <Box sx={{ mt: 1, mb: 2 }}>
+                  <Typography sx={{ color: "black", fontSize: "12px" }} >You will receive an OTP shortly.</Typography>
+                  <Typography sx={{ color: "black", fontSize: "12px" }} >We will send appointment-related communications on this number.</Typography>
+                </Box>
+                <CustomeButton title={"Continue"} onClick={handleContinue} disabled={disabled} />
+
+                {openOtpBox && (
+                  <>
+                    <Box sx={{ display: "flex", justifyContent: "center", transitionDuration: "100ms" }}>
+
+                      {otp.map((data, index) => {
+                        return (
+                          <input
+                            className="otp-field"
+                            type="text"
+                            name="otp"
+                            maxLength="1"
+                            key={index}
+                            value={data}
+                            onChange={e => handleChangeOtp(e.target, index)}
+                            onFocus={e => e.target.select()}
+                          />
+                        );
+                      })}
+
+                    </Box>
+                    <CustomeButton title={"Verify otp"} onClick={handleVerifyOtp} />
+                  </>
+                )}
+
+
+                {/* <Box sx={{ display: "flex", width: "100%", justifyContent: "space-around" }}>
+                  <Box sx={{width: "100%", mr:1}}>
+                    <CustomeButton title={"Verify Otp"} onClick={handleVerifyOtp} />
+    
+                  </Box>
+                  <Box sx={{width: "100%", ml:1}}>
+                  <CustomeButton title={"Verify Otp"} onClick={handleVerifyOtp} />
+                    
+                  </Box>
+                </Box> */}
+
+              </Box>
             </Box>
-          </Box>
 
-        </DialogContent>
+          </DialogContent>
 
-        <DialogActions sx={{ paddingRight: "25px", paddingBottom: "25px" }}>
-          <Button
-            variant="contained"
-            style={{ backgroundColor: "grey" }}
-            sx={{
-              mt: "10px",
-              textTransform: "none",
-              borderRadius: "10px",
-              width: "8rem",
-            }}
-            onClick={onClose}
-          >
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <DialogActions sx={{ paddingRight: "25px", paddingBottom: "25px" }}>
+            <Button
+              variant="contained"
+              style={{ backgroundColor: "grey" }}
+              sx={{
+                mt: "10px",
+                textTransform: "none",
+                borderRadius: "10px",
+                width: "8rem",
+              }}
+              onClick={onClose}
+            >
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+      )}
+
 
       {/* Conformation Dialog box */}
 
