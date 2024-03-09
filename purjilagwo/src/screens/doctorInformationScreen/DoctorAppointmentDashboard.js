@@ -7,7 +7,9 @@ import TablePaginationDemo from '../../components/Pagination'
 import DateRangeSelector from '../../components/DateRangeSelector'
 import DoctorService from '../../services/Doctor.services'
 import { DoctorAppointmentDashboardTable } from '../../models/Index'
+import { DoctorExcelInput } from '../../models/Index'
 import DataNotFound from '../../components/DataNotFound'
+import * as XLSX from 'xlsx'
 
 
 const DoctorAppointmentDashboard = () => {
@@ -67,14 +69,62 @@ const DoctorAppointmentDashboard = () => {
         })();
 
     }, [DoctorService.DoctorDashboardData, dateRange, id, searching, pagination, pageMain,]);
-
+    const downloadExcel = (records) => {
+        debugger;
+        const worksheet = XLSX.utils.json_to_sheet(records);
+        const workbook = XLSX.utils.book_new();
+        
+        // Add headers to the worksheet
+        const headers = Object.keys(records[0]);
+        XLSX.utils.sheet_add_json(worksheet, [headers], { skipHeader: true, origin: 'A1' });
+    
+        // Add values to the worksheet
+        const values = records.map(record => Object.values(record));
+        XLSX.utils.sheet_add_json(worksheet, values, { skipHeader: true, origin: 'A2' });
+    
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'DoctorRecords');
+        XLSX.writeFile(workbook, 'DoctorRecords.xlsx');
+    }
     const handleDownloadExcel = async() =>{
-        const response = await DoctorService.DoctorDownloadExcel();
-        if(response.status === 200){
-            console.log('Excel data:', response.data);
-        }else{
-            console.log('Error:', response);
+        debugger;
+        const data = DoctorExcelInput;
+        data.Id = parseInt(id);
+        data.StartDate = dateRange.startDate;
+        data.EndDate = dateRange.endDate;
+        try {
+            const response = await DoctorService.DoctorDownloadExcel(data);
+            downloadExcel(response.data);
+        } catch (error) {
+            console.error('Error downloading Excel file:', error);
         }
+        // try {
+        //     const response = await DoctorService.DoctorDownloadExcel(data);
+            
+        //     // Create a Blob from the response data
+        //     const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            
+        //     // Create a URL for the Blob
+        //     const url = window.URL.createObjectURL(blob);
+            
+        //     // Create an <a> element to trigger the download
+        //     const a = document.createElement('a');
+        //     a.href = url;
+        //     a.download = 'DoctorRecords.xlsx';
+            
+        //     // Append the <a> element to the document body and trigger the download
+        //     document.body.appendChild(a);
+        //     a.click();
+            
+        //     // Cleanup by revoking the URL
+        //     window.URL.revokeObjectURL(url);
+        // } catch (error) {
+        //     console.error('Error downloading Excel file:', error);
+        // }
+        // if(response.status === 200){
+        //     console.log('Excel data:', response.data);
+        // }else{
+        //     console.log('Error:', response);
+        // }
     }
 
     const handleDownloadloadPdf = async() => {

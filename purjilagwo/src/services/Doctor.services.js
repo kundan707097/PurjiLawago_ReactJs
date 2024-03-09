@@ -108,11 +108,13 @@ const StatusUpdateByDoctor = async(data) =>{
     }
 }
 
-const DoctorDownloadExcel = async() =>{
+const DoctorDownloadExcel = async(data) =>{
+    debugger;
     try {
         const response = await axiosClient({
-            method: 'GET',
-            url: "/DoctorDashboard/GetPatientBookingDetails",  // change the endpoint
+            method: 'POST',
+            url: "DownloadPdfAndExcel/DownloadPatientListInExcel",  // change the endpoint
+            data: JSON.stringify(data),
         })
         return response;
     } catch (error) {
@@ -125,6 +127,7 @@ const DoctorDownloadPdf = async(data) =>{
         const response = await axiosClient({
             method: 'POST',
             url: "/DoctorDashboard/GetPatientBookingDetails",  // change the endpoint
+            data: JSON.stringify(data),
         })
         return response;
     } catch (error) {

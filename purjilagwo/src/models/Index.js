@@ -70,3 +70,10 @@ export const AdminDashboardTable = {
   EndDate: new Date(),
   FilterText: "",
 }
+
+export const DoctorExcelInput ={
+  Id:0,
+  StartDate: new Date(),
+  EndDate: new Date(),
+  FilterText: "",
+}
