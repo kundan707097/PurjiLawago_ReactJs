@@ -180,7 +180,6 @@ const Landing = () => {
                 <input
                   style={{
                     border: "none",
-                    color: "#42A5F5",
                     width: "80%",
                     marginLeft: "5px",
                   }}
@@ -253,7 +252,6 @@ const Landing = () => {
                   type="text"
                   style={{
                     border: "none",
-                    color: "#42A5F5",
                     marginLeft: "5px",
                     width: "80%",
                   }}
