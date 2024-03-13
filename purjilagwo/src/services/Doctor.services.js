@@ -135,7 +135,19 @@ const DoctorDownloadPdf = async(data) =>{
     }
 }
 
+const GetDoctorListInEmergency = async () =>{
+    try {
+        const response = await axiosClient({
+            method: 'GET',
+            url: "Specialities/EmergencyBookingDoctorList"
+        })
+        return response;
+    } catch (error) {
+        
+    }
+}
+
 const DoctorService = {
-    DoctorInformation, DocInfoOnLocation, AllDocInfo, AllDoctorsListInSpeciality, BookSlot, VerifyOtp, DoctorDashboardData,StatusUpdateByDoctor,DoctorDownloadExcel,DoctorDownloadPdf
+    DoctorInformation, DocInfoOnLocation, AllDocInfo, AllDoctorsListInSpeciality, BookSlot, VerifyOtp, DoctorDashboardData,StatusUpdateByDoctor,DoctorDownloadExcel,DoctorDownloadPdf,GetDoctorListInEmergency
 };
 export default DoctorService;

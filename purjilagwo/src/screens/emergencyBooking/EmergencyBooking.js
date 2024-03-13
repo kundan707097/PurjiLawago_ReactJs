@@ -7,6 +7,7 @@ import DoctorService from './DoctorService'
 import HowGetADoctor from './HowGetADoctor'
 import AppointmentService from './AppointmentService'
 import EmergencyCallBanner from './EmergencyCallBanner'
+import Banner from './Banner'
 
 const EmergencyBooking = () => {
 
@@ -20,10 +21,11 @@ const EmergencyBooking = () => {
     return (
         <>
             <Landing />
+            <AppointmentService />
+            <Banner />
             <TreatmentWay />
             <DoctorService />
             <HowGetADoctor />
-            <AppointmentService />
             <EmergencyCallBanner />
             <LiveCounter />
             <Footer />
