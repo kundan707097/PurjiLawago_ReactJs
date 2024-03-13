@@ -10,14 +10,14 @@ import About from '../screens/about/about';
 const EmergencyBooking = lazy(() => import('../screens/emergencyBooking/EmergencyBooking'));
 const DoctorDetails = lazy(() => import('../screens/doctorInformationScreen/DoctorsDetails'));
 const DoctorList = lazy(() => import('../screens/doctorInformationScreen/DoctorList'));
-const EyeCare = lazy(() => import('../screens/eyeCare/EyeCare'));
-const Dentist = lazy(() => import('../screens/dentist/Dentist'));
-const Cardiology = lazy(() => import('../screens/cardiology/Cardiology'));
-const Ent = lazy(() => import('../screens/ent/Ent'));
-const Nephrology = lazy(() => import('../screens/nephrology/Nephrology'));
-const Fertiltity = lazy(() => import('../screens/fertility/Fertiltity'));
-const Paediatric = lazy(() => import('../screens/paediatric/Paediatric'));
-const PhysicanSurgeon = lazy(() => import('../screens/physican&surgeon/Physican&Surgeon'));
+// const EyeCare = lazy(() => import('../screens/eyeCare/EyeCare'));
+// const Dentist = lazy(() => import('../screens/dentist/Dentist'));
+// const Cardiology = lazy(() => import('../screens/cardiology/Cardiology'));
+// const Ent = lazy(() => import('../screens/ent/Ent'));
+// const Nephrology = lazy(() => import('../screens/nephrology/Nephrology'));
+// const Fertiltity = lazy(() => import('../screens/fertility/Fertiltity'));
+// const Paediatric = lazy(() => import('../screens/paediatric/Paediatric'));
+// const PhysicanSurgeon = lazy(() => import('../screens/physican&surgeon/Physican&Surgeon'));
 export const commonroutes = [
   {
     path: '/doctorsdetails/:id',
@@ -67,38 +67,38 @@ export const commonroutes = [
     path: '/contact_us',
     element: <Contact />,
   },
-  {
-    path: '/cardiology',
-    element: <Cardiology />,
-  },
-  {
-    path: '/eyecare',
-    element: <EyeCare />,
-  },
-  {
-    path: '/dentist',
-    element: <Dentist />,
-  },
-  {
-    path: '/nephrology',
-    element: <Nephrology />,
-  },
-  {
-    path: '/fertiltity',
-    element: <Fertiltity />,
-  },
-  {
-    path: '/paediatric',
-    element: <Paediatric />,
-  },
-  {
-    path: '/ent',
-    element: <Ent />,
-  },
-  {
-    path: '/physican&surgeon',
-    element: <PhysicanSurgeon />,
-  },
+  // {
+  //   path: '/cardiology',
+  //   element: <Cardiology />,
+  // },
+  // {
+  //   path: '/eyecare',
+  //   element: <EyeCare />,
+  // },
+  // {
+  //   path: '/dentist',
+  //   element: <Dentist />,
+  // },
+  // {
+  //   path: '/nephrology',
+  //   element: <Nephrology />,
+  // },
+  // {
+  //   path: '/fertiltity',
+  //   element: <Fertiltity />,
+  // },
+  // {
+  //   path: '/paediatric',
+  //   element: <Paediatric />,
+  // },
+  // {
+  //   path: '/ent',
+  //   element: <Ent />,
+  // },
+  // {
+  //   path: '/physican&surgeon',
+  //   element: <PhysicanSurgeon />,
+  // },
 ];
 
 export default commonroutes;
