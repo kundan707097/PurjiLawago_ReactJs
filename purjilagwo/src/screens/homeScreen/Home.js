@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Landing from './Landing';
 import InfoBanner from './InfoBanner';
@@ -13,6 +13,14 @@ import MobileAppBanner from '../../components/MobileAppBanner';
 import VideoCalling from './VideoCalling';
 
 function Home() {
+
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth", // Add smooth scrolling effect
+        });
+    }, [])
+
     return (
         <>
             <Landing />

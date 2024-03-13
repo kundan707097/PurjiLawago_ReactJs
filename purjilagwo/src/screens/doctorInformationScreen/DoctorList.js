@@ -28,6 +28,14 @@ function Doctors() {
     const nameSearchRef = useRef(null);
 
     useEffect(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth", // Add smooth scrolling effect
+        });
+      }, [])
+      
+
+    useEffect(() => {
         (async () => {
             try {
                 if (location === "" || (location !== "" && location.length > 2)) {

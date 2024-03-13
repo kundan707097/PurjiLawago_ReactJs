@@ -43,8 +43,12 @@ function Header() {
       to: "/Cardiologist"
     },
     {
+      name: "Eye Care",
+      to: "/eyecare"
+    },
+    {
       name: "Dentist",
-      to: '/Dentist'
+      to: '/dentist'
     }
   ]
 
@@ -129,25 +133,25 @@ function Header() {
     {
       img: "/images/Header/mother.svg",
       label: "Paediatric",
-      to : "",
+      to : "/paediatric",
       hindiLabel: "बाल चिकित्सा"
     },
     {
       img: "/images/Header/heart.svg",
       label: "Fertility",
-      to : "",
+      to : "/fertiltity",
       hindiLabel: "गर्भधारण"
     },
     {
       img: "/images/Header/ear.svg",
       label: "Ent",
-      to : "",
+      to : "/ent",
       hindiLabel: "कान, नाक, गला"
     },
     {
       img: "/images/Header/heart.svg",
       label: "Physican & Surgeon",
-      to : "",
+      to : "/physican&surgeon",
       hindiLabel: "चिकित्सक एवं सर्जन"
     },
   ]
@@ -156,38 +160,14 @@ function Header() {
     {
       img :"/images/Header/dentist.svg",
       label: "Dentist",
-      to: "",
+      to: "/dentist",
       hindiLabel: "दाँतों का डॉक्टर"
     },
     {
-      img :"/images/Header/heart.svg",
-      label: "Trichologist",
-      to: "",
-      hindiLabel: "बाल"
-    },
-    {
-      img :"/images/Header/heart.svg",
-      label: "Physiotherapist",
-      to: "",
-      hindiLabel: "फ़िज़ियोथेरेपिस्ट"
-    },
-    {
-      img :"/images/Header/heart.svg",
-      label: "Ayurveda",
-      to: "",
-      hindiLabel: "आयुर्वेद"
-    },
-    {
       img :"/images/Header/kidney.svg",
-      label: "Neurologist",
-      to: "",
-      hindiLabel: "न्यूरोलॉजिस्ट"
-    },
-    {
-      img :"/images/Header/heart.svg",
-      label: "Homeopathy",
-      to: "",
-      hindiLabel: "होम्योपैथी"
+      label: "Nephrology",
+      to: "/nephrology",
+      hindiLabel: "किडनी रोग विशेषज्ञ"
     },
     
   ]
