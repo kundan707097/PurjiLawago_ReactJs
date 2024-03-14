@@ -15,17 +15,18 @@ const DoctorsList = ({ data }) => {
                         sx={{ width: 120, height: 120, position: "relative", top: 25, ml: 4, mr: 2 }}
                     />
                     <Box sx={{ mt: 3, mr: 1 }} >
-                        <Typography sx={{ fontSize: "20px", fontWeight: 900, color: "white" }}>₹ {data.consultantFee ? data.consultantFee : "NA"}</Typography>
+                        
                         <Box sx={{ display: "flex", alignItems: "center" }}>
-                            <AccessAlarmsIcon sx={{ fontSize: "24px", mr: "3px", color: "white" }} />
-                            <Typography sx={{ fontSize: "15px", fontWeight: 400, color: "white" }}>{data.doctorsTimeAvailability ? data.doctorsTimeAvailability : "NA"}</Typography>
+                            {/* <AccessAlarmsIcon sx={{ fontSize: "24px", mr: "3px", color: "white" }} /> */}
+                            <Typography sx={{ fontSize: "15px", fontWeight: 400, color: "white" }}>{data?.doctorsTimeAvailability}</Typography>
                         </Box>
+                        <Typography sx={{ fontSize: "15px", fontWeight: 400, color: "white" }}>{data?.consultantFee} ₹</Typography>
                     </Box>
                 </Box>
 
                 {/* Bottom box */}
                 <Box sx={{ backgroundColor: "#F0F6FF", pt: 6, pl: 5, height: 250 }}>
-                    <Typography sx={{ fontSize: "22px", fontWeight: 600, mb: 2 }}>{data.user_Name ? data.user_Name : "Dr. Prof. Ettie Mertz"}</Typography>
+                    <Typography sx={{ fontSize: "22px", fontWeight: 600, mb: 2, color: "black" }}>{data.user_Name ? data.user_Name : "Dr. Prof. Ettie Mertz"}</Typography>
                     <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
                         <img src="../../images/DoctorList/location.svg" alt="" style={{ height: 20 }} />
                         <Typography sx={{ fontSize: "16px", fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Location:  {data.doctor_Address ? data.doctor_Address : "86550 Rosenbaum Lights"}</Typography>

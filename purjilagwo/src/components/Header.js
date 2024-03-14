@@ -131,6 +131,30 @@ function Header() {
       hindiLabel: "आंखों की देखभाल"
     },
     {
+      img :"/images/Header/dentist.svg",
+      label: "Dentist",
+      to: "/dentist",
+      hindiLabel: "दाँतों का डॉक्टर"
+    },
+    
+    {
+      img: "/images/Header/ear.svg",
+      label: "Ent",
+      to : "/ent",
+      hindiLabel: "कान, नाक, गला"
+    },
+    
+  ]
+
+  const second_row=[
+  
+    {
+      img :"/images/Header/kidney.svg",
+      label: "Nephrology",
+      to: "/nephrology",
+      hindiLabel: "किडनी रोग विशेषज्ञ"
+    },
+    {
       img: "/images/Header/mother.svg",
       label: "Paediatric",
       to : "/paediatric",
@@ -141,33 +165,6 @@ function Header() {
       label: "Fertility",
       to : "/fertiltity",
       hindiLabel: "गर्भधारण"
-    },
-    {
-      img: "/images/Header/ear.svg",
-      label: "Ent",
-      to : "/ent",
-      hindiLabel: "कान, नाक, गला"
-    },
-    {
-      img: "/images/Header/heart.svg",
-      label: "Physican & Surgeon",
-      to : "/physican&surgeon",
-      hindiLabel: "चिकित्सक एवं सर्जन"
-    },
-  ]
-
-  const second_row=[
-    {
-      img :"/images/Header/dentist.svg",
-      label: "Dentist",
-      to: "/dentist",
-      hindiLabel: "दाँतों का डॉक्टर"
-    },
-    {
-      img :"/images/Header/kidney.svg",
-      label: "Nephrology",
-      to: "/nephrology",
-      hindiLabel: "किडनी रोग विशेषज्ञ"
     },
     
   ]
@@ -229,7 +226,7 @@ function Header() {
                     }}
                   >
                     <Box>Specialities</Box>
-                    <Box sx={{ position: "absolute", bgcolor: "#F8FCFB", top: "40px", boxShadow: "3px 19px 20px 0px #0000001A", p: 2, left: "-300px", zIndex: 999, }} className="specialities-box">
+                    <Box sx={{ position: "absolute", bgcolor: "#F8FCFB", top: "40px", boxShadow: "3px 19px 20px 0px #0000001A", p: 2, left: "-250px", zIndex: 999, }} className="specialities-box">
                       <Box sx={{ display: "flex", mt: 2, mb: 4, color: "black" }}>
                         {first_row.map((items, index) =>{
                           return(
