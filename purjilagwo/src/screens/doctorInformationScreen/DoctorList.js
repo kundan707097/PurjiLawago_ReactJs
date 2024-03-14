@@ -420,7 +420,7 @@ function Doctors() {
                                                         <Box sx={{ mx: 2, mt: 3 }} >
                                                             <Typography sx={{ fontSize: "12px", fontWeight: 400, color: "white" }}>{doctor?.doctorsTimeAvailability}</Typography>
                                                             <Box sx={{ display: "flex", alignItems: "center" }}>
-                                                                <AccessAlarmsIcon sx={{ fontSize: "12px", mr: 1, color: "white" }} />
+                                                                {/* <AccessAlarmsIcon sx={{ fontSize: "12px", mr: 1, color: "white" }} /> */}
                                                                 <Typography sx={{ fontSize: "12px", fontWeight: 400, color: "white" }}>{doctor?.consultantFee} ₹</Typography>
                                                             </Box>
                                                         </Box>
