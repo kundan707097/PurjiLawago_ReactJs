@@ -5,8 +5,8 @@ import { Link, Navigate, resolvePath, useNavigate } from 'react-router-dom';
 import DoctorService from '../../services/Doctor.services';
 
 const Landing = () => {
-    
-  const navigate = useNavigate();
+
+    const navigate = useNavigate();
     const [searchLocation, setSearchLocation] = useState("");
     const [searchName, setSearchName] = useState("");
     const locationSearchRef = useRef(null);
@@ -15,12 +15,8 @@ const Landing = () => {
         locationVisible: false,
         nameVisible: false,
     });
-    const [location, setLocation] = useState(null);
-    const [doctorName, setDoctorName] = useState(null);
-
-    const dummy_location = ["Siwan", "Patna", "Delhi", "Kolkata"]
-    const dummy_name = ["Vicky Jaiswal", "Pankaj", "Pradumdha", "Salukhe"]
-
+    const [location, setLocation] = useState([]);
+    const [doctorName, setDoctorName] = useState([]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -61,31 +57,31 @@ const Landing = () => {
     }, []);
 
     useEffect(() => {
-        (async () =>{
-            if(searchLocation !== "" && searchLocation.length > 2){
+        (async () => {
+            if (searchLocation !== "" && searchLocation.length > 2) {
                 const response = await DoctorService.AllDocInfo()
-                if(response !== null || response !== undefined){
+                if (response !== null || response !== undefined) {
                     setLocation(response)
                 }
-            }else if(searchName !== "" && searchName.length >2){
+            } else if (searchName !== "" && searchName.length > 2) {
                 const response = await DoctorService.AllDocInfo();
-                if(response !== null || response !== undefined){
+                if (response !== null || response !== undefined) {
                     setDoctorName(response)
                 }
             }
         })()
     }, [searchLocation, searchName])
 
-    const handleSearch = () =>{
+    const handleSearch = () => {
         console.log(searchLocation)
         console.log(searchName);
-        if(searchLocation !== ""){
+        if (searchLocation !== "") {
             navigate(`/doctorlist/${searchLocation}`)
-        }else if(searchName !== ""){
+        } else if (searchName !== "") {
             navigate(`/doctorlistbyId/${searchName}`)
         }
     }
-    
+
 
     return (
         <Box>
@@ -155,7 +151,7 @@ const Landing = () => {
 
                                 />
 
-                                {searchLocation.length >= 3 && (
+                                {location !== undefined && location.length >= 0 && (
 
                                     <Box
                                         sx={{
@@ -170,7 +166,7 @@ const Landing = () => {
                                     >
                                         {/* put the map function here and remove the all the button and put the onclick on button */}
 
-                                        {dummy_location.map((location) => (
+                                        {location.map((location) => (
                                             <Box component={"button"} sx={{
                                                 display: "flex", alignItems: "center", px: 1, bgcolor: "white", ":hover": {
                                                     backgroundColor: "#e3e3e3",
@@ -178,11 +174,11 @@ const Landing = () => {
                                                 color: "black",
 
                                             }}
-                                            // onClick={() => {
-                                            //     setSearchLocation(location.city);
-                                            //     setIsVisible({ locationVisible: false });
-                                            //     handleDoctorListSelect(location.city);
-                                            // }} 
+                                                onClick={() => {
+                                                    setSearchLocation(location.city);
+                                                    setIsVisible({ locationVisible: false });
+                                                    handleSearch();
+                                                }}
                                             >
 
                                                 <Box sx={{ bgcolor: "#F5F5F5", p: .5, borderRadius: "100px", px: 1 }}>
@@ -237,7 +233,7 @@ const Landing = () => {
                                     }}
                                 />
 
-                                {searchName.length >= 3 && (
+                                {doctorName !== undefined && doctorName.length > 0 && (
                                     <Box
                                         sx={{
                                             display: isVisible.nameVisible ? 'block' : 'none',
@@ -254,18 +250,18 @@ const Landing = () => {
                                     >
                                         {/*  put the map function here and remove the all the button and put the onclick on button */}
 
-                                        {dummy_name.map((name) => (
+                                        {doctorName.map((name) => (
 
                                             <Box component={"button"} sx={{
                                                 display: "flex", alignItems: "center", px: 1, bgcolor: "white", ":hover": {
                                                     backgroundColor: "#F5F5F5"
                                                 }, width: "100%", border: "1px solid #afafaf"
                                             }}
-                                            // onClick={() => {
-                                            //     setSearchName(name.user_Name);
-                                            //     setIsVisible({ nameVisible: false });
-                                            //     handledoctorNameSelect(name.id);
-                                            // }}
+                                                onClick={() => {
+                                                    setSearchName(name.user_Name);
+                                                    setIsVisible({ nameVisible: false });
+                                                    navigate(`/doctorsdetails/${name.id}`)
+                                                }}
                                             >
 
                                                 <Box sx={{ bgcolor: "#F5F5F5", p: .5, borderRadius: "100px", px: 1 }}>
@@ -293,7 +289,7 @@ const Landing = () => {
 
                             </Box>
 
-                            <Box sx={{ backgroundColor: "#64EBB6", borderRadius: "8px 12px 12px 8px", display: "flex", px: 2, alignItems: "center", color: "white", cursor: "pointer", width: "40%", justifyContent: "center", border:"none" }} component={"button"} onClick={handleSearch}>
+                            <Box sx={{ backgroundColor: "#64EBB6", borderRadius: "8px 12px 12px 8px", display: "flex", px: 2, alignItems: "center", color: "white", cursor: "pointer", width: "40%", justifyContent: "center", border: "none" }} component={"button"} onClick={handleSearch}>
                                 <Typography sx={{ ml: 1, fontSize: { xs: '10px', lg: "15px" }, mr: 1, }}>SEARCH </Typography>
                                 <Box sx={{ display: { xs: "none", md: "block" } }}>
                                     <img src="../../images/DoctorList/arrow_circle_left.svg" alt="" />

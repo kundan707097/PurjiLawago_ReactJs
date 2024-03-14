@@ -17,7 +17,7 @@ function Doctors() {
     const { location: routeLocation } = useParams();
     const [location, setLocation] = useState(routeLocation || ''); // Initialize with the route location if available
     const [doctorInfo, setDoctorInfo] = useState(null);
-    const [doctorName, setDoctorName] = useState(null);
+    const [doctorName, setDoctorName] = useState(groupId || '');
     const [loading, setLoading] = useState(false);
     const [isVisible, setIsVisible] = useState({
         locationVisible: false,
