@@ -8,6 +8,7 @@ import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
 import HowGetADoctor from '../../components/HowGetADoctor';
 import FandQ from './FandQ';
+import OurServices from './OurServices';
 
 const Dentist = () => {
 
@@ -23,6 +24,7 @@ const Dentist = () => {
         <>
             <Landing />
             <TopDoctors />
+            <OurServices />
             <Process />
             <HealthyTeeth />
             <HowGetADoctor />
