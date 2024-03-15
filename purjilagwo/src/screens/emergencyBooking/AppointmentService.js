@@ -5,7 +5,7 @@ import DoctorsList from '../../components/DoctorsListCard'
 import DoctorService from '../../services/Doctor.services'
 import Loading from '../../components/Loading'
 import { useSnackbar } from 'notistack'
-// import { dummy_data } from '../dummyData/DummyData'
+import { dummy_data } from '../dummyData/DummyData'
 
 const AppointmentService = () => {
     const { enqueueSnackbar } = useSnackbar()
@@ -16,7 +16,7 @@ const AppointmentService = () => {
         (async () => {
             try {
                 setLoading(true);
-                // setCardData(dummy_data)
+                setCardData(dummy_data)
                 const response = await DoctorService.GetDoctorListInEmergency();
                 if (response.status === 200) {
                     console.log(response.data);

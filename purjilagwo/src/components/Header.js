@@ -40,7 +40,7 @@ function Header() {
 
     {
       name: "Cardiologist",
-      to: "/Cardiologist"
+      to: "/cardiology"
     },
     {
       name: "Eye Care",
@@ -49,6 +49,22 @@ function Header() {
     {
       name: "Dentist",
       to: '/dentist'
+    },
+    {
+      name: "ENT",
+      to: "/ent"
+    },
+    {
+      name: "Nephrology",
+      to: "/nephrology"
+    },
+    {
+      name: "Paediatric",
+      to: "/paediatric"
+    },
+    {
+      name: "Fertility",
+      to: "/fertiltity"
     }
   ]
 
@@ -161,7 +177,7 @@ function Header() {
       hindiLabel: "बाल चिकित्सा"
     },
     {
-      img: "/images/Header/heart.svg",
+      img: "/images/Fertility/img7.svg",
       label: "Fertility",
       to : "/fertiltity",
       hindiLabel: "गर्भधारण"

@@ -88,7 +88,7 @@ const Landing = () => {
             <Box sx={{ height: { xs: "100%", lg: "90%" }, width: "100%", position: "relative" }}>
                 <img src="../images/EmergencyBooking/bg.svg" alt="" height={"100%"} width={"100%"} />
 
-                <Box sx={{ position: { xs: "relative", lg: "absolute" }, bottom: { xs: "78px", lg: "60px" }, bgcolor: "#FF697F99", color: "white", px: { xs: 1, lg: 4 }, py: 2, borderRadius: "10px", left: { xs: 0, lg: "24%" } }}>
+                <Box sx={{ position: { xs: "relative", lg: "absolute" }, bottom: { xs: "78px", lg: "60px" }, bgcolor: "#FF697F99", color: "white", px: { xs: 1, lg: 4 }, py: 2, borderRadius: "10px", left: { xs: 0, lg: "25%" } }}>
 
                     <Box sx={{ background: "linear-gradient(180deg, #FBFFFD 0%, #AEDEC4 100%)", color: "#1C4188", textAlign: "center", borderRadius: "10px", py: 2, mb: { xs: 1, lg: 3 }, fontWeight: 600, width: { xs: "60%", lg: "50%" }, mx: "auto" }}>
                         <Typography sx={{ fontSize: { xs: "14px", lg: "18px" }, }}>
