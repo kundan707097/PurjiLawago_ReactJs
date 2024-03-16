@@ -11,6 +11,7 @@ import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
 import MobileAppBanner from '../../components/MobileAppBanner';
 import VideoCalling from './VideoCalling';
+import HotOffer from './HotOffer';
 
 function Home() {
 
@@ -27,6 +28,7 @@ function Home() {
             <InfoBanner />
             <Specialities />
             <GetADoctor />
+            <HotOffer />
             <AboutUs />
             <VideoCalling />
             <WhyUs />
