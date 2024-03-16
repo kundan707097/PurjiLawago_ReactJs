@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Search } from '@carbon/icons-react';
 import { Box, Typography } from '@mui/material'
 import DoctorService from '../../services/Doctor.services';
+import { email, phone_number } from '../../constants/socialMedia';
 
 const Landing = () => {
 
@@ -326,20 +327,19 @@ const Landing = () => {
 
                     <Box sx={{ mt: { xs: 2, lg: 3 }, display: "flex", justifyContent: "center" }}>
 
-                        <Link to="/">
+                        <a href={`tel:+${phone_number}`}>
                             <Box sx={{ bgcolor: "#64EBB647", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: { xs: .6, lg: 1.3 }, borderRadius: 3, fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid white", "&:hover": { color: "#42A5F5", backgroundColor: "white" }, display: "flex", justifyContent: "center" }}>
                                 <Box sx={{ display: { xs: "none", lg: "block" } }}>
                                     <img src="../images/EmergencyBooking/image217.svg" alt="" height={"20px"} style={{ marginRight: 10 }} />
                                 </Box>
                                 895646456454
                             </Box>
-                        </Link>
-
-                        <Link to="/doctorlist" style={{ marginLeft: 20 }}>
+                        </a>
+                        <a href={`mailto:${email}`} style={{ marginLeft: 20 }}>
                             <Box sx={{ bgcolor: "#64EBB647", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: { xs: .6, lg: 1.3 }, borderRadius: 3, fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid white", "&:hover": { color: "#42A5F5", backgroundColor: "white" } }}>
                                 Purjilagwo@gmail.com
                             </Box>
-                        </Link>
+                        </a>
 
                     </Box>
 
