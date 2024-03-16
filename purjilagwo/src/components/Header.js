@@ -6,8 +6,10 @@ import { User } from "@carbon/icons-react";
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ClearIcon from '@mui/icons-material/Clear';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 import "./style/Header.css";
+import { whats_app } from "../constants/socialMedia";
 
 
 function Header() {
@@ -74,7 +76,7 @@ function Header() {
       <List>
         <ListItem sx={{ justifyContent: "space-between" }}>
           <Link to="/" className="navbar-brand">
-            <img src="/images/logo.png" alt="Logo" className="" />
+            <img src="/images/Logo/Logo2.png" alt="Logo" height={"100%"} />
           </Link>
           <Box>
             <ListItemButton onClick={() => setOpen(false)} sx={{ px: 0 }}>
@@ -133,39 +135,39 @@ function Header() {
     </Box>
   );
 
-  const first_row=[
+  const first_row = [
     {
       img: "/images/Header/heart.svg",
       label: "Cadiology",
-      to : "/cardiology",
-      hindiLabel :"हृदय"
+      to: "/cardiology",
+      hindiLabel: "हृदय"
     },
     {
       img: "/images/Header/heart.svg",
       label: "Eye Care",
-      to : "/eyecare",
+      to: "/eyecare",
       hindiLabel: "आंखों की देखभाल"
     },
     {
-      img :"/images/Header/dentist.svg",
+      img: "/images/Header/dentist.svg",
       label: "Dentist",
       to: "/dentist",
       hindiLabel: "दाँतों का डॉक्टर"
     },
-    
+
     {
       img: "/images/Header/ear.svg",
       label: "Ent",
-      to : "/ent",
+      to: "/ent",
       hindiLabel: "कान, नाक, गला"
     },
-    
+
   ]
 
-  const second_row=[
-  
+  const second_row = [
+
     {
-      img :"/images/Header/kidney.svg",
+      img: "/images/Header/kidney.svg",
       label: "Nephrology",
       to: "/nephrology",
       hindiLabel: "किडनी रोग विशेषज्ञ"
@@ -173,16 +175,16 @@ function Header() {
     {
       img: "/images/Header/mother.svg",
       label: "Paediatric",
-      to : "/paediatric",
+      to: "/paediatric",
       hindiLabel: "बाल चिकित्सा"
     },
     {
       img: "/images/Fertility/img7.svg",
       label: "Fertility",
-      to : "/fertiltity",
+      to: "/fertiltity",
       hindiLabel: "गर्भधारण"
     },
-    
+
   ]
 
   return (
@@ -195,7 +197,7 @@ function Header() {
         >
           <div className="container">
             <Link to="/" className="navbar-brand">
-              <img src="/images/logo.png" alt="Logo" className="" />
+              <img src="/images/Logo/Logo2.png" alt="Logo" height={"100%"} />
             </Link>
             <button
               className="navbar-toggler"
@@ -244,45 +246,45 @@ function Header() {
                     <Box>Specialities</Box>
                     <Box sx={{ position: "absolute", bgcolor: "#F8FCFB", top: "40px", boxShadow: "3px 19px 20px 0px #0000001A", p: 2, left: "-250px", zIndex: 999, }} className="specialities-box">
                       <Box sx={{ display: "flex", mt: 2, mb: 4, color: "black" }}>
-                        {first_row.map((items, index) =>{
-                          return(
-                            <Box sx={{ width: "180px",  "&:hover": { translate: "0 -10px", transition: "all", transitionDuration: "300ms" }, transitionDuration: "300ms",  }} key={index}>
-                            <Link to={items.to}>
-                              <Avatar
-                                alt="Remy Sharp"
-                                src={items.img !== "" ? items.img : "../images/Header/heart.svg"}
-                                sx={{ width: 70, height: 70, mx: "auto", background: "white" }}
-                              />
-                              <Typography sx={{ fontSize: "16px", fontWeight: 600, mt: 1, color: "black", textAlign: "center" }}>
-                                {items.label}
-                              </Typography>
-                              <Typography sx={{ fontSize: "15px",  textAlign: "center", color: "gray", fontWeight: 500 }}>
-                                {items.hindiLabel}
-                              </Typography>
-                            </Link>
-                          </Box>
+                        {first_row.map((items, index) => {
+                          return (
+                            <Box sx={{ width: "180px", "&:hover": { translate: "0 -10px", transition: "all", transitionDuration: "300ms" }, transitionDuration: "300ms", }} key={index}>
+                              <Link to={items.to}>
+                                <Avatar
+                                  alt="Remy Sharp"
+                                  src={items.img !== "" ? items.img : "../images/Header/heart.svg"}
+                                  sx={{ width: 70, height: 70, mx: "auto", background: "white" }}
+                                />
+                                <Typography sx={{ fontSize: "16px", fontWeight: 600, mt: 1, color: "black", textAlign: "center" }}>
+                                  {items.label}
+                                </Typography>
+                                <Typography sx={{ fontSize: "15px", textAlign: "center", color: "gray", fontWeight: 500 }}>
+                                  {items.hindiLabel}
+                                </Typography>
+                              </Link>
+                            </Box>
                           )
                         })}
                       </Box>
 
                       <Box sx={{ display: "flex", mb: 2, color: "black" }}>
-                        {second_row.map((items, index) =>{
-                          return(
-                            <Box sx={{ width: "180px",  "&:hover": { translate: "0 -10px", transition: "all", transitionDuration: "300ms" }, transitionDuration: "300ms",  }} key={index}>
-                            <Link to={items.to}>
-                              <Avatar
-                                alt="Remy Sharp"
-                                src={items.img !== "" ? items.img : "../images/HomeVector/Header/heart.svg"}
-                                sx={{ width: 70, height: 70, mx: "auto", background: "white" }}
-                              />
-                              <Typography sx={{ fontSize: "16px", fontWeight: 600, mt: 1, color: "black", textAlign: "center" }}>
-                                {items.label}
-                              </Typography>
-                              <Typography sx={{ fontSize: "15px",  textAlign: "center", color: "gray", fontWeight: 500 }}>
-                                {items.hindiLabel}
-                              </Typography>
-                            </Link>
-                          </Box>
+                        {second_row.map((items, index) => {
+                          return (
+                            <Box sx={{ width: "180px", "&:hover": { translate: "0 -10px", transition: "all", transitionDuration: "300ms" }, transitionDuration: "300ms", }} key={index}>
+                              <Link to={items.to}>
+                                <Avatar
+                                  alt="Remy Sharp"
+                                  src={items.img !== "" ? items.img : "../images/HomeVector/Header/heart.svg"}
+                                  sx={{ width: 70, height: 70, mx: "auto", background: "white" }}
+                                />
+                                <Typography sx={{ fontSize: "16px", fontWeight: 600, mt: 1, color: "black", textAlign: "center" }}>
+                                  {items.label}
+                                </Typography>
+                                <Typography sx={{ fontSize: "15px", textAlign: "center", color: "gray", fontWeight: 500 }}>
+                                  {items.hindiLabel}
+                                </Typography>
+                              </Link>
+                            </Box>
                           )
                         })}
                       </Box>
@@ -330,6 +332,12 @@ function Header() {
 
                 </ul>
                 <LoginedAction />
+                {/* <Link to={whats_app} style={{ marginRight: "10px", color: "white" }}>
+                  <Box sx={{ backgroundColor: "#68B807", p: 1 }}>
+                    <WhatsAppIcon color="white" />
+                  </Box>
+                </Link> */}
+                {/* <WhatsAppIcon style={{ color: "68B807", fontSize: "30px", cursor: "pointer" }} /> */}
               </div>
             </div>
           </div>
@@ -368,7 +376,7 @@ const LoginedAction = () => {
     <>
       {token ? (
         <div className="dropdown">
-          <Link to={localStorage.getItem('role') === 'Admin'? "/dashboard/doctor/registration" : "/dashboard/appointment&details"}>
+          <Link to={localStorage.getItem('role') === 'Admin' ? "/dashboard/doctor/registration" : "/dashboard/appointment&details"}>
             <Paper
               elevation={0}
               sx={{

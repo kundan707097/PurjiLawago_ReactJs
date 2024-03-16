@@ -115,10 +115,9 @@ const Landing = () => {
             {/* Text and heading */}
 
             <Box sx={{ mt: { xs: 6, lg: 3 }, backgroundColor: "transparent" }}>
-              <Typography sx={{ fontSize: { xs: '12px', lg: "24px" }, color: "#64EBB6", fontWeight: 700, }}>
+              <Typography sx={{ fontSize: { xs: '11px', lg: "24px" }, color: "#64EBB6", fontWeight: 700, }}>
                 <span>“</span><span style={{ color: "#5D6566" }}>JOIN THE BEST BE THE BEST</span><span style={{ marginRight: 14 }}>”</span>
                 <Box sx={{ display: { lg: 'none' } }} />
-                <span>“</span><span style={{ color: "#5D6566" }}>JOIN US BE THE BEST</span><span>”</span>
               </Typography>
               <Typography sx={{ mt: { xs: 2, lg: 0 }, fontSize: { xs: "22px", lg: "65px" }, fontWeight: 900, color: "#42A5F5", }}>
                 Keep Your Family
