@@ -1,7 +1,7 @@
+import React, { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import { Search } from '@carbon/icons-react';
 import { Box, Typography } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
-import { Link, Navigate, resolvePath, useNavigate } from 'react-router-dom';
 import DoctorService from '../../services/Doctor.services';
 
 const Landing = () => {
@@ -17,6 +17,8 @@ const Landing = () => {
     });
     const [location, setLocation] = useState([]);
     const [doctorName, setDoctorName] = useState([]);
+
+    const [searchDetails, setSearchDetails] = useState([]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -58,20 +60,43 @@ const Landing = () => {
 
     useEffect(() => {
         (async () => {
-            if (searchLocation !== "" && searchLocation.length > 2) {
-                const response = await DoctorService.AllDocInfo()
-                if (response !== null || response !== undefined) {
-                    setLocation(response)
-                }
-            } else if (searchName !== "" && searchName.length > 2) {
-                const response = await DoctorService.AllDocInfo();
-                if (response !== null || response !== undefined) {
-                    setDoctorName(response)
-                }
+            const response = await DoctorService.AllDocInfo();
+            if (response !== null || response !== undefined) {
+                setSearchDetails(response)
             }
         })()
-    }, [searchLocation, searchName])
+    }, [])
 
+
+    useEffect(() => {
+        if (searchLocation.length > 2 && (searchDetails !== undefined && searchDetails.length > 0)) {
+
+            const filteredLocations = searchDetails.filter((location, index, self) =>
+                location.city &&
+                location.city.toLowerCase().includes(searchLocation.toLowerCase()) &&
+                self.findIndex((otherLocation) => otherLocation.city === location.city) === index
+            );
+            setLocation(filteredLocations.map((location) => location.city));
+
+        }
+
+
+
+    }, [searchLocation, searchDetails]);
+
+
+    useEffect(() => {
+        if (searchName.length > 2 && (searchDetails !== undefined && searchDetails.length > 0)) {
+            const filteredNames = searchDetails.filter((name, index, self) =>
+                name.user_Name &&
+                name.user_Name.toLowerCase().includes(searchName.toLowerCase()) &&
+                self.findIndex((otherName) => otherName.user_Name === name.user_Name) === index
+            );
+            setDoctorName(filteredNames)
+            // setDoctorName(filteredNames.map((name) => name.user_Name));
+        }
+    }, [searchName, searchDetails])
+    
     const handleSearch = () => {
         console.log(searchLocation)
         console.log(searchName);
@@ -151,7 +176,7 @@ const Landing = () => {
 
                                 />
 
-                                {location !== undefined && location.length >= 0 && (
+                                {location !== undefined && location.length >= 0 && searchLocation.length>2  &&  (
 
                                     <Box
                                         sx={{
@@ -233,7 +258,7 @@ const Landing = () => {
                                     }}
                                 />
 
-                                {doctorName !== undefined && doctorName.length > 0 && (
+                                {doctorName !== undefined && doctorName.length > 0 && searchName.length > 2 && (
                                     <Box
                                         sx={{
                                             display: isVisible.nameVisible ? 'block' : 'none',
@@ -275,7 +300,7 @@ const Landing = () => {
                                                         textAlign: "left",
                                                     }}
                                                 >
-                                                    <Typography sx={{ color: "black" }}>{name}</Typography>
+                                                    <Typography sx={{ color: "black" }}>{name.user_Name}</Typography>
                                                 </Box>
 
                                             </Box>
