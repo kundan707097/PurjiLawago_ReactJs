@@ -1,0 +1,5 @@
+export const phone_number = "895646456454"
+export const email = "Purjilagwo@gmail.com"
+export const facebook_link = ""
+export const instagam_link = ""
+export const whats_app = ""

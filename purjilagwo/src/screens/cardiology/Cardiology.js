@@ -8,12 +8,14 @@ import HeartAttack from './HeartAttack'
 import HowGetADoctor from '../../components/HowGetADoctor'
 import StokeSymptoms from './StokeSymptoms'
 import FandQ from './FandQ'
+import OurServices from './OurServices'
 
 const Cardiology = () => {
     return (
         <>
             <Landing />
             <TopDoctors /> 
+            <OurServices />
             <Banner />
             <HeartAttack />
             <HowGetADoctor />

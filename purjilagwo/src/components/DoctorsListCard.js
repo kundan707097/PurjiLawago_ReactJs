@@ -11,7 +11,7 @@ const DoctorsList = ({ data }) => {
                 <Box sx={{ display: "flex", backgroundColor: "#42A5F5", width: "100%", justifyContent: "start", alignItems: "center", }}>
                     <Avatar
                         alt="Remy Sharp"
-                        src={data.profile_Picture ? data.profile_Picture : "../../images/DoctorList/doctor.png"}
+                        src={data.profile_Picture ? data.profile_Picture : "../../images/DoctorList/doctor.jpg"}
                         sx={{ width: 120, height: 120, position: "relative", top: 25, ml: 4, mr: 2 }}
                     />
                     <Box sx={{ mt: 3, mr: 1 }} >
@@ -25,7 +25,7 @@ const DoctorsList = ({ data }) => {
                 </Box>
 
                 {/* Bottom box */}
-                <Box sx={{ backgroundColor: "#F0F6FF", pt: 6, pl: 5, height: 250 }}>
+                <Box sx={{ backgroundColor: "#F0F6FF", pt: 6, pl: 5, height: 230 }}>
                     <Typography sx={{ fontSize: "22px", fontWeight: 600, mb: 2, color: "black" }}>{data.user_Name ? data.user_Name : "Dr. Prof. Ettie Mertz"}</Typography>
                     <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
                         <img src="../../images/DoctorList/location.svg" alt="" style={{ height: 20 }} />

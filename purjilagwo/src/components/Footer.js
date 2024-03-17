@@ -1,6 +1,8 @@
 import { Box, Button, Typography } from "@mui/material";
 import { ChevronRight } from "@carbon/icons-react";
 import { Link } from "react-router-dom";
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import { email, facebook_link, instagam_link, phone_number, whats_app } from "../constants/socialMedia";
 
 const section_2 = [
   {
@@ -28,23 +30,23 @@ const section_2 = [
 const section_3 = [
   {
     name: "Cardiology",
-    to: "",
+    to: "/cardiology",
   },
   {
     name: "Eye Care",
-    to: "",
+    to: "/eyecare",
   },
   {
     name: "Ent",
-    to: "",
+    to: "/ent",
   },
   {
     name: "Dentist",
-    to: "",
+    to: "/dentist",
   },
   {
-    name: "Homeopathy",
-    to: "",
+    name: "Fertiltity",
+    to: "/fertiltity",
   },
 
 ];
@@ -88,9 +90,9 @@ const Footer = () => {
         >
 
 
-          <Box sx={{ my: { xs: 2, lg: 0 }}}>
+          <Box sx={{ my: { xs: 2, lg: 0 } }}>
             <Typography
-              sx={{ color: "white", fontSize: "28px", fontWeight: 700,  mb: {xs:1, lg:3} }}
+              sx={{ color: "white", fontSize: "28px", fontWeight: 700, mb: { xs: 1, lg: 3 } }}
             >
               OUR SERVICES
             </Typography>
@@ -112,9 +114,9 @@ const Footer = () => {
             })}
           </Box>
 
-          <Box sx={{ my: { xs: 2, lg: 0 }}}>
+          <Box sx={{ my: { xs: 2, lg: 0 } }}>
             <Typography
-              sx={{ color: "white", fontSize: "28px", fontWeight: 700,  mb: {xs:1, lg:3} }}
+              sx={{ color: "white", fontSize: "28px", fontWeight: 700, mb: { xs: 1, lg: 3 } }}
             >
               OUR CATEGORIES
             </Typography>
@@ -138,7 +140,7 @@ const Footer = () => {
 
           <Box sx={{ width: { xs: "100%", lg: "40%" }, my: { xs: 2, lg: 0 } }}>
             <Typography
-              sx={{ color: "white", fontSize: "28px", fontWeight: 700, mb: {xs:1, lg:3} }}
+              sx={{ color: "white", fontSize: "28px", fontWeight: 700, mb: { xs: 1, lg: 3 } }}
             >
               NEWSLETTER
             </Typography>
@@ -204,22 +206,22 @@ const Footer = () => {
                   </Typography>
                 </Box>
               </Link>
-              <Link to="">
+              <a href={`mailto:${email}`} >
                 <Box sx={{ display: "flex", my: 2, alignItems: "center" }}>
                   <img src="../images/Footer/drafts.svg" alt="" height={"20px"} />
                   <Typography sx={{ color: "white", fontSize: "16px", ml: 2 }}>
                     Purjilagwo@gmail.com
                   </Typography>
                 </Box>
-              </Link>
-              <Link to="" key="">
+              </a>
+              <a href={`tel:+${phone_number}`} >
                 <Box sx={{ display: "flex", my: 1.5, alignItems: "center" }}>
                   <img src="../images/Footer/add_call.svg" alt="" height={"20px"} />
                   <Typography sx={{ color: "white", fontSize: "16px", ml: 2 }}>
                     895646456454
                   </Typography>
                 </Box>
-              </Link>
+              </a>
               <Link to="/terms" key="">
               <Box sx={{ display: "flex", my: 1.5, alignItems: "center" }}>
                <ChevronRight color="white" size={18} />
@@ -258,21 +260,26 @@ const Footer = () => {
           flexDirection: { xs: "column", lg: "row" },
         }}
       >
-        <Box>
-          <Typography>LOGO</Typography>
+        <Box height={"3rem"}>
+          <img src="../images/Logo/Logo2.png" alt="" height={"100%"} />
         </Box>
         <Box sx={{ color: "#CBCCCE", fontSize: "18px", fontWeight: 300, my: { xs: 2, lg: 0 } }}>
           Copyright © 2024  All Rights Reserved
         </Box>
         <Box sx={{ display: "flex" }}>
-          <Link to="" style={{ marginRight: "10px" }}>
+          <Link to={whats_app} style={{ marginRight: "10px", color: "white" }}>
+            <Box sx={{ backgroundColor: "#68B807", p: 1 }}>
+              <WhatsAppIcon color="white" />
+            </Box>
+          </Link>
+          <Link to={facebook_link} style={{ marginRight: "10px" }}>
             <Box sx={{ backgroundColor: "#42A5F5", p: 1 }}>
               <img src="../images/Footer/facebook.svg" alt="" height={"20px"} />
             </Box>
           </Link>
 
-          <Link to="" style={{ marginRight: "10px" }}>
-            <Box sx={{ backgroundColor: "#68B807", p: 1 }}>
+          <Link to={instagam_link} style={{ marginRight: "10px" }}>
+            <Box sx={{ backgroundColor: "#E24AA6", p: 1 }}>
               <img src="../images/Footer/instagram.svg" alt="" height={"20px"} />
             </Box>
           </Link>

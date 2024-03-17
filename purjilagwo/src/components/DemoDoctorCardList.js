@@ -11,7 +11,7 @@ const DemoDoctorCardList = () => {
                 <Box sx={{ display: "flex", backgroundColor: "#42A5F5", width: "100%", justifyContent: "start", alignItems: "center", }}>
                     <Avatar
                         alt="Remy Sharp"
-                        src="../../images/DoctorList/doctor.png"
+                        src="../../images/DoctorList/doctor.jpg"
                         sx={{ width: 120, height: 120, position: "relative", top: 25, ml: 4, mr: 2 }}
                     />
                     <Box sx={{ mt: 3, mr: 1 }} >

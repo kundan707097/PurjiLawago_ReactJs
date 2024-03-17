@@ -8,6 +8,7 @@ import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
 import FandQ from './FandQ';
 import HowGetADoctor from '../../components/HowGetADoctor';
+import OurServices from './OurServices';
 
 const EyeCare = () => {
 
@@ -22,6 +23,7 @@ const EyeCare = () => {
         <>
             <Landing />
             <TopDoctors />
+            <OurServices />
             <DoctorSpecialist />    
             <DoctorService />
             <HowGetADoctor />

@@ -8,6 +8,7 @@ import Banner from './Banner';
 import FandQ from './FandQ';
 import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
+import OurServices from './OurServices';
 
 const Ent = () => {
 
@@ -23,6 +24,7 @@ const Ent = () => {
         <>
             <Landing />
             <TopDoctors />
+            <OurServices />
             <Category />
             <NoseTreatment />
             <BookingSystem />

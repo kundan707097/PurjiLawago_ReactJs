@@ -10,15 +10,57 @@ import { ChevronLeft, ChevronRight } from "@carbon/icons-react";
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-import svg1 from "../../assets/vectors/image 49.svg"
-import svg2 from "../../assets/vectors/image 50.svg"
-import svg3 from "../../assets/vectors/image 43.svg";
 
 const Specialities = () => {
 
   const swipeerRef = useRef(null);
   const [count, setCount] = useState(6);
   const [departmentData, setDepartmentData] = useState([]);
+
+  const specialities = [
+    {
+      imgsrc: "https://www.practostatic.com/consult/consult-home/symptoms_icon/irregular-painful+period.png",
+      departmentName: "Cardiology",
+      groupId: 1,
+      to: "/cardiology"
+    },
+    {
+      imgsrc: "https://www.practostatic.com/consult/consult-home/symptoms_icon/Acne.png",
+      departmentName: "Eye Care",
+      groupId: 2,
+      to: "/eyecare"
+    },
+    {
+      imgsrc: "https://www.practo.com/consult/static/images/top-speciality-sexology.svg",
+      departmentName: "Dentist",
+      groupId: 3,
+      to: "/dentist"
+    },
+    {
+      imgsrc: "https://www.practostatic.com/consult/consult-home/symptoms_icon/coughing.png",
+      departmentName: "Ent",
+      groupId: 4,
+      to: "/ent"
+    },
+    {
+      imgsrc: "https://www.practo.com/consult/static/images/top-speciality-pediatric.svg",
+      departmentName: "Nephrology",
+      groupId: 5,
+      to: "/nephrology"
+    },
+    {
+      imgsrc: "https://www.practostatic.com/acred/search-assets/2/12-mental-wellness.png",
+      departmentName: "Paediatric",
+      groupId: 6,
+      to: "/paediatric"
+    },
+    {
+      imgsrc: "https://www.practo.com/consult/static/images/top-speciality-sexology.svg",
+      departmentName: "Fertiltity",
+      groupId: 7,
+      to: "/fertiltity"
+    },
+  ]
 
 
   const handleResize = () => {
@@ -70,66 +112,55 @@ const Specialities = () => {
     fetchAdditionalData();
   }, []); // Empty dependency array means this effect runs once when the component mounts
 
-  function generateUniqueId(prefix = 'id') {
-    const timestamp = Date.now().toString(36);
-    const randomNumber = Math.random().toString(36).substr(2, 5);
-    return `${prefix}_${timestamp}_${randomNumber}`;
-  }
-
   return (
-    <>
-      {departmentData.length !== 0 && (
-        <>
-          <Box sx={{ background: "#42A5F5", py: 6, px: 6, position: "relative", mb: 6 }}>
-            <img src={svg1} alt="" style={{ position: "absolute", top: 0, left: 0, height: "100%" }} />
-            <img src={svg2} alt="" style={{ position: "absolute", top: 0, right: 0, height: "30%" }} />
-            <Typography sx={{ fontSize: "50px", textAlign: "center", fontWeight: 600, color: "white", pb: 3 }}>
-              Specialities
-            </Typography>
+
+    <Box sx={{ background: "#42A5F5", py: 6, px: 6, position: "relative", mb: 6 }}>
+      <img src="../images/Home/image49.svg" alt="" style={{ position: "absolute", top: 0, left: 0, height: "100%" }} />
+      <img src="../images/Home/image50.svg"alt="" style={{ position: "absolute", top: 0, right: 0, height: "30%" }} />
+      <Typography sx={{ fontSize: "50px", textAlign: "center", fontWeight: 600, color: "white", pb: 3 }}>
+        Specialities
+      </Typography>
 
 
-            <IconButton
-              color="primary"
-              aria-label="add to shopping cart"
-              sx={{ boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", mx: "10px", color: "#1AE5BE", backgroundColor: "white", position: "absolute", top: "55%", left: "1rem", zIndex: 99 }}
-              size="large"
-              onClick={() => swipeerRef.current.swiper.slidePrev()}
+      <IconButton
+        color="primary"
+        aria-label="add to shopping cart"
+        sx={{ boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", mx: "10px", color: "#1AE5BE", backgroundColor: "white", position: "absolute", top: "55%", left: "1rem", zIndex: 99 }}
+        size="large"
+        onClick={() => swipeerRef.current.swiper.slidePrev()}
 
-            >
-              <ChevronLeft size={24} />
-            </IconButton>
-            {/* Slider */}
-            <Swiper modules={[Navigation]} spaceBetween={20} slidesPerView={count} ref={swipeerRef} >
-              {/* here you need to change the DepartmentCardData to departmentData */}
-              {departmentData.map((item) => {
-                return (
-                  <SwiperSlide>
-                    <SpecialitiesCard
-                      key={generateUniqueId()}
-                      imgsrc={item.imgsrc}
-                      department={item.departmentName}
-                      groupId={item.groupId} />
-                  </SwiperSlide>
-                )
-              })}
-            </Swiper>
+      >
+        <ChevronLeft size={24} />
+      </IconButton>
+      {/* Slider */}
+      <Swiper modules={[Navigation]} spaceBetween={20} slidesPerView={count} ref={swipeerRef} >
+        {/* here you need to change the DepartmentCardData to departmentData */}
+        {specialities.map((item) => {
+          return (
+            <SwiperSlide>
+              <SpecialitiesCard
+                key={item.groupId}
+                imgsrc={item.imgsrc}
+                department={item.departmentName}
+                to={item.to} />
+            </SwiperSlide>
+          )
+        })}
+      </Swiper>
 
-            <IconButton
-              color="primary"
-              aria-label="add to shopping cart"
-              sx={{ boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", mx: "10px", backgroundColor: "white", color: "#1AE5BE", position: "absolute", top: "55%", right: "1rem", zIndex: 99 }}
-              size="large"
-              onClick={() => swipeerRef.current.swiper.slideNext()}
+      <IconButton
+        color="primary"
+        aria-label="add to shopping cart"
+        sx={{ boxShadow: "0px 4px 6px rgba(0,0,0, 0.05)", mx: "10px", backgroundColor: "white", color: "#1AE5BE", position: "absolute", top: "55%", right: "1rem", zIndex: 99 }}
+        size="large"
+        onClick={() => swipeerRef.current.swiper.slideNext()}
 
-            >
-              <ChevronRight size={24} />
-            </IconButton>
+      >
+        <ChevronRight size={24} />
+      </IconButton>
 
-          </Box>
-        </>
-      )}
+    </Box>
 
-    </>
   )
 }
 
@@ -151,7 +182,7 @@ const SpecialitiesCard = (props) => {
       >
         <Avatar
           alt="Remy Sharp"
-          src={props.imgsrc ? props.imgsrc : svg3}
+          src={props.imgsrc}
           sx={{ width: 90, height: 90, mx: "auto", background: "white" }}
         />
         {/* <Box
@@ -193,7 +224,7 @@ const SpecialitiesCard = (props) => {
         </Typography>
 
         <Link
-          to={`/doctorlistbyId/${props.groupId}`}
+          to={props.to}
           style={{ color: "#00B69B" }}
         >
           <Box
@@ -210,7 +241,7 @@ const SpecialitiesCard = (props) => {
               transitionDuration: "100ms",
             }}
           >
-            Book Now
+            <Typography>Book Now</Typography>
           </Box>
         </Link>
       </Box>
