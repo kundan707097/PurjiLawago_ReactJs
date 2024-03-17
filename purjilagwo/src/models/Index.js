@@ -36,6 +36,7 @@ export const DoctorProfileData = {
   Pincode: "",
   ExtraPhoneNumbers: "",
   Language: "",
+  HospitalName: "",
 }
 
 export const PatientProfileData = {

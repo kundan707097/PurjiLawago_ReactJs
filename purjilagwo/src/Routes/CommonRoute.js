@@ -7,6 +7,10 @@ import LabTest from '../screens/labtest/LabTest';
 import Surgeries from '../screens/surgeries/surgeries';
 import Contact from '../screens/contact/contact';
 import About from '../screens/about/about';
+import Privacy_policy from '../screens/privacypolicy/privacy'
+import Terms from '../screens/terms/terms';
+
+
 const EmergencyBooking = lazy(() => import('../screens/emergencyBooking/EmergencyBooking'));
 const DoctorDetails = lazy(() => import('../screens/doctorInformationScreen/DoctorsDetails'));
 const DoctorList = lazy(() => import('../screens/doctorInformationScreen/DoctorList'));
@@ -18,6 +22,7 @@ const Ent = lazy(() => import('../screens/ent/Ent'));
 // const Fertiltity = lazy(() => import('../screens/fertility/Fertiltity'));
 // const Paediatric = lazy(() => import('../screens/paediatric/Paediatric'));
 // const PhysicanSurgeon = lazy(() => import('../screens/physican&surgeon/Physican&Surgeon'));
+
 export const commonroutes = [
   {
     path: '/doctorsdetails/:id',
@@ -78,6 +83,14 @@ export const commonroutes = [
   {
     path: '/dentist',
     element: <Dentist />,
+  },
+  {
+    path: '/privacypolicy',
+    element: <Privacy_policy />,
+  },
+    {
+    path: '/terms',
+    element: <Terms />,
   },
   // {
   //   path: '/nephrology',

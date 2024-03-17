@@ -1,0 +1,18 @@
+.privacy_text{
+    text-align: justify;
+}
+.h-text{
+    font-size: 16px;
+    color: #42A5F5;
+    font-weight: 600 !important;
+    margin: 16px 0px 8px 0px !important;
+}
+.s-head{
+    color: black;
+    font-weight: 700 !important;
+    font-size: 16px;
+     margin: 6px 0px 3px 0px !important;
+}
+.ss-head{
+font-weight: bold !important;
+}
