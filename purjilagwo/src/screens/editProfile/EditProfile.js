@@ -39,7 +39,7 @@ function EditProfile() {
     pincode: "",
     extraphonenumbers: "",
     language: "Hindi",
-    hospitalName: ""
+    hospitalName: "",
   });
   const [day, setDays] = useState({
     monday: false,
@@ -91,7 +91,7 @@ function EditProfile() {
           if (isDoctor === "true") {
             setLoading(true)
             const responseData = await ProfileUpdate.GetProfileData(`DoctorsInformation/DoctorsProfileById?id=${id}`);
-
+            debugger;
             if (responseData != null) {
               console.log('Profile data:', responseData);
               setImage(responseData.image);
@@ -133,7 +133,7 @@ function EditProfile() {
                 extraphonenumbers: responseData.extraPhoneNumbers,
                 language: responseData.language,
                 keywords: responseData.keywords,
-
+                hospitalName:responseData.hostipalName,
 
               })
               setEmail(responseData.email);
@@ -217,6 +217,7 @@ function EditProfile() {
     doctor_profile_data.Pincode = value.pincode;
     doctor_profile_data.ExtraPhoneNumbers = value.extraphonenumbers;
     doctor_profile_data.Language = value.language;
+    doctor_profile_data.HospitalName = value.hospitalName;
     console.log(doctor_profile_data);
 
     try {

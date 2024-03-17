@@ -1,0 +1,206 @@
+.bg img {
+    width: 100%;
+    margin-top: -4px;
+}
+
+.upper_img img {
+    width: 70%;
+}
+
+.upper_img {
+    position: absolute;
+    top: 60px;
+    right: -240px;
+}
+
+.phoneicon {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    background-color: red;
+    color: white;
+    border-radius: 11px;
+}
+
+.cont_div {
+    position: absolute;
+    top: 415px;
+    left: 113px;
+    display: flex;
+    gap: 21px;
+}
+
+.cont {
+    padding: 7px 27px;
+    border: 2px solid #feffef;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-radius: 11px;
+    color: white;
+
+}
+
+.gmailDiv {
+    padding: 7px 27px;
+    border: 2px solid #feffef;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    border-radius: 11px;
+    color: white;
+}
+
+.cont_div1 {
+    position: absolute;
+    top: 474px;
+    left: 26px;
+    display: flex;
+    /* background-color: #fff; */
+    /* padding: 8px 6px; */
+    width: 36%;
+    border-radius: 5px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.firstdiv {
+    border-left: 2px solid gray;
+    padding: 0px 5px;
+}
+
+.firstS {
+    padding: 10px 29px;
+    background-color: #6fbb9f;
+    color: white;
+}
+
+.bgimg1 {
+    background-image: url('../../assets/image/Bg.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-top: 76px;
+    width: 100%;
+    height: auto;
+}
+
+.heed {
+    color: white;
+    text-align: center;
+    padding: 33px 0px;
+    font-family: Nunito Sans, Plaster, sans-serif !important;
+    font-size: 3vw !important;
+    font-weight: 800 !important;
+}
+
+.card-img {
+    width: 100%;
+}
+
+.imgSpace img {
+    width: 93%;
+    margin: auto;
+    display: flex;
+    padding-bottom: 55px;
+}
+
+.tmig img {
+    width: 41%;
+    display: flex;
+    margin: auto;
+    padding-top: 41px;
+    padding-bottom: 13px;
+}
+
+.tcont {
+    width: 100%;
+    display: flex;
+    padding: 8px;
+}
+
+.imgdiv1 {
+    width: 30%;
+}
+
+.imgdiv1 img {
+    width: 100%;
+}
+
+.imgdiv2 {
+    width: 69%;
+    display: flex;
+    margin: auto;
+}
+
+.imgdiv2 img {
+    width: 100%;
+}
+
+.img1 {
+    width: 100%;
+    background-image: url('../../assets/image/why1.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: auto;
+    padding-top: 840px;
+    margin: 51px 0px;
+}
+
+.img1 img {
+    width: 30%;
+    height: 14vh;
+    display: flex;
+    margin: auto;
+}
+
+.imgwhy img {
+    width: 100%;
+}
+
+.fghj img {
+    width: 100%;
+    border-radius: 24px;
+}
+
+.howd img {
+    width: 100%;
+}
+
+.jhgfd img {
+    width: 100%;
+}
+
+@media (max-width: 575px),
+only screen and (min-width: 576px) and (max-width: 767px),
+only screen and (min-width: 768px) and (max-width: 991px),
+only screen and (min-width: 992px) and (max-width: 1199px) {
+    .heed {
+        font-size: 7vw !important;
+    }
+
+    .mobileT img {
+        width: 100%;
+    }
+
+    .whiy img {
+        width: 100%;
+        padding-top: 43px;
+    }
+
+    .dfgytr img {
+        width: 100%;
+        padding-top: 43px;
+    }
+
+    .werdrf img {
+        width: 100%;
+    }
+
+    .hytfgh img {
+        width: 100%;
+    }
+
+    .hgftryu img {
+        width: 100%;
+        padding-top: 43px;
+    }
+
+    .htfdcvbn img {
+        width: 100%;
+        padding-top: 43px;
+    }
+}

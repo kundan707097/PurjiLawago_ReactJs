@@ -13,7 +13,7 @@ const section_2 = [
   },
   {
     name: "Privacy and Policy",
-    to: "/privacy_policy",
+    to: "/privacypolicy",
   },
   {
     name: "Emergency Services",
@@ -220,6 +220,14 @@ const Footer = () => {
                   </Typography>
                 </Box>
               </Link>
+              <Link to="/terms" key="">
+              <Box sx={{ display: "flex", my: 1.5, alignItems: "center" }}>
+               <ChevronRight color="white" size={18} />
+                <Typography sx={{ color: "white", fontSize: "16px", ml: 2 }}>
+                  Terms and condition
+                </Typography>
+              </Box>
+            </Link>
             </Box>
           </Box>
         </Box>

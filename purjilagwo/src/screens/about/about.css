@@ -1,0 +1,87 @@
+.textbanner{
+    padding-top: 125px;
+    padding-right:180px ;
+    padding-bottom: 125px;
+    padding-left: 60px;
+    text-align:justify;
+}
+.cards_coalss1{
+    border-radius: 10px;
+    border:1px solid rgba(255, 255, 255, 0);
+    padding-top: 20px;
+  padding-right: 40px;
+    padding-left: 40px;
+    /* margin-left: 20px; */
+    margin-right: 40px;
+    background-color: #e8fcf4;
+        padding-bottom: 100px;
+}
+
+
+.bgimg {
+    /* margin-top: 200px;    */
+     background-image: url('../../assets/image/bg2asdfasdfasd.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-top: 76px;
+    width: 100%;
+    height: auto;
+}
+
+.imgSpace1 img {
+width:  74%;
+    margin: auto;
+    display: flex;
+    padding-bottom: 55px;
+}
+
+.boximg{
+    width: 35%;
+}
+.textbox{
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.fontcolor{
+    color: #8B8B8B;
+}
+.brandname{
+     font-size: 60px ;
+      font-Weight: 800;
+      color: rgb(131, 239, 197);text-align:center;
+}
+.numberofconpan{
+   font-size: 60px;
+    font-Weight: 800;
+    color: #42a5f5;
+    text-align:center;
+}
+
+@media (max-width: 575px),
+only screen and (min-width: 576px) and (max-width: 767px),
+only screen and (min-width: 768px) and (max-width: 991px),
+only screen and (min-width: 992px) and (max-width: 1199px) {
+.textbanner{
+        padding-top: 1px;
+    padding-right: 33px;
+    padding-bottom: 1px;
+    padding-left:33px;
+    text-align: justify;
+}
+.cards_coalss1{
+    border-radius: 10px;
+    border:1px solid rgba(255, 255, 255, 0);
+    padding-top: 20px;
+    padding-right: 25px;
+    padding-left: 25px;
+    /* margin-left: 20px; */
+    margin-right: 20px;
+    background-color: #e8fcf4;
+        padding-bottom: 100px;
+}
+.brandname{
+     font-size: 33px;
+}
+
+}

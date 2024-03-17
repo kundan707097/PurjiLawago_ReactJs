@@ -11,7 +11,6 @@ import { DoctorExcelInput } from '../../models/Index'
 import DataNotFound from '../../components/DataNotFound'
 import * as XLSX from 'xlsx'
 
-
 const DoctorAppointmentDashboard = () => {
     const [loading, setLoading] = useState(false);
     const [id, setID] = useState(localStorage.getItem('id'));
@@ -71,20 +70,31 @@ const DoctorAppointmentDashboard = () => {
     }, [DoctorService.DoctorDashboardData, dateRange, id, searching, pagination, pageMain,]);
     const downloadExcel = (records) => {
         debugger;
-        const worksheet = XLSX.utils.json_to_sheet(records);
-        const workbook = XLSX.utils.book_new();
+        const workbook = XLSX.utils.book_new(); // Define workbook here
         
-        // Add headers to the worksheet
-        const headers = Object.keys(records[0]);
-        XLSX.utils.sheet_add_json(worksheet, [headers], { skipHeader: true, origin: 'A1' });
+        // Convert records to worksheet
+        const worksheetName = 'DoctorRecords';
+        XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(records), worksheetName);
     
-        // Add values to the worksheet
-        const values = records.map(record => Object.values(record));
-        XLSX.utils.sheet_add_json(worksheet, values, { skipHeader: true, origin: 'A2' });
+        // Customize header style (bold, uppercase, and red color)
+        const headerStyle = {
+            font: { bold: true },
+            alignment: { horizontal: 'center' },
+            fill: { type: 'pattern', patternType: 'solid', fgColor: { rgb: 'FF0000' } } // Red color
+        };
+        const headerRange = XLSX.utils.decode_range(workbook.Sheets[worksheetName]['!ref']);
+        for (let col = headerRange.s.c; col <= headerRange.e.c; ++col) {
+            const headerAddress = XLSX.utils.encode_cell({ r: headerRange.s.r, c: col });
+            const cell = workbook.Sheets[worksheetName][headerAddress];
+            if (cell && cell.v) {
+                cell.s = headerStyle;
+                cell.v = cell.v.toString().toUpperCase(); // Convert header to uppercase
+            }
+        }
     
-        XLSX.utils.book_append_sheet(workbook, worksheet, 'DoctorRecords');
+        // Save workbook to file
         XLSX.writeFile(workbook, 'DoctorRecords.xlsx');
-    }
+    };
     const handleDownloadExcel = async() =>{
         debugger;
         const data = DoctorExcelInput;
@@ -97,34 +107,6 @@ const DoctorAppointmentDashboard = () => {
         } catch (error) {
             console.error('Error downloading Excel file:', error);
         }
-        // try {
-        //     const response = await DoctorService.DoctorDownloadExcel(data);
-            
-        //     // Create a Blob from the response data
-        //     const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            
-        //     // Create a URL for the Blob
-        //     const url = window.URL.createObjectURL(blob);
-            
-        //     // Create an <a> element to trigger the download
-        //     const a = document.createElement('a');
-        //     a.href = url;
-        //     a.download = 'DoctorRecords.xlsx';
-            
-        //     // Append the <a> element to the document body and trigger the download
-        //     document.body.appendChild(a);
-        //     a.click();
-            
-        //     // Cleanup by revoking the URL
-        //     window.URL.revokeObjectURL(url);
-        // } catch (error) {
-        //     console.error('Error downloading Excel file:', error);
-        // }
-        // if(response.status === 200){
-        //     console.log('Excel data:', response.data);
-        // }else{
-        //     console.log('Error:', response);
-        // }
     }
 
     const handleDownloadloadPdf = async() => {
@@ -158,7 +140,7 @@ const DoctorAppointmentDashboard = () => {
                                             <img src="../images/DoctorAppointmentDashboard/icon.svg" alt="img" />
                                         </Box>
                                     </Box>
-                                    <Typography sx={{ color: "#3A3F51", fontSize: "28px", fontWeight: 700, }}>{maxCount? maxCount :(0)}</Typography>
+                                    <Typography sx={{ color: "#3A3F51", fontSize: "28px", fontWeight: 700, }}>{statistics.totalBooking ? statistics.totalBooking : (0)}</Typography>
                                     <Typography sx={{ color: "#CBCCCE", fontSize: "15px", fontWeight: 500, pt: 2.6 }}>Total {" "}<span style={{ color: "#64EBB6", fontWeight: 600 }}>{statistics.totalBookingInLast30Days ? statistics.totalBookingInLast30Days : (0)}</span> Booking In Last 30 Days</Typography>
                                 </Box>
                                 <Box sx={{ p: 2, bgcolor: "white", borderRadius: "5px", boxShadow: "0 0 1px #00000040", width: { xs: "100%", md: "27%" }, mr: 2.5, mb: { xs: 2, md: 0 } }}>
@@ -173,7 +155,7 @@ const DoctorAppointmentDashboard = () => {
                                 </Box>
                                 <Box sx={{ p: 2, bgcolor: "white", borderRadius: "5px", boxShadow: "0 0 1px #00000040", width: { xs: "100%", md: "46%" }, position: "relative" }}>
                                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", height: "3rem" }}>
-                                        <Typography sx={{ color: "#898989", fontSize: "15px" }}>My Today Performance</Typography>
+                                        <Typography sx={{ color: "#898989", fontSize: "15px" }}>Today Booking Reports</Typography>
                                         <Box sx={{ position: "absolute", right: 0, top: 0 }}>
                                             <img src="../images/DoctorAppointmentDashboard/Group265.svg" alt="img" />
                                         </Box>
