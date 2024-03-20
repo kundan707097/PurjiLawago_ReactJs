@@ -10,11 +10,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CallIcon from '@mui/icons-material/Call';
-import Calender from "../../assets/image/calender_cut.svg"
 import Loading from '../../components/Loading';
 import DataNotFound from '../../components/DataNotFound';
 import "../../components/style/InputBox.css"
-import CustomeButton from '../../components/Button';
+import CustomeButton, { CustomizedButton } from '../../components/Button';
 import { useSnackbar } from 'notistack';
 import { Checkmark } from "@carbon/icons-react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -22,7 +21,7 @@ import MobileAppBanner from '../../components/MobileAppBanner';
 import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
 import BackdropLoading from '../../components/BackdropLoading';
-// import { doctorDetails } from '../dummyData/DummyData';
+import { doctorDetails } from '../dummyData/DummyData';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,6 +57,7 @@ function a11yProps(index) {
 }
 
 export default function Doctor() {
+  const { enqueueSnackbar } = useSnackbar()
   const [doctorData, setDoctorData] = useState(null); // uncomment this and remove the dummy data
   const [timeSlots, setTimeSlots] = useState([]);
   const [dateString, setDateString] = useState([]);
@@ -67,6 +67,46 @@ export default function Doctor() {
   const [details, setDetails] = useState({}); // useState for the details that we passing in the dialog box
 
   const [expanded, setExpanded] = React.useState(false);
+  const [backdropLoading, setbackdropLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(true);
+  const [visibleNameInput, setVisibleNameInput] = useState(false);
+  const [bookingOrPhoneNo, setBookingOrPhoneNo] = useState("");
+  const [name, setName] = useState("");
+
+  const handleVerifyBooking = async () => {
+
+    setbackdropLoading(true);
+    const response = await DoctorService.VerifyPhoneOrBookingNo({ bookingOrPhoneNo: bookingOrPhoneNo });
+    if (response.status === 200) {
+      if (response.data.IsSuccess) {
+        setbackdropLoading(false);
+        setVisibleNameInput(true);
+        setName(response.data.name);
+      } else {
+        setbackdropLoading(false);
+        setVisibleNameInput(false);
+        enqueueSnackbar(response.data.errorMessage, { variant: "error" });
+      }
+    } else {
+      setbackdropLoading(false);
+      enqueueSnackbar("Server is busy", { variant: "error" });
+    }
+
+  }
+
+  const handleContinueBooking = async () => {
+    const response = await DoctorService.BookingForExistingPatient({ bookingOrPhoneNo: bookingOrPhoneNo, name: name });
+    if (response.status === 200) {
+      if (response.data.IsSuccess) {
+        // Open either the opt box or continue the booking process for the existing patient
+      } else {
+        enqueueSnackbar(response.data.errorMessage, { variant: "error" });
+      }
+    } else {
+      enqueueSnackbar("Server is busy", { variant: "error" });
+    }
+    setbackdropLoading(true);
+  }
 
   const handleExpand = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -109,7 +149,7 @@ export default function Doctor() {
       if (id) {
         setLoading(true);
         try {
-          //setDoctorData(doctorDetails)
+          setDoctorData(doctorDetails)
           const response = await DoctorService.DoctorInformation(id);
           debugger;
           if (response !== undefined) {
@@ -150,8 +190,8 @@ export default function Doctor() {
         if (doctorData.timeSlots[dateString[i]][index].isAvailable) {
           count++;
         }
-        if(index === doctorData.timeSlots[dateString[i]].length - 1){
-          if(doctorData.timeSlots[dateString[i]][index].isAvailable){
+        if (index === doctorData.timeSlots[dateString[i]].length - 1) {
+          if (doctorData.timeSlots[dateString[i]][index].isAvailable) {
             count++;
           }
         }
@@ -276,147 +316,156 @@ export default function Doctor() {
                   </Box>
 
                   {/* This slot is availbale in moblie view */}
+                  <Box sx={{ display: { xs: "block", md: "none", } }} >
 
-                  <Box sx={{ display: { xs: "block", md: "none", backgroundColor: "white", } }}>
-                    <Typography sx={{ fontSize: "18px", fontWeight: 600, color: "#8E999A", mb: 1, textAlign: "center", mt: 2 }}>Pick a Time Slot</Typography>
-                    <Box
-                      sx={{
-                        flexGrow: 1,
-                        width: 400,
-                        bgcolor: 'background.paper',
-                        borderRadius: "15px",
-                        border: "2px solid #64EBB666",
-                        mx: "auto"
+                    <Box sx={{ backgroundColor: "white" }}>
+                      <Typography sx={{ fontSize: "18px", fontWeight: 600, color: "#8E999A", mb: 1, textAlign: "center", mt: 2 }}>Pick a Time Slot</Typography>
+                      <Box
+                        sx={{
+                          flexGrow: 1,
+                          width: 400,
+                          bgcolor: 'background.paper',
+                          borderRadius: "15px",
+                          border: "2px solid #64EBB666",
+                          mx: "auto"
 
-                      }}
-                    >
-                      <Typography sx={{ textAlign: "center", py: 2, fontSize: "14px", color: "black" }}>Book an appointment for Consultation</Typography>
+                        }}
+                      >
+                        <Typography sx={{ textAlign: "center", py: 2, fontSize: "14px", color: "black" }}>Book an appointment for Consultation</Typography>
 
-                      <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: .6, borderRadius: "5px", fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", mx: "auto", mb: 2 }}>
-                        Clinic appointment 650₹
-                      </Box>
-
-                      {currentDate != null && timeSlots.length !== 0 ? (
-                        <Box sx={{ display: "flex", px: 1 }}>
-                          <TabScrollButton onClick={handleLeft} direction='left' orientation='horizontal'>
-                            <ChevronLeftIcon />
-                          </TabScrollButton>
-                          <Tabs
-                            value={value}
-                            onChange={handleChange}
-                            variant="scrollable"
-                            scrollButtons={false}
-                            aria-label="visible arrows tabs example"
-                            sx={{
-                              [`& .${tabsClasses.scrollButtons}`]: {
-                                '&.Mui-disabled': { opacity: 0.3 },
-                              },
-                            }}
-
-                          >
-
-                            {timeSlots.map((items, index) => {
-                              return (
-
-                                <Tab label={[
-                                  <>
-                                    {items.getDate() === currentDate.getDate() &&
-                                      items.getMonth() === currentDate.getMonth() &&
-                                      items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Today</div>}
-                                    {items.getDate() === currentDate.getDate() + 1 &&
-                                      items.getMonth() === currentDate.getMonth() &&
-                                      items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Tomorrow</div>}
-                                    {items.getDate() !== currentDate.getDate() && items.getDate() !== currentDate.getDate() + 1 && <div style={{ color: "black" }}>{items.toDateString().split(' ')[0]}, {items.toDateString().split(' ')[2]} {items.toDateString().split(' ')[1]}</div>}
-
-                                    <div style={{ marginTop: '5px', fontSize: "8px", fontWeight: 800, color: "#42A5F599", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
-                                  </>
-                                ]} sx={{ fontSize: "10px", p: 0, width: "100px", fontWeight: 500, }} {...a11yProps(index)} />
-
-                              )
-                            })}
-
-                          </Tabs>
-                          <TabScrollButton onClick={handleRight} direction='right' orientation='horizontal'>
-                            <ChevronRightIcon />
-                          </TabScrollButton>
+                        <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: .6, borderRadius: "5px", fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", mx: "auto", mb: 2 }}>
+                          Clinic appointment 650₹
                         </Box>
-                      ) : <>
-                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", }}>
-                          <img src={Calender} alt="No Slot Available" width={50} />
-                          <Typography sx={{ mt: 2, fontSize: "10px" }}>No Data Available</Typography>
-                          <a href="tel:+" style={{ width: "50%", }}>
-                            <Button
-                              variant="contained"
-                              sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
+
+                        {currentDate != null && timeSlots.length !== 0 ? (
+                          <Box sx={{ display: "flex", px: 1 }}>
+                            <TabScrollButton onClick={handleLeft} direction='left' orientation='horizontal'>
+                              <ChevronLeftIcon />
+                            </TabScrollButton>
+                            <Tabs
+                              value={value}
+                              onChange={handleChange}
+                              variant="scrollable"
+                              scrollButtons={false}
+                              aria-label="visible arrows tabs example"
+                              sx={{
+                                [`& .${tabsClasses.scrollButtons}`]: {
+                                  '&.Mui-disabled': { opacity: 0.3 },
+                                },
+                              }}
+
                             >
-                              <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
-                            </Button>
-                          </a>
-                        </Box>
-                      </>}
 
-                      {/* <Typography sx={{ mt: 2, fontSize: "15px", color: "black", ml: 3, fontWeight: 600 }}>Evening</Typography> */}
+                              {timeSlots.map((items, index) => {
+                                return (
+
+                                  <Tab label={[
+                                    <>
+                                      {items.getDate() === currentDate.getDate() &&
+                                        items.getMonth() === currentDate.getMonth() &&
+                                        items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Today</div>}
+                                      {items.getDate() === currentDate.getDate() + 1 &&
+                                        items.getMonth() === currentDate.getMonth() &&
+                                        items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Tomorrow</div>}
+                                      {items.getDate() !== currentDate.getDate() && items.getDate() !== currentDate.getDate() + 1 && <div style={{ color: "black" }}>{items.toDateString().split(' ')[0]}, {items.toDateString().split(' ')[2]} {items.toDateString().split(' ')[1]}</div>}
+
+                                      <div style={{ marginTop: '5px', fontSize: "8px", fontWeight: 800, color: "#42A5F599", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
+                                    </>
+                                  ]} sx={{ fontSize: "10px", p: 0, width: "100px", fontWeight: 500, }} {...a11yProps(index)} />
+
+                                )
+                              })}
+
+                            </Tabs>
+                            <TabScrollButton onClick={handleRight} direction='right' orientation='horizontal'>
+                              <ChevronRightIcon />
+                            </TabScrollButton>
+                          </Box>
+                        ) : <>
+                          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", }}>
+                            <img src="../images/DoctorDetails/calender_cut.svg" alt="No Slot Available" width={50} />
+                            <Typography sx={{ mt: 2, fontSize: "10px" }}>No Data Available</Typography>
+                            <a href="tel:+" style={{ width: "50%", }}>
+                              <Button
+                                variant="contained"
+                                sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
+                              >
+                                <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
+                              </Button>
+                            </a>
+                          </Box>
+                        </>}
+
+                        {/* <Typography sx={{ mt: 2, fontSize: "15px", color: "black", ml: 3, fontWeight: 600 }}>Evening</Typography> */}
 
 
-                      {dateString.map((items, index) => {
-                        return (
-                          <>
-                            <CustomTabPanel value={value} index={index} key={index}>
-                              {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
-                                <>
-                                  <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", pr: "24px" }}>
-                                    <img src={Calender} alt="No Slot Available" width={50} />
-                                    <Typography sx={{ mt: 2, fontSize: "10px" }}>No Slot Available</Typography>
-                                    <a href="tel:+" style={{ width: "50%", }}>
-                                      <Button
-                                        variant="contained"
-                                        sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
-                                      >
-                                        <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
-                                      </Button>
-                                    </a>
+                        {dateString.map((items, index) => {
+                          return (
+                            <>
+                              <CustomTabPanel value={value} index={index} key={index}>
+                                {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
+                                  <>
+                                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", pr: "24px" }}>
+                                      <img src="../images/DoctorDetails/calender_cut.svg" alt="No Slot Available" width={50} />
+                                      <Typography sx={{ mt: 2, fontSize: "10px" }}>No Slot Available</Typography>
+                                      <a href="tel:+" style={{ width: "50%", }}>
+                                        <Button
+                                          variant="contained"
+                                          sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
+                                        >
+                                          <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
+                                        </Button>
+                                      </a>
+                                    </Box>
+
+                                  </>
+                                )}
+                                <Box >
+                                  <Box sx={{ py: 1, px: 4, bgcolor: "#F0F6FF", borderRadius: "10px", mr: 3, mb: 3 }}>
+                                    <Typography sx={{ color: "#1C4188", textAlign: "center" }}>Total Availability {countSlot(index)} slot</Typography>
+                                  </Box>
+                                  <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll", justifyContent: "center", "::-webkit-scrollbar": { width: "15px", bgcolor: "#F0F6FF", borderRadius: "10px" }, "::-webkit-scrollbar-thumb": { bgcolor: "#64EBB6", borderRadius: "10px" } }}>
+                                    {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
+                                      return (
+                                        <>
+                                          <Box sx={{ fontSize: "12px", px: 1, py: 1, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index], doctorData?.consultantFee)} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
+
+                                          {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index], doctorData?.consultantFee)}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
+                                        </>
+                                      )
+                                    })}
+
+
                                   </Box>
 
-                                </>
-                              )}
-                              <Box >
-                                <Box sx={{ py: 1, px: 4, bgcolor: "#F0F6FF", borderRadius: "10px", mr: 3, mb: 3 }}>
-                                  <Typography sx={{ color: "#1C4188", textAlign: "center" }}>Total Availability {countSlot(index)} slot</Typography>
-                                </Box>
-                                <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll", justifyContent: "center", "::-webkit-scrollbar": { width: "15px", bgcolor: "#F0F6FF", borderRadius: "10px" }, "::-webkit-scrollbar-thumb": { bgcolor: "#64EBB6", borderRadius: "10px" } }}>
-                                  {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
-                                    return (
-                                      <>
-                                        <Box sx={{ fontSize: "12px", px: 1, py: 1, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index], doctorData?.consultantFee)} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
-
-                                        {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index], doctorData?.consultantFee)}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
-                                      </>
-                                    )
-                                  })}
-
 
                                 </Box>
 
+                              </CustomTabPanel>
+                            </>
+                          )
+                        })}
 
-                              </Box>
+                        <Box sx={{ width: "90%", mx: "auto", backgroundColor: "#42A5F5", px: 1, py: 1.5, textAlign: "center", borderRadius: "4px", mb: 3, }}>
+                          <Typography sx={{ fontSize: "12px", color: "white", lineHeight: 1.4, }}>After you have submitted the appointment request, we might call to confirm the preferred appointment slot.</Typography>
 
-                            </CustomTabPanel>
-                          </>
-                        )
-                      })}
 
-                      <Box sx={{ width: "90%", mx: "auto", backgroundColor: "#42A5F5", px: 1, py: 1.5, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", mb: 3, color: "white" }}>
-                        After you have submitted the appointment request, we might call to confirm the preferred appointment slot.
+                        </Box>
+                        <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", pb: 1 }}>
+                          <Box sx={{ display: "flex", justifyContent: "space-between", }}><Typography sx={{ fontSize: "14px", fontWeight: 600 }}>Manipal Hospital</Typography></Box>
+                          <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}><Typography sx={{ fontSize: "12px" }}>Jayanagar 9 block</Typography><Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography></Box>
+
+                        </Box>
 
                       </Box>
-                      <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", pb: 1 }}>
-                        <Box sx={{ display: "flex", justifyContent: "space-between", }}><Typography sx={{ fontSize: "14px", fontWeight: 600 }}>Manipal Hospital</Typography></Box>
-                        <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}><Typography sx={{ fontSize: "12px" }}>Jayanagar 9 block</Typography><Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography></Box>
-
-                      </Box>
-
                     </Box>
+
+                    <BookingExistingApplication />
+
+
                   </Box>
+
+
 
                   {/* Info and consult Q & A */}
 
@@ -642,150 +691,157 @@ export default function Doctor() {
 
                 {/* Box for book slot right box */}
 
-                <Box sx={{ display: { xs: "none", md: "block" }, mt: "30px", mr: 5, ml: 2 }}>
-                  <Typography sx={{ fontSize: "18px", fontWeight: 600, color: "#8E999A", mb: 1, }}>Pick a Time Slot</Typography>
-                  <Box
-                    sx={{
-                      flexGrow: 1,
-                      width: 400,
-                      bgcolor: 'background.paper',
-                      borderRadius: "15px",
-                      border: "2px solid #64EBB666",
+                <Box sx={{ mt: "30px", mr: 5, ml: 2, display: { xs: "none", md: "block" }, }}>
 
-                    }}
-                  >
-                    <Typography sx={{ textAlign: "center", py: 2, fontSize: "14px", color: "black" }}>Book an appointment for Consultation</Typography>
+                  <Box>
+                    <Typography sx={{ fontSize: "18px", fontWeight: 600, color: "#8E999A", mb: 1, }}>Pick a Time Slot</Typography>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        width: 400,
+                        bgcolor: 'background.paper',
+                        borderRadius: "15px",
+                        border: "2px solid #64EBB666",
 
-                    <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: .6, borderRadius: "5px", fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", mx: "auto", mb: 2 }}>
-                      Clinic appointment {doctorData?.consultantFee} ₹
-                    </Box>
+                      }}
+                    >
+                      <Typography sx={{ textAlign: "center", py: 2, fontSize: "14px", color: "black" }}>Book an appointment for Consultation</Typography>
 
-                    {currentDate != null && timeSlots.length !== 0 ? (
-                      <Box sx={{ display: "flex", px: 1 }}>
-                        <TabScrollButton onClick={handleLeft} direction='left' orientation='horizontal'>
-                          <ChevronLeftIcon />
-                        </TabScrollButton>
-                        <Tabs
-                          value={value}
-                          onChange={handleChange}
-                          variant="scrollable"
-                          scrollButtons={false}
-                          aria-label="visible arrows tabs example"
-                          sx={{
-                            [`& .${tabsClasses.scrollButtons}`]: {
-                              '&.Mui-disabled': { opacity: 0.3 },
-                            },
-                          }}
-
-                        >
-
-                          {timeSlots.map((items, index) => {
-                            return (
-
-                              <Tab label={[
-                                <>
-                                  {items.getDate() === currentDate.getDate() &&
-                                    items.getMonth() === currentDate.getMonth() &&
-                                    items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Today</div>}
-                                  {items.getDate() === currentDate.getDate() + 1 &&
-                                    items.getMonth() === currentDate.getMonth() &&
-                                    items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Tomorrow</div>}
-                                  {items.getDate() !== currentDate.getDate() && items.getDate() !== currentDate.getDate() + 1 && <div style={{ color: "black" }}>{items.toDateString().split(' ')[0]}, {items.toDateString().split(' ')[2]} {items.toDateString().split(' ')[1]}</div>}
-
-                                  <div style={{ marginTop: '5px', fontSize: "8px", fontWeight: 800, color: "#42A5F599", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
-                                </>
-                              ]} sx={{ fontSize: "10px", p: 0, width: "100px", fontWeight: 500, }} {...a11yProps(index)} />
-
-                            )
-                          })}
-
-                        </Tabs>
-                        <TabScrollButton onClick={handleRight} direction='right' orientation='horizontal'>
-                          <ChevronRightIcon />
-                        </TabScrollButton>
+                      <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: .6, borderRadius: "5px", fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", mx: "auto", mb: 2 }}>
+                        Clinic appointment {doctorData?.consultantFee} ₹
                       </Box>
-                    ) : <>
-                      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", }}>
-                        <img src={Calender} alt="No Slot Available" width={50} />
-                        <Typography sx={{ mt: 2, fontSize: "10px" }}>No Data Available</Typography>
-                        <a href="tel:+" style={{ width: "50%", }}>
-                          <Button
-                            variant="contained"
-                            sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
+
+                      {currentDate != null && timeSlots.length !== 0 ? (
+                        <Box sx={{ display: "flex", px: 1 }}>
+                          <TabScrollButton onClick={handleLeft} direction='left' orientation='horizontal'>
+                            <ChevronLeftIcon />
+                          </TabScrollButton>
+                          <Tabs
+                            value={value}
+                            onChange={handleChange}
+                            variant="scrollable"
+                            scrollButtons={false}
+                            aria-label="visible arrows tabs example"
+                            sx={{
+                              [`& .${tabsClasses.scrollButtons}`]: {
+                                '&.Mui-disabled': { opacity: 0.3 },
+                              },
+                            }}
+
                           >
-                            <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
-                          </Button>
-                        </a>
-                      </Box>
-                    </>}
 
-                    {/* <Typography sx={{ mt: 2, fontSize: "15px", color: "black", ml: 3, fontWeight: 600 }}>Evening</Typography> */}
+                            {timeSlots.map((items, index) => {
+                              return (
+
+                                <Tab label={[
+                                  <>
+                                    {items.getDate() === currentDate.getDate() &&
+                                      items.getMonth() === currentDate.getMonth() &&
+                                      items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Today</div>}
+                                    {items.getDate() === currentDate.getDate() + 1 &&
+                                      items.getMonth() === currentDate.getMonth() &&
+                                      items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Tomorrow</div>}
+                                    {items.getDate() !== currentDate.getDate() && items.getDate() !== currentDate.getDate() + 1 && <div style={{ color: "black" }}>{items.toDateString().split(' ')[0]}, {items.toDateString().split(' ')[2]} {items.toDateString().split(' ')[1]}</div>}
+
+                                    <div style={{ marginTop: '5px', fontSize: "8px", fontWeight: 800, color: "#42A5F599", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
+                                  </>
+                                ]} sx={{ fontSize: "10px", p: 0, width: "100px", fontWeight: 500, }} {...a11yProps(index)} />
+
+                              )
+                            })}
+
+                          </Tabs>
+                          <TabScrollButton onClick={handleRight} direction='right' orientation='horizontal'>
+                            <ChevronRightIcon />
+                          </TabScrollButton>
+                        </Box>
+                      ) : <>
+                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", }}>
+                          <img src="../images/DoctorDetails/calender_cut.svg" alt="No Slot Available" width={50} />
+                          <Typography sx={{ mt: 2, fontSize: "10px" }}>No Data Available</Typography>
+                          <a href="tel:+" style={{ width: "50%", }}>
+                            <Button
+                              variant="contained"
+                              sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
+                            >
+                              <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
+                            </Button>
+                          </a>
+                        </Box>
+                      </>}
+
+                      {/* <Typography sx={{ mt: 2, fontSize: "15px", color: "black", ml: 3, fontWeight: 600 }}>Evening</Typography> */}
 
 
-                    {dateString.map((items, index) => {
-                      return (
-                        <>
-                          <CustomTabPanel value={value} index={index} key={index}>
-                            {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
-                              <>
-                                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", pr: "24px" }}>
-                                  <img src={Calender} alt="No Slot Available" width={50} />
-                                  <Typography sx={{ mt: 2, fontSize: "10px" }}>No Slot Available</Typography>
-                                  <a href="tel:+" style={{ width: "50%", }}>
-                                    <Button
-                                      variant="contained"
-                                      sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
-                                    >
-                                      <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
-                                    </Button>
-                                  </a>
+                      {dateString.map((items, index) => {
+                        return (
+                          <>
+                            <CustomTabPanel value={value} index={index} key={index}>
+                              {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
+                                <>
+                                  <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", pr: "24px" }}>
+                                    <img src="../images/DoctorDetails/calender_cut.svg" alt="No Slot Available" width={50} />
+                                    <Typography sx={{ mt: 2, fontSize: "10px" }}>No Slot Available</Typography>
+                                    <a href="tel:+" style={{ width: "50%", }}>
+                                      <Button
+                                        variant="contained"
+                                        sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
+                                      >
+                                        <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
+                                      </Button>
+                                    </a>
+                                  </Box>
+
+                                </>
+                              )}
+                              <Box >
+                                <Box sx={{ py: 1, px: 4, bgcolor: "#F0F6FF", borderRadius: "10px", mr: 3, mb: 3 }}>
+                                  <Typography sx={{ color: "#1C4188", textAlign: "center" }}>Total Availability {countSlot(index)} slot</Typography>
+                                </Box>
+                                <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll", justifyContent: "center", "::-webkit-scrollbar": { width: "15px", bgcolor: "#F0F6FF", borderRadius: "10px" }, "::-webkit-scrollbar-thumb": { bgcolor: "#64EBB6", borderRadius: "10px" } }}>
+                                  {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
+                                    return (
+                                      <>
+                                        <Box sx={{ fontSize: "12px", px: 1, py: 1, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index], doctorData?.consultantFee)} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
+
+                                        {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index], doctorData?.consultantFee)}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
+                                      </>
+                                    )
+                                  })}
+
+
                                 </Box>
 
-                              </>
-                            )}
-                            <Box >
-                              <Box sx={{ py: 1, px: 4, bgcolor: "#F0F6FF", borderRadius: "10px", mr: 3, mb: 3 }}>
-                                <Typography sx={{ color: "#1C4188", textAlign: "center" }}>Total Availability {countSlot(index)} slot</Typography>
-                              </Box>
-                              <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll", justifyContent: "center", "::-webkit-scrollbar": { width: "15px", bgcolor: "#F0F6FF", borderRadius: "10px" }, "::-webkit-scrollbar-thumb": { bgcolor: "#64EBB6", borderRadius: "10px" } }}>
-                                {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
-                                  return (
-                                    <>
-                                      <Box sx={{ fontSize: "12px", px: 1, py: 1, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index], doctorData?.consultantFee)} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
-
-                                      {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index], doctorData?.consultantFee)}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
-                                    </>
-                                  )
-                                })}
-
 
                               </Box>
 
+                            </CustomTabPanel>
+                          </>
+                        )
+                      })}
 
-                            </Box>
+                      <Box sx={{ width: "90%", mx: "auto", backgroundColor: "#42A5F5", px: 1, py: 1.5, textAlign: "center", borderRadius: "4px", mb: 3, }}>
+                        <Typography sx={{ fontSize: "12px", color: "white", lineHeight: 1.4, }}>After you have submitted the appointment request, we might call to confirm the preferred appointment slot.</Typography>
 
-                          </CustomTabPanel>
-                        </>
-                      )
-                    })}
+                      </Box>
+                      <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, borderRadius: "4px", pb: 1 }}>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", }}>
+                          <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>{doctorData?.remarkArea}</Typography>
+                        </Box>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}>
+                          <Typography sx={{ fontSize: "12px" }}>{doctorData?.doctor_Address}</Typography>
+                          <Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography>
+                        </Box>
 
-                    <Box sx={{ width: "90%", mx: "auto", backgroundColor: "#42A5F5", px: 1, py: 1.5, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", mb: 3, color: "white" }}>
-                      After you have submitted the appointment request, we might call to confirm the preferred appointment slot.
+                      </Box>
 
                     </Box>
-                    <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, borderRadius: "4px", pb: 1 }}>
-                      <Box sx={{ display: "flex", justifyContent: "space-between", }}>
-                        <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>{doctorData?.remarkArea}</Typography>
-                      </Box>
-                      <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}>
-                        <Typography sx={{ fontSize: "12px" }}>{doctorData?.doctor_Address}</Typography>
-                        <Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography>
-                      </Box>
-
-                    </Box>
-
                   </Box>
+
+                  <BookingExistingApplication />
+
                 </Box>
+
 
               </Box>
 
@@ -800,7 +856,7 @@ export default function Doctor() {
             </>
           )}
 
-
+          <BackdropLoading open={backdropLoading} />
           <MobileAppBanner />
           <LiveCounter />
           <Footer />
@@ -946,16 +1002,17 @@ const SlotBookDialog = ({ open, onClose, details }) => {
     onClose();
     setName('');
     setPhone("");
+    setDisabled(true);
   }
 
   return (
     <>
-      {loading && (<BackdropLoading />)}
 
       <Dialog open={open} maxWidth="md" fullWidth sx={{ textAlign: "center" }} onClose={handleClose} aria-describedby="alert-dialog-slide-description" keepMounted>
         <DialogTitle fontSize={19} lineHeight={1} fontWeight={600}>Book Slot</DialogTitle>
 
         <DialogContent >
+          <BackdropLoading open={loading} />
           <Box sx={{ display: "flex", width: "100%", mt: 1, flexDirection: { xs: "column", sm: "row" } }}>
             {/* Box for Doctor Details */}
             <Box sx={{ width: { xs: "100%", sm: "50%" } }}>
@@ -1105,6 +1162,148 @@ const SlotBookDialog = ({ open, onClose, details }) => {
           </Button>
         </DialogActions>
       </Dialog>
+
+    </>
+
+  )
+}
+
+const BookingExistingApplication = () => {
+
+  const { enqueueSnackbar } = useSnackbar()
+  const [backdropLoading, setbackdropLoading] = useState(false);
+  const [disableButton, setDisableButton] = useState(true);
+  const [visibleNameInput, setVisibleNameInput] = useState(false);
+  const [bookingOrPhoneNo, setBookingOrPhoneNo] = useState("");
+  const [name, setName] = useState("");
+
+  const handleVerifyBooking = async () => {
+
+    setbackdropLoading(true);
+    const response = await DoctorService.VerifyPhoneOrBookingNo({ bookingOrPhoneNo: bookingOrPhoneNo });
+    if (response.status === 200) {
+      if (response.data.IsSuccess) {
+        setbackdropLoading(false);
+        setVisibleNameInput(true);
+        setName(response.data.name);
+      } else {
+        setbackdropLoading(false);
+        setVisibleNameInput(false);
+        enqueueSnackbar(response.data.errorMessage, { variant: "error" });
+      }
+    } else {
+      setbackdropLoading(false);
+      enqueueSnackbar("Server is busy", { variant: "error" });
+    }
+
+  }
+
+  const handleContinueBooking = async () => {
+    const response = await DoctorService.BookingForExistingPatient({ bookingOrPhoneNo: bookingOrPhoneNo, name: name });
+    if (response.status === 200) {
+      if (response.data.IsSuccess) {
+        // Open either the opt box or continue the booking process for the existing patient
+      } else {
+        enqueueSnackbar(response.data.errorMessage, { variant: "error" });
+      }
+    } else {
+      enqueueSnackbar("Server is busy", { variant: "error" });
+    }
+    setbackdropLoading(true);
+  }
+  return (
+    <>
+      <Box
+        sx={{
+          flexGrow: 1,
+          width: 400,
+          bgcolor: 'background.paper',
+          borderRadius: "15px",
+          border: "2px solid #64EBB666",
+          mt: 4,
+          p: 2,
+          mx: "auto"
+
+        }}
+      >
+        <Typography sx={{ textAlign: "center", fontSize: "14px", color: "black", pb: 2 }}>Booking for Exiting Application</Typography>
+        <Box>
+          <Typography sx={{ fontSize: "14px", color: "black", pb: 1 }}>Instruction</Typography>
+          <Typography sx={{ fontSize: "14px", color: "black", pb: 0.5 }}>1. This booking is for the pateint who have visited once to this doctor.</Typography>
+          <Typography sx={{ fontSize: "14px", color: "black", pb: 0.5 }}>2. Booking should valid for pateint who have visited in between the 15 days from present day.</Typography>
+          <Typography sx={{ fontSize: "14px", color: "black", pb: 2 }}>3. Use same phone no. that use for previous booking. You can also use the booking no.</Typography>
+        </Box>
+
+        <Box sx={{ width: "100%", mx: "auto" }}>
+
+          <Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}>Phone No./Previous Booking No.</Typography>
+          <Box>
+            <input
+              type="number"
+              style={{
+                border: "1px solid #64EBB6",
+                padding: "10px",
+                backgroundColor: "white",
+                borderRadius: "10px",
+                width: "100%",
+                fontFamily: "nunito",
+              }}
+              value={bookingOrPhoneNo}
+              onChange={(e) => {
+                setBookingOrPhoneNo(e.target.value)
+
+              }}
+              onInput={(e) => {
+                if (e.target.value.length >= 10) {
+                  setDisableButton(false)
+                } else {
+                  setDisableButton(true)
+                }
+              }}
+              disabled={visibleNameInput}
+            />
+          </Box>
+
+        </Box>
+        {visibleNameInput && (
+          <Box sx={{ width: { xs: "85%", lg: "100%" }, mx: "auto", mt: 1 }}>
+
+            <Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}>Name</Typography>
+            <Box>
+              <input
+                type="number"
+                style={{
+                  border: "1px solid #64EBB6",
+                  padding: "10px",
+                  backgroundColor: "white",
+                  // color: 'black',
+                  borderRadius: "10px",
+                  width: "100%",
+                  fontFamily: "nunito",
+                }}
+                value={name}
+                disabled
+              />
+            </Box>
+
+          </Box>
+        )}
+        {visibleNameInput ? (
+          <Box sx={{ width: "100%", mt: 2 }}>
+            <CustomizedButton title={"Continue"} type={"submit"} onClick={handleContinueBooking} />
+          </Box>
+        ) : (
+          <Box sx={{ width: "100%", mt: 2 }}>
+            <CustomizedButton title={"Verify"} type={"submit"} disabled={disableButton} onClick={handleVerifyBooking} />
+          </Box>
+        )}
+
+
+
+
+
+      </Box>
+      <BackdropLoading open={backdropLoading} />
     </>
 
   )

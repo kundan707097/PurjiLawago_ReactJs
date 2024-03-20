@@ -147,7 +147,33 @@ const GetDoctorListInEmergency = async () =>{
     }
 }
 
+const VerifyPhoneOrBookingNo = async(data) =>{
+    try {
+        const res = await axiosClient({
+            method: 'POST',
+            url: "/PatientsConform/VerifyPhoneOrBookingNo",
+            data: JSON.stringify(data)
+        })
+        return res;
+    } catch (error) {
+        return error;
+    }
+}
+
+const BookingForExistingPatient = async(data) =>{
+    try {
+        const res = await axiosClient({
+            method: 'POST',
+            url: "/PatientsConform/BookingForExistingPatient",
+            data: JSON.stringify(data)
+        })
+        return res;
+    } catch (error) {
+        return error;
+    }
+}
+
 const DoctorService = {
-    DoctorInformation, DocInfoOnLocation, AllDocInfo, AllDoctorsListInSpeciality, BookSlot, VerifyOtp, DoctorDashboardData,StatusUpdateByDoctor,DoctorDownloadExcel,DoctorDownloadPdf,GetDoctorListInEmergency
+    DoctorInformation, DocInfoOnLocation, AllDocInfo, AllDoctorsListInSpeciality, BookSlot, VerifyOtp, DoctorDashboardData,StatusUpdateByDoctor,DoctorDownloadExcel,DoctorDownloadPdf,GetDoctorListInEmergency,VerifyPhoneOrBookingNo,BookingForExistingPatient
 };
 export default DoctorService;
