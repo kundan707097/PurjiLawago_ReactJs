@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, TabScrollButton, Typography, Avatar, AccordionSummary, AccordionDetails, Accordion, Tooltip, Stack } from '@mui/material';
 import Tabs, { tabsClasses } from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import '../../style/DoctorsDetails.css'
-import { useParams } from 'react-router-dom';
-import DoctorService from '../../services/Doctor.services';
 import PropTypes from 'prop-types';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CallIcon from '@mui/icons-material/Call';
-import Loading from '../../components/Loading';
-import DataNotFound from '../../components/DataNotFound';
+import { Checkmark } from "@carbon/icons-react";
+import { useSnackbar } from 'notistack';
+
 import "../../components/style/InputBox.css"
 import CustomeButton, { CustomizedButton } from '../../components/Button';
-import { useSnackbar } from 'notistack';
-import { Checkmark } from "@carbon/icons-react";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import DataNotFound from '../../components/DataNotFound';
+import Loading from '../../components/Loading';
+import DoctorService from '../../services/Doctor.services';
 import MobileAppBanner from '../../components/MobileAppBanner';
 import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
 import BackdropLoading from '../../components/BackdropLoading';
-import { doctorDetails } from '../dummyData/DummyData';
+//import { doctorDetails } from '../dummyData/DummyData';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -57,7 +57,6 @@ function a11yProps(index) {
 }
 
 export default function Doctor() {
-  const { enqueueSnackbar } = useSnackbar()
   const [doctorData, setDoctorData] = useState(null); // uncomment this and remove the dummy data
   const [timeSlots, setTimeSlots] = useState([]);
   const [dateString, setDateString] = useState([]);
@@ -67,47 +66,6 @@ export default function Doctor() {
   const [details, setDetails] = useState({}); // useState for the details that we passing in the dialog box
 
   const [expanded, setExpanded] = React.useState(false);
-  const [backdropLoading, setbackdropLoading] = useState(false);
-  const [disableButton, setDisableButton] = useState(true);
-  const [visibleNameInput, setVisibleNameInput] = useState(false);
-  const [bookingOrPhoneNo, setBookingOrPhoneNo] = useState("");
-  const [name, setName] = useState("");
-
-  const handleVerifyBooking = async () => {
-
-    setbackdropLoading(true);
-    const response = await DoctorService.VerifyPhoneOrBookingNo({ bookingOrPhoneNo: bookingOrPhoneNo });
-    if (response.status === 200) {
-      if (response.data.IsSuccess) {
-        setbackdropLoading(false);
-        setVisibleNameInput(true);
-        setName(response.data.name);
-      } else {
-        setbackdropLoading(false);
-        setVisibleNameInput(false);
-        enqueueSnackbar(response.data.errorMessage, { variant: "error" });
-      }
-    } else {
-      setbackdropLoading(false);
-      enqueueSnackbar("Server is busy", { variant: "error" });
-    }
-
-  }
-
-  const handleContinueBooking = async () => {
-    const response = await DoctorService.BookingForExistingPatient({ bookingOrPhoneNo: bookingOrPhoneNo, name: name });
-    if (response.status === 200) {
-      if (response.data.IsSuccess) {
-        // Open either the opt box or continue the booking process for the existing patient
-      } else {
-        enqueueSnackbar(response.data.errorMessage, { variant: "error" });
-      }
-    } else {
-      enqueueSnackbar("Server is busy", { variant: "error" });
-    }
-    setbackdropLoading(true);
-  }
-
   const handleExpand = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -149,7 +107,7 @@ export default function Doctor() {
       if (id) {
         setLoading(true);
         try {
-          setDoctorData(doctorDetails)
+          //setDoctorData(doctorDetails)
           const response = await DoctorService.DoctorInformation(id);
           debugger;
           if (response !== undefined) {
@@ -855,8 +813,7 @@ export default function Doctor() {
 
             </>
           )}
-
-          <BackdropLoading open={backdropLoading} />
+ 
           <MobileAppBanner />
           <LiveCounter />
           <Footer />
@@ -1297,9 +1254,6 @@ const BookingExistingApplication = () => {
             <CustomizedButton title={"Verify"} type={"submit"} disabled={disableButton} onClick={handleVerifyBooking} />
           </Box>
         )}
-
-
-
 
 
       </Box>
