@@ -6,8 +6,8 @@ import NoseTreatment from './NoseTreatment';
 import BookingSystem from './BookingSystem';
 import Banner from './Banner';
 import FandQ from './FandQ';
-import LiveCounter from '../../components/LiveCounter';
-import Footer from '../../components/Footer';
+import LiveCounter from '../../../components/LiveCounter';
+import Footer from '../../../components/Footer';
 import OurServices from './OurServices';
 
 const Ent = () => {

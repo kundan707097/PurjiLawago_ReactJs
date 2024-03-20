@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box } from '@mui/material';
-import FandQComponent from '../../components/FandQComponent';
+import FandQComponent from '../../../components/FandQComponent';
 
 const FandQ = () => {
 

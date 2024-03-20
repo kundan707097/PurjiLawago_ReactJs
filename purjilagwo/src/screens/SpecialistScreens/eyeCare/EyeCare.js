@@ -1,17 +1,16 @@
 import React, { useEffect } from 'react'
-import Landing from './Landing';
+import Landing from './Landing'
+import DoctorService from './DoctorService';
 import TopDoctors from './TopDoctors';
-import Process from './Process';
-import HealthyTeeth from './HealthyTeeth';
-import Structure from './Structure';
-import LiveCounter from '../../components/LiveCounter';
-import Footer from '../../components/Footer';
-import HowGetADoctor from '../../components/HowGetADoctor';
+import DoctorSpecialist from './DoctorSpecialist';
+import DoctorTreatment from './DoctorTreatment';
+import LiveCounter from '../../../components/LiveCounter';
+import Footer from '../../../components/Footer';
 import FandQ from './FandQ';
+import HowGetADoctor from '../../../components/HowGetADoctor';
 import OurServices from './OurServices';
 
-const Dentist = () => {
-
+const EyeCare = () => {
 
     useEffect(() => {
         window.scrollTo({
@@ -25,15 +24,16 @@ const Dentist = () => {
             <Landing />
             <TopDoctors />
             <OurServices />
-            <Process />
-            <HealthyTeeth />
+            <DoctorSpecialist />    
+            <DoctorService />
             <HowGetADoctor />
-            <Structure />
+            <DoctorTreatment />
             <FandQ />
             <LiveCounter />
             <Footer />
+
         </>
     )
 }
 
-export default Dentist
+export default EyeCare
