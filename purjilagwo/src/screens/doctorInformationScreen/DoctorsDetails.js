@@ -21,7 +21,8 @@ import MobileAppBanner from '../../components/MobileAppBanner';
 import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
 import BackdropLoading from '../../components/BackdropLoading';
-//import { doctorDetails } from '../dummyData/DummyData';
+import { doctorDetails } from '../dummyData/DummyData';
+import OtpBox from '../../components/OtpBox';
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -107,7 +108,7 @@ export default function Doctor() {
       if (id) {
         setLoading(true);
         try {
-          //setDoctorData(doctorDetails)
+          setDoctorData(doctorDetails)
           const response = await DoctorService.DoctorInformation(id);
           debugger;
           if (response !== undefined) {
@@ -813,7 +814,7 @@ export default function Doctor() {
 
             </>
           )}
- 
+
           <MobileAppBanner />
           <LiveCounter />
           <Footer />
@@ -1126,23 +1127,34 @@ const SlotBookDialog = ({ open, onClose, details }) => {
 }
 
 const BookingExistingApplication = () => {
-
+  const { id } = useParams();
   const { enqueueSnackbar } = useSnackbar()
   const [backdropLoading, setbackdropLoading] = useState(false);
   const [disableButton, setDisableButton] = useState(true);
   const [visibleNameInput, setVisibleNameInput] = useState(false);
+  const [inputState, setInputState] = useState("");
   const [bookingOrPhoneNo, setBookingOrPhoneNo] = useState("");
   const [name, setName] = useState("");
+  const [mnOrBn, setMnOrBn] = useState("");
+  const [otp, setOtp] = useState("");
+  const [openOtpBox, setOpenOtpBox] = useState(false);
 
   const handleVerifyBooking = async () => {
-
     setbackdropLoading(true);
-    const response = await DoctorService.VerifyPhoneOrBookingNo({ bookingOrPhoneNo: bookingOrPhoneNo });
+    const response = await DoctorService.VerifyPhoneOrBookingNo(bookingOrPhoneNo);
     if (response.status === 200) {
-      if (response.data.IsSuccess) {
+      if (response.data.isSuccess) {
         setbackdropLoading(false);
         setVisibleNameInput(true);
-        setName(response.data.name);
+        if (bookingOrPhoneNo.length === 10) {
+          console.log(parseInt(bookingOrPhoneNo));
+          setInputState('BookingInput')
+        }
+        if (bookingOrPhoneNo.length === 16) {
+          setInputState('PhoneInput')
+        }
+        setName(response.data.existingBookingPatientDetails.patientName);
+        setMnOrBn(response.data.existingBookingPatientDetails.mnOrBn);
       } else {
         setbackdropLoading(false);
         setVisibleNameInput(false);
@@ -1156,18 +1168,52 @@ const BookingExistingApplication = () => {
   }
 
   const handleContinueBooking = async () => {
-    const response = await DoctorService.BookingForExistingPatient({ bookingOrPhoneNo: bookingOrPhoneNo, name: name });
+    var data = {
+      doctorId: id,
+      phoneNumber: bookingOrPhoneNo.length === 10 ? bookingOrPhoneNo : mnOrBn, // this is for phone number
+      name: name,
+      bookingNumber: bookingOrPhoneNo.length !== 10 ? bookingOrPhoneNo : mnOrBn// this is for bookking number
+    };
+    setbackdropLoading(true);
+    const response = await DoctorService.BookingForExistingPatient(data);
     if (response.status === 200) {
-      if (response.data.IsSuccess) {
-        // Open either the opt box or continue the booking process for the existing patient
+      if (response.data.isSuccess) {
+        setbackdropLoading(false);
+        setOpenOtpBox(true);
+        enqueueSnackbar(response.data.message)
       } else {
+        setbackdropLoading(false);
         enqueueSnackbar(response.data.errorMessage, { variant: "error" });
       }
     } else {
+      setbackdropLoading(false);
       enqueueSnackbar("Server is busy", { variant: "error" });
     }
-    setbackdropLoading(true);
   }
+
+  const handleSubmitOtp = async () => {
+    setbackdropLoading(true);
+    var otpData = {
+      doctorId: id,
+      phoneNumber: bookingOrPhoneNo.length === 10 ? bookingOrPhoneNo : mnOrBn,
+      otp: otp
+    }
+    const response = await DoctorService.OtpVerificationOfExistingApplication(otpData);
+
+    if (response.status === 200) {
+      if (response.data.isSuccess) {
+        setbackdropLoading(false);
+        enqueueSnackbar(response.data.message, { variant: "success" });
+      } else {
+        setbackdropLoading(false);
+        enqueueSnackbar(response.data.errorMessage);
+      }
+    } else {
+      setbackdropLoading(false);
+      enqueueSnackbar("Server is busy", { variant: "error" })
+    }
+  }
+
   return (
     <>
       <Box
@@ -1223,37 +1269,75 @@ const BookingExistingApplication = () => {
 
         </Box>
         {visibleNameInput && (
-          <Box sx={{ width: { xs: "85%", lg: "100%" }, mx: "auto", mt: 1 }}>
+          <>
+            <Box sx={{ width: { xs: "85%", lg: "100%" }, mx: "auto", mt: 1 }}>
+              <Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}>Pateint Name</Typography>
+              <Box>
+                <input
+                  type="number"
+                  style={{
+                    border: "1px solid #64EBB6",
+                    padding: "10px",
+                    backgroundColor: "white",
+                    // color: 'black',
+                    borderRadius: "10px",
+                    width: "100%",
+                    fontFamily: "nunito",
+                  }}
+                  value={name}
+                  disabled
+                />
+              </Box>
 
-            <Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}>Name</Typography>
-            <Box>
-              <input
-                type="number"
-                style={{
-                  border: "1px solid #64EBB6",
-                  padding: "10px",
-                  backgroundColor: "white",
-                  // color: 'black',
-                  borderRadius: "10px",
-                  width: "100%",
-                  fontFamily: "nunito",
-                }}
-                value={name}
-                disabled
-              />
             </Box>
 
-          </Box>
+            <Box sx={{ width: { xs: "85%", lg: "100%" }, mx: "auto", mt: 1 }}>
+              <Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}>{inputState === "BookingInput" ? "Previous Booking No." : "Phone No."}</Typography>
+              <Box>
+                <input
+                  type="number"
+                  style={{
+                    border: "1px solid #64EBB6",
+                    padding: "10px",
+                    backgroundColor: "white",
+                    // color: 'black',
+                    borderRadius: "10px",
+                    width: "100%",
+                    fontFamily: "nunito",
+                  }}
+                  value={mnOrBn}
+                  disabled
+                />
+              </Box>
+
+            </Box>
+          </>
+
         )}
-        {visibleNameInput ? (
-          <Box sx={{ width: "100%", mt: 2 }}>
-            <CustomizedButton title={"Continue"} type={"submit"} onClick={handleContinueBooking} />
-          </Box>
+
+        {openOtpBox ? (
+          <>
+            <OtpBox setOtp={setOtp} />
+            <Box sx={{ width: "100%", mt: 2 }}>
+              <CustomizedButton title={"Submit"} type={"submit"} onClick={handleSubmitOtp} />
+            </Box>
+
+          </>
         ) : (
-          <Box sx={{ width: "100%", mt: 2 }}>
-            <CustomizedButton title={"Verify"} type={"submit"} disabled={disableButton} onClick={handleVerifyBooking} />
-          </Box>
-        )}
+          <>
+            {visibleNameInput ? (
+              <Box sx={{ width: "100%", mt: 2 }}>
+                <CustomizedButton title={"Continue"} type={"submit"} onClick={handleContinueBooking} />
+              </Box>
+            ) : (
+              <Box sx={{ width: "100%", mt: 2 }}>
+                <CustomizedButton title={"Verify"} type={"submit"} disabled={disableButton} onClick={handleVerifyBooking} />
+              </Box>
+            )}
+          </>
+        )
+        }
+
 
 
       </Box>
