@@ -1,9 +1,6 @@
 
 import React, { lazy } from 'react';
 import Home from '../screens/homeScreen/Home';
-import VideoConsult from '../screens/videoconsult/VideoConsult';
-import Medicine from '../screens/medicine/Medicine';
-import LabTest from '../screens/labtest/LabTest';
 import Surgeries from '../screens/surgeries/surgeries';
 import Contact from '../screens/contact/contact';
 import About from '../screens/about/about';
@@ -14,13 +11,13 @@ import Terms from '../screens/terms/terms';
 const EmergencyBooking = lazy(() => import('../screens/emergencyBooking/EmergencyBooking'));
 const DoctorDetails = lazy(() => import('../screens/doctorInformationScreen/DoctorsDetails'));
 const DoctorList = lazy(() => import('../screens/doctorInformationScreen/DoctorList'));
-const EyeCare = lazy(() => import('../screens/eyeCare/EyeCare'));
-const Dentist = lazy(() => import('../screens/dentist/Dentist'));
-const Cardiology = lazy(() => import('../screens/cardiology/Cardiology'));
-const Ent = lazy(() => import('../screens/ent/Ent'));
-// const Nephrology = lazy(() => import('../screens/nephrology/Nephrology'));
-// const Fertiltity = lazy(() => import('../screens/fertility/Fertiltity'));
-// const Paediatric = lazy(() => import('../screens/paediatric/Paediatric'));
+const EyeCare = lazy(() => import('../screens/SpecialistScreens/eyeCare/EyeCare'));
+const Dentist = lazy(() => import('../screens/SpecialistScreens/dentist/Dentist'));
+const Cardiology = lazy(() => import('../screens/SpecialistScreens/cardiology/Cardiology'));
+const Ent = lazy(() => import('../screens/SpecialistScreens/ent/Ent'));
+const Nephrology = lazy(() => import('../screens/SpecialistScreens/nephrology/Nephrology'));
+const Fertiltity = lazy(() => import('../screens/SpecialistScreens/fertility/Fertiltity'));
+const Paediatric = lazy(() => import('../screens/SpecialistScreens/paediatric/Paediatric'));
 // const PhysicanSurgeon = lazy(() => import('../screens/physican&surgeon/Physican&Surgeon'));
 
 export const commonroutes = [
@@ -43,18 +40,6 @@ export const commonroutes = [
   {
     path: '/doctorlist',
     element: <DoctorList />,
-  },
-  {
-    path: '/videoConsult',
-    element: <VideoConsult />,
-  },
-  {
-    path: '/medicine',
-    element: <Medicine />,
-  },
-  {
-    path: '/labTest',
-    element: <LabTest />,
   },
   {
     path: '/surgeries',
@@ -88,22 +73,22 @@ export const commonroutes = [
     path: '/privacypolicy',
     element: <Privacy_policy />,
   },
-    {
+  {
     path: '/terms',
     element: <Terms />,
   },
-  // {
-  //   path: '/nephrology',
-  //   element: <Nephrology />,
-  // },
-  //  {
-  //    path: '/fertiltity',
-  //    element: <Fertiltity />,
-  //  },
-  //  {
-  //    path: '/paediatric',
-  //    element: <Paediatric />,
-  //  },
+  {
+    path: '/nephrology',
+    element: <Nephrology />,
+  },
+  {
+    path: '/fertiltity',
+    element: <Fertiltity />,
+  },
+  {
+    path: '/paediatric',
+    element: <Paediatric />,
+  },
   {
     path: '/ent',
     element: <Ent />,

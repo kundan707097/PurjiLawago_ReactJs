@@ -147,7 +147,47 @@ const GetDoctorListInEmergency = async () =>{
     }
 }
 
+const VerifyPhoneOrBookingNo = async(data) =>{
+    try {
+        const response = await axiosClient({
+            method: 'GET',
+            url: `/DoctorsInformation/ExistingBoking?BnOrPn=${data}`,
+        })
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
+
+const BookingForExistingPatient = async(data) =>{
+    try {
+        const response = await axiosClient({
+            method: 'POST',
+            url: `/DoctorsInformation/ExistingBoking?BnOrPn=${data}`, // change the endpoint
+            data: JSON.stringify(data)
+        })
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
+
+const OtpVerificationOfExistingApplication = async(otpData) =>{
+    try{
+        const response = await axiosClient({
+            method: 'POST',
+            url: `/PatientsConform/OTPVerifyByPatients`, // Give your API endpoint
+            data: JSON.stringify(otpData),
+        });
+        return response;
+    }
+    catch(error)
+    {
+        console.log(error);
+    }
+}
+
 const DoctorService = {
-    DoctorInformation, DocInfoOnLocation, AllDocInfo, AllDoctorsListInSpeciality, BookSlot, VerifyOtp, DoctorDashboardData,StatusUpdateByDoctor,DoctorDownloadExcel,DoctorDownloadPdf,GetDoctorListInEmergency
+    DoctorInformation, DocInfoOnLocation, AllDocInfo, AllDoctorsListInSpeciality, BookSlot, VerifyOtp, DoctorDashboardData,StatusUpdateByDoctor,DoctorDownloadExcel,DoctorDownloadPdf,GetDoctorListInEmergency,VerifyPhoneOrBookingNo,BookingForExistingPatient,OtpVerificationOfExistingApplication
 };
 export default DoctorService;

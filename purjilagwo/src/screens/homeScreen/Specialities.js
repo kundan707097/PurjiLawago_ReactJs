@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Box, IconButton, Typography, Avatar } from "@mui/material";
 import { Link } from "react-router-dom";
-import DepartmentCardData from "../../components/DepartmentCardData";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "@carbon/icons-react";
@@ -84,33 +83,6 @@ const Specialities = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // Extract only imgsrc values from the existing DepartmentCardData
-    const imgsrcValues = DepartmentCardData.map((item) => item.imgsrc);
-
-    // Fetch additional data from the API for the remaining fields
-    const fetchAdditionalData = async () => {
-      try {
-        const response = await fetch("https://localhost:44324/DoctorsGroup/GetDoctorsGroup");
-        const apiData = await response.json();
-        debugger;
-        // Map the API data to the format expected in the component state
-        const updatedDepartmentData = imgsrcValues.map((imgsrc, index) => ({
-          imgsrc,
-          departmentName: apiData[index]?.specialty || "", // You can add an appropriate default value or leave it empty
-          disc: apiData[index]?.description || "", // You can add an appropriate default value or leave it empty
-          //link: apiData[index]?.link || "javascript:void(0)",
-          groupId: apiData[index]?.id || null,
-        }));
-
-        setDepartmentData(updatedDepartmentData);
-      } catch (error) {
-        console.error("Error fetching data from API:", error);
-      }
-    };
-
-    fetchAdditionalData();
-  }, []); // Empty dependency array means this effect runs once when the component mounts
 
   return (
 
@@ -134,7 +106,7 @@ const Specialities = () => {
       </IconButton>
       {/* Slider */}
       <Swiper modules={[Navigation]} spaceBetween={20} slidesPerView={count} ref={swipeerRef} >
-        {/* here you need to change the DepartmentCardData to departmentData */}
+
         {specialities.map((item) => {
           return (
             <SwiperSlide>
