@@ -16,6 +16,8 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import dayjs from 'dayjs';
 import "./style/InputBox.css";
 import { useEffect, useState } from "react";
+import { ViewFilled, ViewOffFilled } from "@carbon/icons-react";
+
 
 function InputBox(props) {
 
@@ -24,6 +26,7 @@ function InputBox(props) {
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(dayjs('2022-04-17'));
+  const [seePassword, setSeePassword] = useState(false);
 
   useEffect(() => {
     if (props.value != null) {
@@ -229,6 +232,41 @@ function InputBox(props) {
               label={props.label}
             />
           </FormGroup>
+        </>
+      );
+    case "password":
+      const handleVisiblePassword = () =>{
+        if(seePassword){
+          setSeePassword(false);
+        }else{
+          setSeePassword(true);
+        }
+      }
+      return (
+        <>
+          <Box sx={{ position: "relative" }}>
+            <Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}>{props.title}</Typography>
+            <Box>
+              <input
+                type={seePassword ? "text" :"password"}
+                name={props.name}
+                style={{
+                  border: "1px solid #64EBB6",
+                  padding: "10px",
+                  backgroundColor: "white",
+                  // color: 'black',
+                  borderRadius: "10px",
+                  width: "100%",
+                  fontFamily: "nunito",
+                }}
+                value={props.value}
+                onChange={props.onChange} />
+            </Box>
+            <Box sx={{position: "absolute", top: "2.1rem", right:"0.5rem", cursor:"pointer", border: "none", bgcolor: "transparent"}} component={"button"} type="button" onClick={handleVisiblePassword} >
+              {seePassword ? <ViewOffFilled width={22} height={22} color="#42A5F5" /> : <ViewFilled width={22} height={22} color="#42A5F5"/>  }
+              
+            </Box>
+          </Box>
         </>
       );
     default:
