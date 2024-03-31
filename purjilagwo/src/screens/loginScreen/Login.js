@@ -457,17 +457,8 @@ const Login = () => {
             </Box>
 
             <Typography sx={{ color: "#1C4188", fontSize: { xs: "20px", lg: "28px" }, fontWeight: 700, mt: 3 }}>
-              “Join the best”
+            “Join The Best Be The Best”
             </Typography>
-
-            <Box sx={{ display: "flex" }}>
-              <Typography sx={{ color: "#64EBB6CC", fontSize: { xs: "18px", lg: "28px" }, fontWeight: 700, mr: 1 }}>
-                “Be the best”
-              </Typography>
-              <Typography sx={{ color: "#1C4188", fontSize: { xs: "18px", lg: "28px" }, fontWeight: 700, ml: 1 }}>
-                “Join us be the best”
-              </Typography>
-            </Box>
 
             {activeTab === 'register' && (
               <Box sx={{ height: "4rem", mt: 6 }}>
@@ -480,7 +471,7 @@ const Login = () => {
 
           {/* Box for right side login */}
 
-          <Box sx={{ bgcolor: "white", width: { xs: "100%", lg: "42%" }, p: { xs: 3, lg: 6 }, borderRadius: "10px", boxShadow: "0 0 5px #64EBB666", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "start", ml: 1 }}>
+          <Box sx={{ bgcolor: "white", width: { xs: "100%", lg: "42%" }, p: { xs: 3, lg: 6 }, borderRadius: "10px", boxShadow: "0 0 5px #64EBB666", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "start", ml: {xs:0,lg:1}, }}>
 
             <Box sx={{ display: "flex", width: "100%", alignItems: "start", justifyContent: "center" }}>
               <Box component={"button"} sx={{ backgroundColor: activeTab === 'login' ? "#DBEEFC" : "#42A5F5", width: "100%", textAlign: "center", p: "10px", borderRadius: 2, fontSize: "15px", fontWeight: 500, color: activeTab === 'login' ? "#42A5F5" : "white", border: "2px solid #64EBB6", borderBottomRightRadius: 0, borderTopRightRadius: 0, mr: "1px", }} onClick={() => toggleTab('login')}>
@@ -522,7 +513,7 @@ const Login = () => {
                     <Box sx={{ width: "100%", mt: 2 }} >
                       <InputBox
                         name="loginPassword"
-                        type="text"
+                        boxType="password"
                         title={"Password"}
                         value={inputValues.loginPassword}
                         onChange={handleInputChange}
@@ -537,7 +528,7 @@ const Login = () => {
                     <Box sx={{ width: "100%", mt: 2 }} >
                       <InputBox
                         name="newPassword"
-                        type="text"
+                        boxType="password"
                         title={"New Password"}
                         value={inputValues.newPassword}
                         onChange={handleInputChange}
@@ -623,7 +614,7 @@ const Login = () => {
 
                   <Box sx={{ width: "100%", mt: 2 }} >
                     <InputBox
-                      type="text"
+                      boxType="password"
                       title="Password"
                       name="password"
                       value={inputValues.password}
