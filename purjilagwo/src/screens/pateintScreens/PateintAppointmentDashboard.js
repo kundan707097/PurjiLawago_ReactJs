@@ -20,6 +20,11 @@ const PateintAppointmentDashboard = () => {
     const [todayDate, setTodayDate] = useState("");
     const [cssProperty, setCssProperty] = useState("#E8C804");
     const [openCancelDialog, setOpenCancelDialog] = useState(false);
+    const [dateRange, setDateRange] = useState({
+        startDate: new Date(),
+        endDate: new Date(),
+    })
+    const [searching, setSearching] = useState("");
     useEffect(() => {
         const options = { day: 'numeric', month: 'short', year: 'numeric' };
         const today = new Date();
@@ -52,7 +57,7 @@ const PateintAppointmentDashboard = () => {
                                     <ChevronDown style={{ width: '25px', color: "white" }} />
                                 </Box> */}
                                     <Box sx={{ width: { xs: "80%", lg: "50%", }, bgcolor: "#42A5F5", borderRadius: "12px", py: 1, mx: { xs: "auto", md: 1 }, ml: 0 }}>
-                                        <DateRangeSelector />
+                                        <DateRangeSelector setDateRange={setDateRange} />
                                     </Box>
 
 
