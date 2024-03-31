@@ -21,7 +21,7 @@ import MobileAppBanner from '../../components/MobileAppBanner';
 import LiveCounter from '../../components/LiveCounter';
 import Footer from '../../components/Footer';
 import BackdropLoading from '../../components/BackdropLoading';
-import { doctorDetails } from '../dummyData/DummyData';
+// import { doctorDetails } from '../dummyData/DummyData';
 import OtpBox from '../../components/OtpBox';
 
 function CustomTabPanel(props) {
@@ -108,7 +108,7 @@ export default function Doctor() {
       if (id) {
         setLoading(true);
         try {
-          setDoctorData(doctorDetails)
+          // setDoctorData(doctorDetails)
           const response = await DoctorService.DoctorInformation(id);
           debugger;
           if (response !== undefined) {
