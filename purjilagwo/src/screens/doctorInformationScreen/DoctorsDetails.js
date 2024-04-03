@@ -1153,6 +1153,7 @@ const BookingExistingApplication = () => {
         if (bookingOrPhoneNo.length === 16) {
           setInputState('PhoneInput')
         }
+        debugger;
         setName(response.data.existingBookingPatientDetails.patientName);
         setMnOrBn(response.data.existingBookingPatientDetails.mnOrBn);
       } else {
@@ -1180,7 +1181,8 @@ const BookingExistingApplication = () => {
       if (response.data.isSuccess) {
         setbackdropLoading(false);
         setOpenOtpBox(true);
-        enqueueSnackbar(response.data.message)
+        enqueueSnackbar("OTP send SuccessFully", { variant: "success" });
+        //enqueueSnackbar(response.data.message)
       } else {
         setbackdropLoading(false);
         enqueueSnackbar(response.data.errorMessage, { variant: "error" });
@@ -1195,7 +1197,7 @@ const BookingExistingApplication = () => {
     setbackdropLoading(true);
     var otpData = {
       doctorId: id,
-      phoneNumber: bookingOrPhoneNo.length === 10 ? bookingOrPhoneNo : mnOrBn,
+      phone: bookingOrPhoneNo.length === 10 ? bookingOrPhoneNo : mnOrBn,
       otp: otp
     }
     const response = await DoctorService.OtpVerificationOfExistingApplication(otpData);
@@ -1274,7 +1276,7 @@ const BookingExistingApplication = () => {
               <Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600 }}>Pateint Name</Typography>
               <Box>
                 <input
-                  type="number"
+                  type="text"
                   style={{
                     border: "1px solid #64EBB6",
                     padding: "10px",

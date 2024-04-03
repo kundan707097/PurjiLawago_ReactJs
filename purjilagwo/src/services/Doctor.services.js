@@ -163,7 +163,7 @@ const BookingForExistingPatient = async(data) =>{
     try {
         const response = await axiosClient({
             method: 'POST',
-            url: `/DoctorsInformation/ExistingBoking?BnOrPn=${data}`, // change the endpoint
+            url: `/DoctorsInformation/ConformExistingBooking`, // change the endpoint
             data: JSON.stringify(data)
         })
         return response;
@@ -176,7 +176,7 @@ const OtpVerificationOfExistingApplication = async(otpData) =>{
     try{
         const response = await axiosClient({
             method: 'POST',
-            url: `/PatientsConform/OTPVerifyByPatients`, // Give your API endpoint
+            url: `/DoctorsInformation/ExistingBookingVerification`, // Give your API endpoint
             data: JSON.stringify(otpData),
         });
         return response;
