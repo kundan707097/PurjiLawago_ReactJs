@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, Box, Avatar, Button } from '@mui/material';
 import { Close, InformationFilled, } from '@carbon/icons-react';
+
 import OtpBox from './OtpBox';
 import { CustomizedButton } from './Button';
+import BackdropLoading from './BackdropLoading';
 
 export const OtpVerificationDialogBox = ({ openDialog, closeDialog, variant, handleSubmitOtp, setOtpMain, title, content }) => {
     const [otp, setOtp] = useState("");
@@ -18,9 +20,9 @@ export const OtpVerificationDialogBox = ({ openDialog, closeDialog, variant, han
     return (
         <>
             <Dialog open={openDialog} maxWidth="xs" fullWidth >
-                <DialogTitle sx={{  position: "relative" }}>
-                    <Typography sx={{textAlign: "center", fontWeight: 600, fontSize:"24px"}}>{title}</Typography>
-                    <Button sx={{position: "absolute", right: 0, top:0}} onClick={closeDialog}><Close style={{width: 30, height: 30, color: "black"}} /></Button>
+                <DialogTitle sx={{ position: "relative" }}>
+                    <Typography sx={{ textAlign: "center", fontWeight: 600, fontSize: "24px" }}>{title}</Typography>
+                    <Button sx={{ position: "absolute", right: 0, top: 0 }} onClick={closeDialog}><Close style={{ width: 30, height: 30, color: "black" }} /></Button>
                 </DialogTitle>
                 <DialogContent sx={{ px: 4, mx: 2, borderRadius: "12px", py: 0 }} >
                     <Box sx={{ display: "flex", width: "100%", flexDirection: "column", justifyContent: "center", alignItems: "center", }}>
@@ -52,20 +54,21 @@ export const OtpVerificationDialogBox = ({ openDialog, closeDialog, variant, han
     )
 }
 
-export const CancelDialogBox = ({opendialog, closeDialog, handleCancel}) => {
-    return(
+export const CancelDialogBox = ({ opendialog, closeDialog, handleCancel, backdropLoading }) => {
+    return (
         <>
-        <Dialog open={opendialog} maxWidth="xs" fullWidth>
-            <DialogTitle>Booking Cancellation</DialogTitle>
-            <DialogContent>
-                <Typography>Are you sure you want to cancel the booking?</Typography>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={closeDialog}>No</Button>
-                <Button onClick={handleCancel}>Confirm</Button>
-            </DialogActions>
+            <Dialog open={opendialog} maxWidth="xs" fullWidth>
+                <DialogTitle>Booking Cancellation</DialogTitle>
+                <DialogContent>
+                    <Typography>Are you sure to cancel the booking?</Typography>
+                    <BackdropLoading open={backdropLoading} />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDialog}>No</Button>
+                    <Button onClick={handleCancel}>Confirm</Button>
+                </DialogActions>
 
-        </Dialog>
+            </Dialog>
         </>
     )
 }

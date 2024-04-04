@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react'
 
 import { Box, Typography } from '@mui/material'
 import { Search } from '@carbon/icons-react';
-import { AdminTableHeader, AdminTableRow, } from '../../components/TableRow';
 
+import { AdminTableHeader, AdminTableRow, } from '../../components/TableRow';
 import DateRangeSelector from '../../components/DateRangeSelector';
 import { AdminDashboardTable } from '../../models/Index';
 import AdminService from '../../services/Admin.service';
 import Loading from '../../components/Loading';
 import DataNotFound from '../../components/DataNotFound';
+//import { admin_doctor_list } from '../dummyData/DummyData';
 
 const AdminDashboard = () => {
   const [id, setID] = useState(parseInt(localStorage.getItem('id')));
@@ -42,6 +43,7 @@ const AdminDashboard = () => {
             data.EndDate = dateRange.endDate;
             data.FilterText = searching;
             console.log(data);
+            //setTableData(admin_doctor_list);
             const response = await AdminService.AdminDashboardData(data);
 
             if (response.status === 200) {
@@ -186,19 +188,17 @@ const AdminDashboard = () => {
                 <>
                   {tableData.length === 0 ? (
                     <>
-                      {/* <DataNotFound /> */}
-                      <AdminTableRow />
-                      <AdminTableRow />
-                      <AdminTableRow />
-                      <AdminTableRow />
+                      <DataNotFound />
                     </>
                   ) : (
                     <>
-                      <AdminTableRow />
-                      <AdminTableRow />
-                      <AdminTableRow />
-                      <AdminTableRow />
-
+                      {tableData.map((detail, index) => {
+                        return (
+                          <>
+                            <AdminTableRow details={detail} key={index} />
+                          </>
+                        )
+                      })}
                     </>
                   )}
                 </>

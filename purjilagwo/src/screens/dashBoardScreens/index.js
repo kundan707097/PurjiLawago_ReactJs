@@ -1,12 +1,14 @@
-import React from "react";
+import React , {lazy} from "react";
 import { Route, Routes } from "react-router-dom";
+import { Box } from "@mui/material";
+
+
 import EditProfile from "../editProfile/EditProfile";
 import DashboardNavigationPanel from "./DashboardNavigationPanel";
 import NotFound from "../proxy/NotFound";
-import { Box } from "@mui/material";
 import DoctorAppointmentDashboard from "../doctorInformationScreen/DoctorAppointmentDashboard";
-import PateintAppointmentDashboard from "../pateintScreens/PateintAppointmentDashboard";
 import AdminDashboard from "../admin/AdminDashboard";
+const PateintAppointmentDashboard = lazy(() => import('../pateintScreens/PateintAppointmentDashboard'));
 
 const Dashboard = () => {
     
