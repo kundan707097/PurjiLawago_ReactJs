@@ -1,0 +1,18 @@
+export const searchDiseaseKeyword = [
+    {name: "Fever", searchAs: "general"},
+    {name: "Viral Fever", searchAs: "general"},
+    {name: "Dengue Fever", searchAs: "general"},
+    {name: "Fever", searchAs: "general"},
+    {name: "Fever", searchAs: "general"},
+    {name: "pet dard", searchAs: "general"},
+    {name: "Sar dard", searchAs: "general"},
+    {name: "Paar dard", searchAs: "general"},
+    {name: "Pair dard", searchAs: "general"},
+    {name: "Headache", searchAs: "general"},
+    {name: "Aakh Doctor", searchAs: "eye"},
+    {name: "Aakh", searchAs: "eye"},
+    {name: "Eye", searchAs: "eye"},
+    {name: "Heart", searchAs: "heart"},
+    {name: "Heart Doctor", searchAs: "heart"},
+    {name: "Heart Attach", searchAs: "heart"},
+]
