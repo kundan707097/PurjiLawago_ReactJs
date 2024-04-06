@@ -9,7 +9,10 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json; charset=utf-8',
     'Accept': 'application/json',
+    
+
   },
+  //withCredentials: true,
 });
 
 // Request interceptor to handle authentication or other custom logic

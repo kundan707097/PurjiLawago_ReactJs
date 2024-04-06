@@ -72,6 +72,7 @@ export const PatientAppointmentDashboardTable = {
   filterText: "",
   maxResultCount: 0,
   skipCount: 0,
+  PhoneNumner:"",
 }
 
 export const AdminDashboardTable = {

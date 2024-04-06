@@ -122,7 +122,6 @@ function BottomDrawer(props) {
                                 <Typography sx={{ fontWeight: 400, fontSize: "16px", ml: 1, }}>View / Update Profile</Typography>
                             </Box>
                         </Link>
-
                         <Link to="/dashboard/edit/password" style={{ my: 1 }}>
                             <Box sx={{ p: 2, pl: 4, bgcolor: location.pathname === "/dashboard/edit/password" && "#64EBB6", borderRadius: "0 15px 15px 0", my: 1, display: "flex", alignItems: "center", "&:hover": { color: location.pathname === "/dashboard/edit/password" ? "white" : "black", bgcolor: location.pathname === "/dashboard/edit/password" ? "#64EBB6" : "#E9FAF3" }, color: location.pathname === "/dashboard/edit/password" ? "white" : "#5D6566", boxShadow: location.pathname === "/dashboard/edit/password" && "0 0 4px #D8DEE8" }}>
                                 <Password style={{ width: "22px", height: "22px", }} />
@@ -136,6 +135,7 @@ function BottomDrawer(props) {
                                 <Typography sx={{ fontWeight: 400, fontSize: "16px", ml: 1, }}>Update Phone No.</Typography>
                             </Box>
                         </Link>
+                        
 
                         <Box component={"button"} type='button' sx={{ border: "none", py: 2, pl: 4, bgcolor: "white", borderRadius: "0 15px 15px 0", my: 1, display: "flex", alignItems: "center", "&:hover": { color: "black", bgcolor: "#E9FAF3" }, color: "#5D6566", width: "100%" }}>
                             <Logout style={{ width: "22px", height: "22px", }} />

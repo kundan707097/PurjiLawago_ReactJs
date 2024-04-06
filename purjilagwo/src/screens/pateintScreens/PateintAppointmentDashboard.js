@@ -20,6 +20,7 @@ const PateintAppointmentDashboard = () => {
     const [loading, setLoading] = useState(false);
     const [backdropLoading, setBackdropLoading] = useState(false)
     const [id, setID] = useState(parseInt(localStorage.getItem('id')));
+    const [mobileNo, mobileNoID] =useState(localStorage.getItem('phoneNumber'));
     const [openCancelDialog, setOpenCancelDialog] = useState(false);
     const [bNo, setBNo] = useState("");
     const [cancelledSuccess, setCancelledSuccess] = useState(false)
@@ -50,10 +51,13 @@ const PateintAppointmentDashboard = () => {
                         data.skipCount = pagination.SkipCount;
                         data.skipCount = (pageMain) * pagination.MaxResultCount;  //if the next or previous button is clicked then it will set the skip count
                         data.maxResultCount = pagination.MaxResultCount;
+                        data.PhoneNumner = mobileNo;
                         console.log(data);
-                        const response = PatientService.PatientDashboardData(data);
+                        debugger;
+                        const response = await PatientService.PatientDashboardData(data);
+                        debugger;
                         if (response.status === 200) {
-                            setTableData(response.data)
+                            setTableData(response.data.doctorsDashboardRecords.items)
                             console.log("Patient Table Data" + response.data)
                         }
                         setLoading(false);
