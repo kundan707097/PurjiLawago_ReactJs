@@ -1,11 +1,11 @@
 import axiosClient from '../interceptors/axiosInstance';
 
-const AdminDashboardData = async (data) => {
+const PatientDashboardData = async (data) => {
     debugger;
     try {
         const response = await axiosClient({
             method: 'POST',
-            url: "/AdminVerifyDoctors/AdminGetByDoctors",
+            url: "/PatientDashboard/PatientBookingDashboardDetails",
             data: JSON.stringify(data),
         });
         return response;
@@ -14,22 +14,19 @@ const AdminDashboardData = async (data) => {
     }
 }
 
-const StatusUpdateByAdmin = async (data) => {
+const CancelBookingByPateint = async(data) =>{
     debugger;
     try {
-        const response = await axiosClient({
+        const res = await axiosClient({
             method: 'POST',
-            url: "/AdminVerifyDoctors/AdminUpdateDoctorStatus", 
+            url: "/PatientDashboard/UpdatePatientBookingStatus",
             data: JSON.stringify(data),
-        });
-        return response;
+        })
+        return res;
     } catch (error) {
         return error;
     }
 }
 
-const AdminService = {
-    AdminDashboardData,StatusUpdateByAdmin
-}
-
-export default AdminService;
+const PatientService = {PatientDashboardData, CancelBookingByPateint};
+export default PatientService;

@@ -124,8 +124,8 @@ export const DoctorTableRow = ({ data }) => {
               <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>{data.patient_MobileNumber}</Typography>
             </Box>
             <Dropdown>
-              <MenuButton sx={{ color: cssProperty, border: `1px solid ${cssProperty}`, ":hover": { bgcolor: cssProperty } }}>
-                {status}<ChevronDown style={{ marginLeft: "4px" }} />
+              <MenuButton sx={{ color: cssProperty, border: `1px solid ${cssProperty}`, ":hover": { bgcolor: cssProperty } }} disabled={status ==="Cancel"}>
+                {status ==="Cancel" ? "Cancelled" : (status)}<ChevronDown style={{ marginLeft: "4px" }} />
               </MenuButton>
               <Menu slots={{ listbox: Listbox }}>
                 <MenuItem onClick={() => handleUpdateStatus('Pending', "#E8C804", data.bookingNumber)} sx={{ color: status === "Pending" ? "white" : "#E8C804", bgcolor: status === "Pending" && "#E8C804" }}>Pending</MenuItem>
@@ -199,7 +199,7 @@ export const AdminTableHeader = () => {
           <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>Specialist</Typography>
         </Box>
         <Box sx={{ width: "16%" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>Registration Date</Typography>
+          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>Phone Number</Typography>
         </Box>
         <Box sx={{ width: "16%" }}>
           <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>Location</Typography>
@@ -212,7 +212,7 @@ export const AdminTableHeader = () => {
   )
 }
 
-export const AdminTableRow = () => {
+export const AdminTableRow = ({ details }) => {
   const [cssProperty, setCssProperty] = useState("#E8C804");
   const [status, setStatus] = useState("Pending");
   const { enqueueSnackbar } = useSnackbar()
@@ -224,21 +224,24 @@ export const AdminTableRow = () => {
     }
   }, [localStorage.getItem('id')]);
 
-  const handleUpdateStatus = async (status, color, registrationNumber) => {
+  const handleUpdateStatus = async (status, color) => {
     try {
       if (id !== 0 || id !== null) {
         const data = {
-          id: id,
-          patient_Status: status,
-          registrationNumber: registrationNumber,
+          doctorId: details.id,
+          doctorStatus: status,
+          registrationNumber: details.registrationNo,
         }
-        console.log(data);
         const response = await AdminService.StatusUpdateByAdmin(data);
         debugger;
         if (response.status === 200) {
-          setStatus(status); //this property need to set after the we success true response
-          setCssProperty(color);
-          console.log(response.data)
+          if (response.data.isSuccess) {
+            setStatus(status);
+            setCssProperty(color);
+            console.log(response.data)
+          } else {
+            enqueueSnackbar(response.data.errorMessage, { variant: "error" })
+          }
         } else {
           enqueueSnackbar("Server not responding", { variant: "error" })
         }
@@ -248,23 +251,37 @@ export const AdminTableRow = () => {
       enqueueSnackbar("Server not responding", { variant: "error" })
     }
   }
+
+  useEffect(() => {
+    if (details !== null) {
+      setStatus(details.status);
+      if (details.status === "Pending") {
+        setCssProperty("#E8C804");
+      } else if (details.status === "Approve") {
+        setCssProperty("#00B69B");
+      } else if (details.status === "Refuse") {
+        setCssProperty("#EB5757");
+      }
+    }
+  }, [details])
+
   return (
     <>
       <Box sx={{ borderRadius: "6px", border: `none`, my: 1, justifyContent: "space-between", alignContent: "center", width: "100%", bgcolor: "white", color: "#8E999A", ":hover": { transition: "0.3s", boxShadow: "1px 18px 20px 0px #0000001A" }, display: { xs: "none", md: "flex" }, }} component={"button"}>
         <Box sx={{ width: "20%" }} >
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, textAlign: "left" }}>{"824829ksl4klj43u89"}</Typography>
+          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, textAlign: "left" }}>{details.registrationNo}</Typography>
         </Box>
         <Box sx={{ color: "black", width: "16%", textAlign: "left" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>{"Vicky Jaiswal"}</Typography>
+          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>{details.doctorName}</Typography>
         </Box>
         <Box sx={{ width: "16%", textAlign: "left" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>{"Heart Specialist"}</Typography>
+          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>{details.speciality.split(",")[0]}</Typography>
         </Box>
         <Box sx={{ width: "16%", textAlign: "left" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, }}>{"12-12-2024"}</Typography>
+          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, }}>{details.moblie_Number}</Typography>
         </Box>
         <Box sx={{ width: "16%", textAlign: "left" }}>
-          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, }}>{"Saidpur Ganesh"}</Typography>
+          <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600, }}>{details.city}</Typography>
         </Box>
         <Dropdown>
           <MenuButton sx={{ color: "white", border: `1px solid ${cssProperty}`, ":hover": { bgcolor: "white", color: cssProperty, border: `1px solid ${cssProperty}` }, bgcolor: cssProperty }}>
@@ -285,29 +302,29 @@ export const AdminTableRow = () => {
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
           <Box sx={{ width: "50%" }}>
             <Typography sx={{ color: "#1C4188", fontSize: "16px" }}>Registration No.</Typography>
-            <Typography sx={{ fontSize: "14px" }}>{"289ru829r784"}</Typography>
+            <Typography sx={{ fontSize: "14px" }}>{details.registrationNo}</Typography>
           </Box>
           <Box sx={{ width: "50%" }}>
-            <Typography sx={{ color: "#1C4188", fontSize: "16px" }}>Registration Date</Typography>
-            <Typography sx={{ fontSize: "14px" }}>{"12-12-2024"}</Typography>
+            <Typography sx={{ color: "#1C4188", fontSize: "16px" }}>Phone No.</Typography>
+            <Typography sx={{ fontSize: "14px" }}>{details.moblie_Number}</Typography>
           </Box>
         </Box>
 
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
           <Box sx={{ width: "50%" }}>
             <Typography sx={{ color: "#1C4188", fontSize: "16px" }}>Doctor Name</Typography>
-            <Typography sx={{ fontSize: "14px" }}>{"Vicky Jaiswal"}</Typography>
+            <Typography sx={{ fontSize: "14px" }}>{details.doctorName}</Typography>
           </Box>
           <Box sx={{ width: "50%" }}>
             <Typography sx={{ color: "#1C4188", fontSize: "16px" }}>Specialist</Typography>
-            <Typography sx={{ fontSize: "14px" }}>{"Heart Specialist"}</Typography>
+            <Typography sx={{ fontSize: "14px" }}>{details.speciality.split(",")[0]}</Typography>
           </Box>
 
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
           <Box sx={{ width: "50%" }}>
             <Typography sx={{ color: "#1C4188", fontSize: "16px" }}>Location</Typography>
-            <Typography sx={{ fontSize: "14px" }}>{"Saidpur Ganesh"}</Typography>
+            <Typography sx={{ fontSize: "14px" }}>{details.city}</Typography>
           </Box>
         </Box>
 

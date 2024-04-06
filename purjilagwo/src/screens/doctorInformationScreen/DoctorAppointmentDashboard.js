@@ -10,6 +10,8 @@ import { DoctorAppointmentDashboardTable } from '../../models/Index'
 import { DoctorExcelInput } from '../../models/Index'
 import DataNotFound from '../../components/DataNotFound'
 import * as XLSX from 'xlsx'
+import { pateintList } from '../dummyData/DummyData'
+import { CancelDialogBox } from '../../components/DialogBox'
 
 const DoctorAppointmentDashboard = () => {
     const [loading, setLoading] = useState(false);
@@ -27,6 +29,8 @@ const DoctorAppointmentDashboard = () => {
     })
     const [maxCount, setMaxCount] = useState(0);
     const [pageMain, setPageMain] = useState(0);
+    const [openCancelDialog, setOpenCancelDialog] = useState(false);
+    const [backdropLoading, setBackdropLoading] = useState(false) 
 
     // setting the id from the local storage
     useEffect(() => {
@@ -51,7 +55,7 @@ const DoctorAppointmentDashboard = () => {
                         data.MaxResultCount = pagination.MaxResultCount;
                         console.log(data);
                         const response = await DoctorService.DoctorDashboardData(data);
-
+                        setTableData(pateintList)
                         if (response.status === 200) {
                             console.log('Profile data:', response.data);
                             setTableData(response.data.doctorsDashboardRecords.items)
@@ -71,11 +75,11 @@ const DoctorAppointmentDashboard = () => {
     const downloadExcel = (records) => {
         debugger;
         const workbook = XLSX.utils.book_new(); // Define workbook here
-        
+
         // Convert records to worksheet
         const worksheetName = 'DoctorRecords';
         XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(records), worksheetName);
-    
+
         // Customize header style (bold, uppercase, and red color)
         const headerStyle = {
             font: { bold: true },
@@ -91,11 +95,11 @@ const DoctorAppointmentDashboard = () => {
                 cell.v = cell.v.toString().toUpperCase(); // Convert header to uppercase
             }
         }
-    
+
         // Save workbook to file
         XLSX.writeFile(workbook, 'DoctorRecords.xlsx');
     };
-    const handleDownloadExcel = async() =>{
+    const handleDownloadExcel = async () => {
         debugger;
         const data = DoctorExcelInput;
         data.Id = parseInt(id);
@@ -109,20 +113,24 @@ const DoctorAppointmentDashboard = () => {
         }
     }
 
-    const handleDownloadloadPdf = async() => {
-        const data ={
+    const handleDownloadloadPdf = async () => {
+        const data = {
             id: parseInt(id),
-            StartDate : dateRange.startDate,
-            EndDate : dateRange.endDate,
+            StartDate: dateRange.startDate,
+            EndDate: dateRange.endDate,
             // FilterText : searching,
         }
         const response = await DoctorService.DoctorDownloadPdf(data);
-        if(response.status === 200){
+        if (response.status === 200) {
             console.log('Pdf data:', response.data);
-        }else{
+        } else {
             console.log('Error:', response);
         }
     }
+
+    const handleCancel = async() =>{
+
+    } 
 
 
     return (
@@ -274,7 +282,7 @@ const DoctorAppointmentDashboard = () => {
                                                         <DoctorTableRow key={index} data={tableData[index]} />
                                                     )
                                                 })}
-                                                <Box sx={{ mb: 15, mt:3 }}>
+                                                <Box sx={{ mb: 15, mt: 3 }}>
 
                                                     <TablePaginationDemo maxCount={maxCount} setPagination={setPagination} pagination={pagination} pageMain={pageMain} setPageMain={setPageMain} />
                                                 </Box>
@@ -290,10 +298,7 @@ const DoctorAppointmentDashboard = () => {
 
                     </Box>
 
-                    {/* Doctor Image and details */}
-                    {/* <Box sx={{ width: "30%", bgcolor: "red" }}>
-                        Doctor image and details
-                    </Box> */}
+                    <CancelDialogBox opendialog={openCancelDialog} closeDialog={() => setOpenCancelDialog(false)} handleCancel={() => handleCancel()} backdropLoading={backdropLoading}/>
                 </Box>
             )}
         </>

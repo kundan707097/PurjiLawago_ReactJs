@@ -64,6 +64,15 @@ export const DoctorAppointmentDashboardTable = {
   SkipCount: 0
 
 }
+export const PatientAppointmentDashboardTable = {
+  id: 0,
+  startDate: new Date(),
+  endDate: new Date(),
+  sorting: null,
+  filterText: "",
+  maxResultCount: 0,
+  skipCount: 0,
+}
 
 export const AdminDashboardTable = {
   Id: 0,
