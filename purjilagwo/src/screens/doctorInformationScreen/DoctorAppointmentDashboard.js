@@ -10,7 +10,7 @@ import { DoctorAppointmentDashboardTable } from '../../models/Index'
 import { DoctorExcelInput } from '../../models/Index'
 import DataNotFound from '../../components/DataNotFound'
 import * as XLSX from 'xlsx'
-import { pateintList } from '../dummyData/DummyData'
+// import { pateintList } from '../dummyData/DummyData'
 import { CancelDialogBox } from '../../components/DialogBox'
 
 const DoctorAppointmentDashboard = () => {
@@ -55,7 +55,7 @@ const DoctorAppointmentDashboard = () => {
                         data.MaxResultCount = pagination.MaxResultCount;
                         console.log(data);
                         const response = await DoctorService.DoctorDashboardData(data);
-                        setTableData(pateintList)
+                        // setTableData(pateintList)
                         if (response.status === 200) {
                             console.log('Profile data:', response.data);
                             setTableData(response.data.doctorsDashboardRecords.items)
