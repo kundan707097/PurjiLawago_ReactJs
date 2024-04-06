@@ -124,8 +124,8 @@ export const DoctorTableRow = ({ data }) => {
               <Typography sx={{ p: 2, fontSize: "16px", fontWeight: 600 }}>{data.patient_MobileNumber}</Typography>
             </Box>
             <Dropdown>
-              <MenuButton sx={{ color: cssProperty, border: `1px solid ${cssProperty}`, ":hover": { bgcolor: cssProperty } }}>
-                {status}<ChevronDown style={{ marginLeft: "4px" }} />
+              <MenuButton sx={{ color: cssProperty, border: `1px solid ${cssProperty}`, ":hover": { bgcolor: cssProperty } }} disabled={status ==="Cancel"}>
+                {status ==="Cancel" ? "Cancelled" : (status)}<ChevronDown style={{ marginLeft: "4px" }} />
               </MenuButton>
               <Menu slots={{ listbox: Listbox }}>
                 <MenuItem onClick={() => handleUpdateStatus('Pending', "#E8C804", data.bookingNumber)} sx={{ color: status === "Pending" ? "white" : "#E8C804", bgcolor: status === "Pending" && "#E8C804" }}>Pending</MenuItem>

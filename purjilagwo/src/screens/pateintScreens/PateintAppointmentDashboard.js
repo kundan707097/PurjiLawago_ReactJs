@@ -150,6 +150,11 @@ const PateintAppointmentDashboard = () => {
                                 <TableContainer sx={{ mt: 3, display: { xs: "none", md: "block" } }}>
                                     <Table >
                                         <THead />
+                                        <TableBody>
+                                            {rows.map((data, index) => (
+                                                <TBody data={data} key={index} setOpenCancelDialog={setOpenCancelDialog} setBNo={setBNo} cancelledSuccess={cancelledSuccess} bNo={bNo} />
+                                            ))}
+                                        </TableBody>
                                     </Table>
                                 </TableContainer>
                                 <DataNotFound />
