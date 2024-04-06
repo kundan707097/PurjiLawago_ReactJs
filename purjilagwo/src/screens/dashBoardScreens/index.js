@@ -21,7 +21,7 @@ const Dashboard = () => {
                 <Routes>
                     <Route excat path="/edit/profile" element={<EditProfile />} />
                     {(localStorage.getItem("role") === "Doctor" && localStorage.getItem("isDocotrsOrPatiets") === "true") && (<Route exact path="/appointment&details" element={<DoctorAppointmentDashboard />} />)}
-                    {(localStorage.getItem("role") === "Pateint" && localStorage.getItem("isDocotrsOrPatiets") === "false") && (<Route exact path="/appointment&details" element={<PateintAppointmentDashboard />} />)}
+                    {(localStorage.getItem("role") === "Patient" && localStorage.getItem("isDocotrsOrPatiets") === "false") && (<Route exact path="/appointment&details" element={<PateintAppointmentDashboard />} />)}
                     {(localStorage.getItem("role") === "Admin" && localStorage.getItem("isDocotrsOrPatiets") === "false") &&  (<Route excat path="doctor/registration" element={<AdminDashboard />} />)}
                     
                     <Route excat path="*" element={<NotFound />} />
