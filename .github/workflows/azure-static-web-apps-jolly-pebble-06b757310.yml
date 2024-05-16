@@ -33,4 +33,4 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "purjilagwo/src"  # Path to your app source code
-          output_location: "purjilagwo/build"  # Path to your build output directory
+          output_location: ""  # Path to your build output directory
