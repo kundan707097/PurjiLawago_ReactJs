@@ -17,11 +17,11 @@ import BackdropLoading from '../../components/BackdropLoading';
 import { OtpVerificationDialogBox } from '../../components/DialogBox';
 import { useSnackbar } from 'notistack';
 
-const Login = () => {
+const RegisterScreen = () => {
 
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [activeTab, setActiveTab] = useState('login');
+  const [activeTab, setActiveTab] = useState('register');
   const [isDoctor, setIsDoctor] = useState(false);
   const [inputValues, setInputValues] = useState({
     fullName: '',
@@ -474,100 +474,16 @@ const Login = () => {
           <Box sx={{ bgcolor: "white", width: { xs: "100%", lg: "42%" }, p: { xs: 3, lg: 6 }, borderRadius: "10px", boxShadow: "0 0 5px #64EBB666", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "start", ml: {xs:0,lg:1}, }}>
 
             <Box sx={{ display: "flex", width: "100%", alignItems: "start", justifyContent: "center" }}>
-              <Box component={"button"} sx={{ backgroundColor: activeTab === 'login' ? "#fff" : "#42A5F5", width: "100%", textAlign: "center", p: "10px", borderRadius: 2, fontSize: "34px", fontWeight: 700, color: activeTab === 'login' ? "#3498db" : "white", borderBottomRightRadius: 0, border:"none", borderTopRightRadius: 0, mr: "1px", }} onClick={() => toggleTab('login')}>
-                Login
-              </Box>
-              {/* <Box component={"button"} sx={{ backgroundColor: activeTab === 'register' ? "#DBEEFC" : "#42A5F5", width: "100%", textAlign: "center", p: "10px", borderRadius: 2, fontSize: "15px", fontWeight: 500, color: activeTab === 'register' ? "#42A5F5" : "white", border: "2px solid #64EBB6", borderBottomLeftRadius: 0, borderTopLeftRadius: 0, ml: "1px" }} onClick={() => toggleTab('register')}>
+              <Box component={"button"} sx={{ backgroundColor: activeTab === 'register' ? "#fff" : "#42A5F5", width: "100%", textAlign: "center", p: "10px", borderRadius: 2, fontSize: "34px", fontWeight: 700, color: activeTab === 'register' ? "#3498db" : "white", border: "none", borderBottomLeftRadius: 0, borderTopLeftRadius: 0, ml: "1px" }} onClick={() => toggleTab('register')}>
                 Register
-              </Box> */}
+              </Box>
 
             </Box>
 
-            {/* This is login screen */}
-
-            {activeTab === 'login' && (
-
-              <Box sx={{ width: "100%" }}>
-                <form onSubmit={handleSubmit(onSubmit)}>
-
-                  {/* Phone number and email input */}
-                  <Box sx={{ width: "100%", mt: 3 }} >
-
-                    <InputBox
-                      type="text"
-                      name="emailOrPhoneNumber"
-                      title={"Email or Phone number"}
-                      value={inputValues.emailOrPhoneNumber}
-                      onChange={handleInputChange}
-                    />
-
-                    {errors.emailOrPhoneNumber && (
-                      <ErrorMessage message={errors.emailOrPhoneNumber.message} />
-                    )}
-
-                  </Box>
-
-                  {/* Password input */}
-
-                  {(!loginWithOtp && !forgotPassword) && (
-                    <Box sx={{ width: "100%", mt: 2 }} >
-                      <InputBox
-                        name="loginPassword"
-                        boxType="password"
-                        title={"Password"}
-                        value={inputValues.loginPassword}
-                        onChange={handleInputChange}
-                      />
-                      {errors.loginPassword && (
-                        <ErrorMessage message={errors.loginPassword.message} />
-                      )}
-                    </Box>
-                  )}
-
-                  {newPasswordInput && (
-                    <Box sx={{ width: "100%", mt: 2 }} >
-                      <InputBox
-                        name="newPassword"
-                        boxType="password"
-                        title={"New Password"}
-                        value={inputValues.newPassword}
-                        onChange={handleInputChange}
-                      />
-                      {errors.newPassword && (
-                        <ErrorMessage message={errors.newPassword.message} />
-                      )}
-                    </Box>
-                  )}
-
-
-
-                  {/* Box for forgot password and login with otp */}
-
-                  <Box sx={{ display: "flex", mt: 2, justifyContent: "space-between", }}>
-                    {!forgotPassword && (<Typography component={"button"} type='button' sx={{ color: "#1C4188", fontSize: "15px", fontWeight: 600, border: "none", bgcolor: "transparent", textAlign: "left" }} onClick={loginViaOtpToggler}>{loginWithOtp ? "Login via password" : "Login via otp"}</Typography>)}
-
-                    {!loginWithOtp && (
-                      <Typography component={"button"} type='button' sx={{ color: "#42A5F5", fontSize: "15px", fontWeight: 600, border: "none", bgcolor: "transparent" }} onClick={forgotPasswordToggler}>{forgotPassword ? "Login via old password" : " Forgot Password ?"}</Typography>
-                    )}
-
-                  </Box>
-
-                  {/* Button for login */}
-                  <Box sx={{ width: "100%", mt: 2 }}>
-                    <CustomizedButton title={"Sign In"} type={"submit"} disabled={buttonDisabled.ForLogin} />
-                  </Box>
-                      <Link to="/signup" style={{color:"#666"}}>Signup?</Link>
-                </form>
-
-                <OtpVerificationDialogBox openDialog={openLoginOtpBox.open} closeDialog={() => setOpenLoginOtpBox({ open: false, endpoint: "" })} handleSubmitOtp={() => handleSubmitOtp(openLoginOtpBox.endpoint)} setOtpMain={setOtp} title={openLoginOtpBox.title} content={openLoginOtpBox.content} />
-
-
-              </Box>
-            )}
 
             {/* This is for signup screen */}
 
-            {/* {activeTab === 'register' && (
+            {activeTab === 'register' && (
               <Box sx={{ width: "100%" }}>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -625,13 +541,13 @@ const Login = () => {
                   <Box sx={{ width: "100%", mt: 2 }}>
                     <CustomizedButton title={"Sign Up"} type={"submit"} disabled={buttonDisabled.ForRegister} />
                   </Box>
-
+                  <div style={{fontWeight:"500"}} className='mt-2'>Already have an Account? <Link to="/login" style={{ color:"#222", fontWeight:"700", textDecoration:"underline" }}>Sign In</Link> </div>
                 </form>
 
                 <OtpVerificationDialogBox openDialog={openRegisterOtpBox.open} closeDialog={() => setOpenRegisterOtpBox({ open: false, endpoint: "" })} handleSubmitOtp={() => handleSubmitOtp(openRegisterOtpBox.endpoint)} setOtpMain={setOtp} title={openRegisterOtpBox.title} content={openRegisterOtpBox.content} />
 
               </Box>
-            )} */}
+            )}
 
             {/* Google and facebook signin */}
 
@@ -665,4 +581,4 @@ const Login = () => {
   )
 }
 
-export default Login;
+export default RegisterScreen;

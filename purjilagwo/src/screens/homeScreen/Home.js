@@ -12,6 +12,7 @@ import Footer from '../../components/Footer';
 import MobileAppBanner from '../../components/MobileAppBanner';
 import VideoCalling from './VideoCalling';
 import HotOffer from './HotOffer';
+import Doctors from './Doctors';
 
 function Home() {
 
@@ -29,10 +30,11 @@ function Home() {
             <AboutUs />
             <Specialities />
             <GetADoctor />
+            <Doctors/>
             {/* <HotOffer /> */}
             {/* <VideoCalling /> */}
-            <WhyUs />
-            <BookingSystem />
+            {/* <WhyUs /> */}
+            {/* <BookingSystem /> */}
             {/* <MobileAppBanner /> */}
             <LiveCounter />
             <Footer />

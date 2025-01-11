@@ -455,7 +455,7 @@ const LoginedAction = () => {
                     </ul> */}
         </div>
       ) : (
-        <Link to="/authentication">
+        <Link to="/login">
           <Paper
             sx={{
               backgroundColor: "#42a5f5",
