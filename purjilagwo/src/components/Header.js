@@ -7,7 +7,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ClearIcon from '@mui/icons-material/Clear';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import "./style/Header.css";
 import { whats_app } from "../constants/socialMedia";
 
@@ -191,11 +191,11 @@ function Header() {
     <>
       <header className="pageHeader">
         <nav
-          className="navbar navbar-expand-lg navbar-light navbar-white bg-white"
+          className="navbar navbar-expand-lg navbar-light navbar-white"
           aria-label="Eighth navbar example"
           style={{ zIndex: 999 }}
         >
-          <div className="container">
+          <div className="px-3 py-2 w-100 d-flex justify-content-between align-items-center">
             <Link to="/" className="navbar-brand">
               <img src="/images/Logo/Logo2.png" alt="Logo" height={"100%"} />
             </Link>
@@ -219,10 +219,10 @@ function Header() {
                     className="nav-link"
                     to="/doctorlist"
                     style={{
-                      color: location.pathname === "/doctorlist" && "black",
+                      color: location.pathname === "/doctorlist" && "#fff", textDecoration : location.pathname === "/doctorlist" && "underline", fontWeight: location.pathname === "/doctorlist" && "700" 
                     }}
                   >
-                    Find Doctor
+                    Doctors
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -243,7 +243,7 @@ function Header() {
                       position: "relative"
                     }}
                   >
-                    <Box>Specialities</Box>
+                    <Box className="d-flex align-iteems-start">Specialities<KeyboardArrowDownIcon/> </Box>
                     <Box sx={{ position: "absolute", bgcolor: "#F8FCFB", top: "40px", boxShadow: "3px 19px 20px 0px #0000001A", p: 2, left: "-250px", zIndex: 999, }} className="specialities-box">
                       <Box sx={{ display: "flex", mt: 2, mb: 4, color: "black" }}>
                         {first_row.map((items, index) => {

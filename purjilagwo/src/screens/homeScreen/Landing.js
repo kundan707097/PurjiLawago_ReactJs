@@ -92,7 +92,7 @@ const Landing = () => {
   return (
     <>
 
-      <Box sx={{ display: "flex", mb: 10 }}>
+      <Box  sx={{ display: "flex", mb: 10, minHeight:"60vh", justifyContent:"center", alignItems:"center" }}>
 
         {/* Left box */}
         <Box sx={{ width: "50%" }}>
@@ -105,49 +105,49 @@ const Landing = () => {
 
             {/* Image and support */}
 
-            <Box sx={{ display: { xs: "none", lg: "flex" }, alignItems: "center" }}>
+            {/* <Box sx={{ display: { xs: "none", lg: "flex" }, alignItems: "center" }}>
               <img src="../images/Home/image40.svg" alt="" />
               <Typography sx={{ color: "#64EBB6", fontSize: "20px", fontWeight: 600, ml: 2 }} >
                 SUPPORT
               </Typography>
-            </Box>
+            </Box> */}
 
             {/* Text and heading */}
 
             <Box sx={{ mt: { xs: 6, lg: 3 }, backgroundColor: "transparent" }}>
-              <Typography sx={{ fontSize: { xs: '11px', lg: "24px" }, color: "#64EBB6", fontWeight: 700, }}>
-                <span>“</span><span style={{ color: "#5D6566" }}>JOIN THE BEST BE THE BEST</span><span style={{ marginRight: 14 }}>”</span>
+              <Typography sx={{ fontSize: { xs: '10px', md:"16px", lg: "24px" }, color: "#64EBB6", fontWeight: 700, }}>
+                <span>“</span><span style={{ color: "#5D6566" }}>EMPOWERING HEALTHIER LIVING</span><span style={{ marginRight: 14 }}>”</span>
                 <Box sx={{ display: { lg: 'none' } }} />
               </Typography>
-              <Typography sx={{ mt: { xs: 2, lg: 0 }, fontSize: { xs: "22px", lg: "65px" }, fontWeight: 900, color: "#42A5F5", }}>
-                Keep Your Family
+              <Typography sx={{ mt: { xs: 2, lg: 0 }, fontSize: { xs: "18px",md:"36px", lg: "50px" }, fontWeight: 800, color: "#42A5F5", }}>
+              Your Family's Health, 
               </Typography>
-              <Typography fontWeight={900} fontSize={"65px"} color={"#42A5F5"} sx={{ fontSize: { xs: "22px", lg: "65px" } }}>
-                More Healthy
+              <Typography fontWeight={800} fontSize={"65px"} color={"#42A5F5"} sx={{ fontSize: { xs: "18px", md:"36px", lg: "50px" } }}>
+              Our Priority
               </Typography>
 
               <Typography fontWeight={400} fontSize={"20px"} color={"#5D6566"} mt={3} sx={{ display: { xs: "none", md: "initial" } }}>
-                Healthcare covers prevention, diagnosis, treatment, and management of physical and mental conditions to maintain and enhance health.
+              Discover comprehensive healthcare solutions designed to prevent, diagnose, and treat, ensuring a healthier and happier life for your loved ones.
               </Typography>
             </Box>
 
             {/* Appointment and buy medcine  */}
 
-            <Box sx={{ mt: { xs: 2, lg: 8 }, display: "flex" }}>
+            {/* <Box sx={{ mt: { xs: 2, lg: 4 }, display: "flex" }}>
               <Link to="/doctorlist" style={{ zIndex: 999 }}>
-                <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: { xs: .6, lg: 1.3 }, borderRadius: 3, fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", "&:hover": { color: "#42A5F5", backgroundColor: "white" } }}>
+                <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "130px", lg: "200px" }, textAlign: "center", p: { xs: .6, lg: 1.3 }, borderRadius: 3, fontSize: { xs: "12px", lg: "18px" }, fontWeight: 600, color: "white", border: "2px solid #42A5F5", "&:hover": { color: "#42A5F5", backgroundColor: "white" } }}>
                   Make a Appointment
                 </Box>
-              </Link>
+              </Link> */}
 
-              <Link to="/" style={{ marginLeft: 20, zIndex: 999 }}>
+              {/* <Link to="/" style={{ marginLeft: 20, zIndex: 999 }}>
                 <Box sx={{ backgroundColor: "white", width: "250px", textAlign: "center", p: 1.3, borderRadius: 3, fontSize: "15px", fontWeight: 500, color: "#42A5F5", border: "2px solid #42A5F5", "&:hover": { backgroundColor: "#42A5F5", color: "white" }, display: { xs: "none", lg: "block" } }}>
                   <img src="../images/Home/image32.svg" alt="" height={"20px"} style={{ marginRight: 10 }} />
                   Buy Medicine
                 </Box>
-              </Link>
+              </Link> */}
 
-            </Box>
+            {/* </Box> */}
 
             {/* Search box on home page */}
 
@@ -157,13 +157,13 @@ const Landing = () => {
                 justifyContent: "space-evenly",
                 border: "1px solid #42A5F5",
                 borderRadius: "12px",
-                width: { xs: "100%", md: "50rem" },
+                width: { xs: "100%", md: "50%",lg:"70%", sm:"50%" },
                 position: { xs: "absolute", lg: "relative" },
                 left: { xs: 2, lg: 0 },
                 zIndex: 10,
                 backgroundColor: "white",
                 mb: "40px",
-                mt: { xs: "20px", sm: "0px", md: 6 },
+                mt: { xs: "20px", sm: "10px", md: 3 },
               }}
             >
               <Box
@@ -171,7 +171,7 @@ const Landing = () => {
                   borderRight: { xs: "none", sm: "none", md: "2px solid grey" },
                   my: { xs: "4px", lg: "10px" },
                   mx: { md: "10px" },
-                  width: "40%",
+                  width: "50%",
                   position: "relative",
                 }}
               >
@@ -179,7 +179,7 @@ const Landing = () => {
                 <input
                   style={{
                     border: "none",
-                    width: "80%",
+                    width: "70%",
                     marginLeft: "5px",
                   }}
                   id="searchLocation"
@@ -241,7 +241,7 @@ const Landing = () => {
               <Box
                 sx={{
                   my: { xs: "4px", lg: "10px" },
-                  width: { md: "70%" },
+                  width: { md: "40%" },
                   mx: { md: "5px" },
                 }}
               >
@@ -318,8 +318,10 @@ const Landing = () => {
               </Box>
 
               <Box sx={{ backgroundColor: "#42A5F5", borderRadius: "0px 12px 12px 0", display: "flex", px: 2, alignItems: "center", color: "white", cursor: "pointer", }}>
-                <Search />
-                <Typography sx={{ ml: 1, fontSize: { xs: '10px', lg: "15px" } }}>Search</Typography>
+                <Link style={{color:"#fff"}} to="/doctorlist">
+                <Search color="#fff" size={23}/>
+                </Link>
+                {/* <Typography sx={{ ml: 1, fontSize: { xs: '10px', lg: "15px", display: {xs: "none"} } }}>Search</Typography> */}
               </Box>
             </Box>
 
@@ -331,21 +333,21 @@ const Landing = () => {
 
         <Box sx={{ width: "50%", overflow: "hidden" }}>
           <Box sx={{ position: "absolute", top: "0", zIndex: 1, right: "-4.3rem", height: { xs: "18rem", lg: "46.9rem" }, }}>
-            <img src="../images/Home/hero_bg.svg" alt="" height={"100%"} />
+            {/* <img src="../images/Home/hero_bg.svg" alt="" height={"100%"} /> */}
           </Box>
-          <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "5.8rem", lg: "7.07rem" }, right: 2, height: { xs: "12rem", lg: "40rem" } }}>
+          <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "5.8rem", md:"2rem", lg: "1rem", sm:"3rem" }, right: 4, height: { xs: "12rem",md: "26rem", lg: "36rem", sm:"18rem" } }}>
             <img src="../images/Home/Maskgroup.svg" alt="" style={{ height: "100%" }} />
           </Box>
-          <Box sx={{ zIndex: 3, position: "absolute", top: "180px", overflow: "hidden", display: { xs: "none", lg: "initial" } }}>
+          {/* <Box sx={{ zIndex: 3, position: "absolute", top: "180px", overflow: "hidden", display: { xs: "none", lg: "initial" } }}>
             <img src="../images/Home/image38.svg" alt="img" style={{ height: "3.3rem" }} />
             <Typography sx={{ fontSize: "12px", color: '#42A5F5' }}>Daily Visit</Typography>
-          </Box>
-          <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "9rem", lg: "24rem" }, right: { xs: "11rem", lg: "36.5rem" }, height: { xs: "2rem", lg: "3.5rem" } }}>
+          </Box> */}
+          {/* <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "9rem", lg: "24rem" }, right: { xs: "11rem", lg: "36.5rem" }, height: { xs: "2rem", lg: "3.5rem" } }}>
             <img src="../images/Home/image35.svg" alt="" style={{ height: "100%" }} />
-          </Box>
-          <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "15rem", lg: "32rem" }, right: { xs: 0, lg: "35.4rem" }, height: { xs: "2rem", lg: "3.5rem" } }}>
+          </Box> */}
+          {/* <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "15rem", lg: "32rem" }, right: { xs: 0, lg: "35.4rem" }, height: { xs: "2rem", lg: "3.5rem" } }}>
             <img src="../images/Home/Group370.svg" alt="" style={{ height: "100%" }} />
-          </Box>
+          </Box> */}
           <Box sx={{ zIndex: 1, position: "absolute", top: { xs: "13rem", lg: "38rem" }, right: "0", height: { xs: "2rem", lg: "3.5rem" } }}>
             <img src="../images/Home/Group269.svg" alt="" style={{ height: "100%" }} />
           </Box>

@@ -25,15 +25,15 @@ function Home() {
     return (
         <>
             <Landing />
-            <InfoBanner />
+            {/* <InfoBanner /> */}
+            <AboutUs />
             <Specialities />
             <GetADoctor />
-            <HotOffer />
-            <AboutUs />
-            <VideoCalling />
+            {/* <HotOffer /> */}
+            {/* <VideoCalling /> */}
             <WhyUs />
             <BookingSystem />
-            <MobileAppBanner />
+            {/* <MobileAppBanner /> */}
             <LiveCounter />
             <Footer />
 

@@ -70,6 +70,8 @@ const Specialities = () => {
     } else if (width > 600 && width < 900) {
       setCount(2);
     } else if (width > 900) {
+      setCount(4);
+    }else if (width > 1400) {
       setCount(6);
     }
   };
@@ -86,11 +88,11 @@ const Specialities = () => {
 
   return (
 
-    <Box sx={{ background: "#42A5F5", py: 6, px: 6, position: "relative", mb: 6 }}>
+    <Box sx={{ background: "#3498db", py: 6, px: 6, position: "relative", mb: 6 }}>
       <img src="../images/Home/image49.svg" alt="" style={{ position: "absolute", top: 0, left: 0, height: "100%" }} />
       <img src="../images/Home/image50.svg"alt="" style={{ position: "absolute", top: 0, right: 0, height: "30%" }} />
       <Typography sx={{ fontSize: "50px", textAlign: "center", fontWeight: 600, color: "white", pb: 3 }}>
-        Specialities
+      Our Medical Specialties
       </Typography>
 
 
@@ -142,12 +144,14 @@ const SpecialitiesCard = (props) => {
   return (
     <>
       <Box
+       style={{borderRadius:"20px"}}
         sx={{
           width: { xs: "200px", lg: "auto" },
           border: "2px solid white",
-          background: "#DBEEFC",
-          py: 3,
-          px: 4,
+          background: "#fff",
+          boxShadow:"rgba(0, 0, 0, 0.15) 0px 3px 12px 0px",
+          py: 1,
+          px: 1,
           borderRadius: "10px",
           mx: "auto"
         }}
@@ -178,14 +182,14 @@ const SpecialitiesCard = (props) => {
             fontSize: "18px",
             fontWeight: 500,
             textAlign: "center",
-            mt: 5,
+            mt: 1,
           }}
         >
           {props.department ? props.department : "Cardiology"}
         </Typography>
         <Typography
           sx={{
-            color: "#8E999A",
+            color: "#3498db",
             fontSize: "14px",
             fontWeight: 500,
             textAlign: "center",
@@ -197,17 +201,20 @@ const SpecialitiesCard = (props) => {
 
         <Link
           to={props.to}
-          style={{ color: "#00B69B" }}
+          style={{ color: "#3498db" }}
+          className="d-flex justify-content-center align-items-center"
+
         >
           <Box
             sx={{
-              p: "8px 24px",
-              border: "1px solid #00B69B",
+              p: "8px 12px",
+              width:"60%",
+              border: "1px solid #3498db",
               borderRadius: "10px",
               textAlign: "center",
               mt: 2,
               "&:hover": {
-                backgroundColor: "#00B69B",
+                backgroundColor: "#3498db",
                 color: "white",
               },
               transitionDuration: "100ms",
