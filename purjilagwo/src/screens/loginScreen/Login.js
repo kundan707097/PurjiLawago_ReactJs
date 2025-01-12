@@ -10,15 +10,16 @@ import InputBox from '../../components/InputBox';
 import { CustomizedButton } from '../../components/Button';
 import MobileAppBanner from '../../components/MobileAppBanner';
 import LiveCounter from '../../components/LiveCounter';
+import "./login.css";
 import Footer from '../../components/Footer';
 import ErrorMessage from '../../components/ErrorMessage';
 import MessageBar from '../../components/MessageBar';
 import BackdropLoading from '../../components/BackdropLoading';
 import { OtpVerificationDialogBox } from '../../components/DialogBox';
 import { useSnackbar } from 'notistack';
-
+import LoginIcon from '@mui/icons-material/Login';
 const Login = () => {
-
+  const [loginType, setLoginType] = useState("email");
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const [activeTab, setActiveTab] = useState('login');
@@ -408,7 +409,7 @@ const Login = () => {
             setMessageProperty({ openDialog: false });
           }, 3000);
         }
-      }else{
+      } else {
         setBackdropLoading(false);
         setMessageProperty({
           openDialog: true,
@@ -443,221 +444,59 @@ const Login = () => {
   return (
     <>
       <BackdropLoading open={backdropLoading} />
-      <Box sx={{ bgcolor: "#F0F6FF", py: { xs: 2, lg: 8 } }}>
+      <div className='login__background'>
+        <div className='login__div'>
+          <div className='login__icon'>
+            <LoginIcon sx={{ fontSize: "40px", color: "#000", fontWeight: "700" }} />
+          </div>
+          <h3>Welcome Back!</h3>
+          <h5>Sign In using Email or Using Phone Number</h5>
+          <form>
+            {
+              loginType === "email" && (
+                <>
 
-        <Container sx={{ display: "flex", flexDirection: { xs: "column-reverse", lg: "row" } }}>
+                  <label>Email</label>
+                  <input placeholder='Enter Your Email' />
+                  <label>Password</label>
+                  <input type='password' placeholder='Enter Your Password' />
+                  <div className='d-flex justify-content-between align-items-center'>
+                    <p onClick={()=>setLoginType("otp")}>Signin using OTP</p>
+                    <p>Forget Password?</p>
+                  </div>
+                  <div className='d-flex justify-content-center align-items-center mt-2'>
+                    <button>Sign In</button>
+                  </div>
+                  <div className='mt-1'>
+                    Want to Register?
+                    <Link to="/signup">Sign Up</Link>
+                  </div>
+                </>
+              )
+            }
+            {
+              loginType === "otp" && (
+                <>
+                  <label>Enter Phone Number</label>
+                  <input type='number' placeholder='Enter Your Phone Number' />
+                  <div className='d-flex justify-content-between align-items-center'>
+                    <p onClick={()=>setLoginType("email")}>Signin using Password</p>
+                    {/* <p>Forget Password?</p> */}
+                  </div>
+                  <div className='d-flex justify-content-center align-items-center mt-2'>
+                    <button>Sign In</button>
+                  </div>
+                  <div className='mt-1'>
+                    Want to Register?
+                    <Link to="/signup">Sign Up</Link>
+                  </div>
+                </>
+              )
+            }
 
-          {/* Box for left side image */}
-
-          <Box sx={{ bgcolor: "white", width: { xs: "100%", lg: "58%" }, p: { xs: 3, lg: 6 }, borderRadius: "10px", boxShadow: "0 0 5px #64EBB666", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", mr: 1, my: { xs: 2, lg: 0 } }}>
-
-            <Box sx={{ height: { xs: "13rem", lg: "18rem" } }}>
-              {activeTab === 'login' && (<img src="../../images/LoginVector/Illustration.svg" alt="" height={"100%"} />)}
-              {activeTab === 'register' && (<img src="../../images/LoginVector/signupIllustration.svg" alt="" height={"100%"} />)}
-            </Box>
-
-            <Typography sx={{ color: "#1C4188", fontSize: { xs: "20px", lg: "28px" }, fontWeight: 700, mt: 3 }}>
-            “Join The Best Be The Best”
-            </Typography>
-
-            {/* {activeTab === 'register' && (
-              <Box sx={{ height: "4rem", mt: 6 }}>
-                <img src="../../images/LoginVector/Shape.svg" alt="" height={"100%"} />
-              </Box>
-            )} */}
-
-
-          </Box>
-
-          {/* Box for right side login */}
-
-          <Box sx={{ bgcolor: "white", width: { xs: "100%", lg: "42%" }, p: { xs: 3, lg: 6 }, borderRadius: "10px", boxShadow: "0 0 5px #64EBB666", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "start", ml: {xs:0,lg:1}, }}>
-
-            <Box sx={{ display: "flex", width: "100%", alignItems: "start", justifyContent: "center" }}>
-              <Box component={"button"} sx={{ backgroundColor: activeTab === 'login' ? "#fff" : "#42A5F5", width: "100%", textAlign: "center", p: "10px", borderRadius: 2, fontSize: "34px", fontWeight: 700, color: activeTab === 'login' ? "#3498db" : "white", borderBottomRightRadius: 0, border:"none", borderTopRightRadius: 0, mr: "1px", }} onClick={() => toggleTab('login')}>
-                Login
-              </Box>
-              {/* <Box component={"button"} sx={{ backgroundColor: activeTab === 'register' ? "#DBEEFC" : "#42A5F5", width: "100%", textAlign: "center", p: "10px", borderRadius: 2, fontSize: "15px", fontWeight: 500, color: activeTab === 'register' ? "#42A5F5" : "white", border: "2px solid #64EBB6", borderBottomLeftRadius: 0, borderTopLeftRadius: 0, ml: "1px" }} onClick={() => toggleTab('register')}>
-                Register
-              </Box> */}
-
-            </Box>
-
-            {/* This is login screen */}
-
-            {activeTab === 'login' && (
-
-              <Box sx={{ width: "100%" }}>
-                <form onSubmit={handleSubmit(onSubmit)}>
-
-                  {/* Phone number and email input */}
-                  <Box sx={{ width: "100%", mt: 3 }} >
-
-                    <InputBox
-                      type="text"
-                      name="emailOrPhoneNumber"
-                      title={"Email or Phone number"}
-                      value={inputValues.emailOrPhoneNumber}
-                      onChange={handleInputChange}
-                    />
-
-                    {errors.emailOrPhoneNumber && (
-                      <ErrorMessage message={errors.emailOrPhoneNumber.message} />
-                    )}
-
-                  </Box>
-
-                  {/* Password input */}
-
-                  {(!loginWithOtp && !forgotPassword) && (
-                    <Box sx={{ width: "100%", mt: 2 }} >
-                      <InputBox
-                        name="loginPassword"
-                        boxType="password"
-                        title={"Password"}
-                        value={inputValues.loginPassword}
-                        onChange={handleInputChange}
-                      />
-                      {errors.loginPassword && (
-                        <ErrorMessage message={errors.loginPassword.message} />
-                      )}
-                    </Box>
-                  )}
-
-                  {newPasswordInput && (
-                    <Box sx={{ width: "100%", mt: 2 }} >
-                      <InputBox
-                        name="newPassword"
-                        boxType="password"
-                        title={"New Password"}
-                        value={inputValues.newPassword}
-                        onChange={handleInputChange}
-                      />
-                      {errors.newPassword && (
-                        <ErrorMessage message={errors.newPassword.message} />
-                      )}
-                    </Box>
-                  )}
-
-
-
-                  {/* Box for forgot password and login with otp */}
-
-                  <Box sx={{ display: "flex", mt: 2, justifyContent: "space-between", }}>
-                    {!forgotPassword && (<Typography component={"button"} type='button' sx={{ color: "#1C4188", fontSize: "15px", fontWeight: 600, border: "none", bgcolor: "transparent", textAlign: "left" }} onClick={loginViaOtpToggler}>{loginWithOtp ? "Login via password" : "Login via otp"}</Typography>)}
-
-                    {!loginWithOtp && (
-                      <Typography component={"button"} type='button' sx={{ color: "#42A5F5", fontSize: "15px", fontWeight: 600, border: "none", bgcolor: "transparent" }} onClick={forgotPasswordToggler}>{forgotPassword ? "Login via old password" : " Forgot Password ?"}</Typography>
-                    )}
-
-                  </Box>
-
-                  {/* Button for login */}
-                  <Box sx={{ width: "100%", mt: 2 }}>
-                    <CustomizedButton title={"Sign In"} type={"submit"} disabled={buttonDisabled.ForLogin} />
-                  </Box>
-                      <Link to="/signup" style={{color:"#666"}}>Signup?</Link>
-                </form>
-
-                <OtpVerificationDialogBox openDialog={openLoginOtpBox.open} closeDialog={() => setOpenLoginOtpBox({ open: false, endpoint: "" })} handleSubmitOtp={() => handleSubmitOtp(openLoginOtpBox.endpoint)} setOtpMain={setOtp} title={openLoginOtpBox.title} content={openLoginOtpBox.content} />
-
-
-              </Box>
-            )}
-
-            {/* This is for signup screen */}
-
-            {/* {activeTab === 'register' && (
-              <Box sx={{ width: "100%" }}>
-
-                <form onSubmit={handleSubmit(onSubmit)}>
-
-                  <Box sx={{ display: "flex", mt: 2 }}>
-                    {!isDoctor && (<Typography sx={{ color: "#1C4188", fontSize: "16px", fontWeight: 600, mr: 1, }}>Are You a Doctor ?</Typography>)}
-
-                    <Typography component={"button"} type='button' sx={{ color: "#42A5F5", fontSize: "16px", fontWeight: 600, border: "none", bgcolor: "transparent" }} onClick={toggleDoctorStatus}>{isDoctor ? "Not a Doctor ?" : "Register Here"}</Typography>
-
-
-                  </Box>
-
-                  <Box sx={{ width: "100%", mt: 2 }} >
-                    <InputBox
-                      type="text"
-                      title={"Full Name"}
-                      name="fullName"
-                      value={inputValues.fullName}
-                      onChange={handleInputChange}
-                    />
-                    {errors.fullName && (
-                      <ErrorMessage message={errors.fullName.message} />
-                    )}
-                  </Box>
-
-                  <Box sx={{ width: "100%", mt: 2 }} >
-                    <InputBox
-                      type="text"
-                      title="Phone Number"
-                      name="mobileNumber"
-                      value={inputValues.mobileNumber}
-                      onChange={handleInputChange}
-                    />
-                    {errors.mobileNumber && (
-                      <ErrorMessage message={errors.mobileNumber.message} />
-                    )}
-                  </Box>
-
-
-                  <Box sx={{ width: "100%", mt: 2 }} >
-                    <InputBox
-                      boxType="password"
-                      title="Password"
-                      name="password"
-                      value={inputValues.password}
-                      onChange={handleInputChange}
-                    />
-
-                    {errors.password && (
-                      <ErrorMessage message={errors.password.message} />
-                    )}
-                  </Box>
-
-
-                  <Box sx={{ width: "100%", mt: 2 }}>
-                    <CustomizedButton title={"Sign Up"} type={"submit"} disabled={buttonDisabled.ForRegister} />
-                  </Box>
-
-                </form>
-
-                <OtpVerificationDialogBox openDialog={openRegisterOtpBox.open} closeDialog={() => setOpenRegisterOtpBox({ open: false, endpoint: "" })} handleSubmitOtp={() => handleSubmitOtp(openRegisterOtpBox.endpoint)} setOtpMain={setOtp} title={openRegisterOtpBox.title} content={openRegisterOtpBox.content} />
-
-              </Box>
-            )} */}
-
-            {/* Google and facebook signin */}
-
-            <Box sx={{ mt: 3 }}>
-              <Typography sx={{ fontSize: "16px", color: "#1C4188", textAlign: "center" }}>Or</Typography>
-
-              <Box sx={{ display: "flex", justifyContent: "space-evenly", mt: 2 }}>
-                <Box component={"button"} sx={{ padding: ".8rem", backgroundColor: "#F0F6FF", borderRadius: "100px", height: "50px", cursor: "pointer", border: "none", mr: 1 }}>
-                  <img src="../../images/SocialMedia/google.svg" style={{ height: "100%" }} alt="" />
-                </Box>
-                <Box component={"button"} sx={{ padding: ".8rem", backgroundColor: "#42A5F5", borderRadius: "100px", height: "50px", cursor: "pointer", border: "none", ml: 1 }} >
-                  <img src="../../images/SocialMedia/facebook.svg" style={{ height: "100%" }} alt="" />
-                </Box>
-
-              </Box>
-
-            </Box>
-
-          </Box>
-
-        </Container>
-
-        <MessageBar openDialog={messageProperty.openDialog} closeDialog={() => setMessageProperty({ openDialog: false })} title={messageProperty.dialogTitle} content={messageProperty.dialogContent} variant={messageProperty.variant} />
-
-      </Box>
-
+          </form>
+        </div>
+      </div>
       {/* <MobileAppBanner /> */}
       {/* <LiveCounter /> */}
       <Footer />
