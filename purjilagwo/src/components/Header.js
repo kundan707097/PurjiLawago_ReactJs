@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Box, Typography, ListItemText, ListItemButton, ListItem, List, Paper, Divider, Drawer, Collapse, ListItemIcon, Avatar } from '@mui/material'
 import { User } from "@carbon/icons-react";
@@ -353,106 +353,105 @@ function Header() {
 }
 
 const LoginedAction = () => {
-  const [token, setToken] = useState(null);
-  const [name, setName] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const token = localStorage.getItem("token");
+  const name = localStorage.getItem("name");
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
+
+  // Close dropdown when clicking outside
   useEffect(() => {
-    // Retrieve the token from local storage
-    const storedToken = localStorage.getItem("token");
-
-    if (storedToken) {
-      setToken(storedToken);
-
-      // Retrieve email and phone number from local storage
-      const storedName = localStorage.getItem("fullName");
-
-      if (storedName) {
-        setName(storedName);
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
       }
-    }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
   }, []);
 
   return (
     <>
       {token ? (
-        <div className="dropdown">
-          <Link to={localStorage.getItem('role') === 'Admin' ? "/dashboard/doctor/registration" : "/dashboard/appointment&details"}>
-            <Paper
-              elevation={0}
-              sx={{
-                backgroundColor: "white",
-                display: "flex",
-                p: "10px",
-                alignItems: "center",
-                mr: "10px",
-                border: "2px solid #42A5F5",
-                cursor: "pointer",
-                borderRadius: "10px",
+        <div ref={dropdownRef}>
+          <Paper
+            elevation={0}
+            sx={{
+              backgroundColor: "white",
+              display: "flex",
+              p: "10px",
+              alignItems: "center",
+              mr: "10px",
+              border: "2px solid #42A5F5",
+              cursor: "pointer",
+              borderRadius: "10px",
+            }}
+            onClick={() => setDropdownOpen((prev) => !prev)}
+          >
+            <User
+              style={{
+                color: "white",
+                marginRight: "5px",
+                backgroundColor: "#42A5F5",
+                width: "35px",
+                height: "35px",
+                padding: 8,
+                borderRadius: "8px",
               }}
-            // className="nav-link dropdown-toggle"
-            // id="dropdown07"
-            // data-bs-toggle="dropdown"
-            // aria-expanded="false"
+            />
+            <Typography
+              sx={{
+                color: "#1C4188",
+                fontSize: "15px",
+                fontWeight: 600,
+                ml: "2px",
+              }}
             >
-              <User
-                style={{
-                  color: "white",
-                  marginRight: "5px",
-                  backgroundColor: "#42A5F5",
-                  width: "35px",
-                  height: "35px",
-                  padding: 8,
-                  borderRadius: "8px",
-                }}
-              />
-              <Typography
-                sx={{
-                  color: "#1C4188",
-                  fontSize: "15px",
-                  fontWeight: 600,
-                  ml: "2px",
-                }}
-              >
-                {name}
-              </Typography>
-            </Paper>
-          </Link>
+              {name}
+            </Typography>
+          </Paper>
 
-          {/* <ul
-                      className="dropdown-menu liststyle-none"
-                      aria-labelledby="dropdown07"
-                    >
-                      <List sx={{ width: "230px"}}>
-                        <ListItem disablePadding>
-                          <ListItemButton>
-                            <ListItemText sx={{ fontSize: "13px" }}>
-                              <Typography sx={{ fontSize: "13px", }}>My Appointment</Typography>
-                            </ListItemText>
-                          </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                          <ListItemButton onClick={() => navigate("/edit/profile")}>
-                            <ListItemText sx={{ fontSize: "13px" }}>
-                              <Typography sx={{ fontSize: "13px", pl: "5px", color: "#42A5F5" }}>View / Update Profile</Typography>
-                            </ListItemText>
-                          </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                          <ListItemButton>
-                            <ListItemText sx={{ fontSize: "13px" }}>
-                              <Typography sx={{ fontSize: "13px", pl: "5px" }}>Setting</Typography>
-                            </ListItemText>
-                          </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                          <ListItemButton onClick={handleLogout}>
-                            <ListItemText sx={{ fontSize: "13px" }}>
-                              <Typography sx={{ fontSize: "13px", pl: "5px" }}>Logout</Typography>
-                            </ListItemText>
-                          </ListItemButton>
-                        </ListItem>
-                      </List>
-                    </ul> */}
+          {dropdownOpen && (
+            <ul
+              style={{
+                listStyleType: "none",
+                position: "absolute",
+                top: "100%",
+                right: 0,
+                margin: 0,
+                padding: "10px",
+                backgroundColor: "white",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                borderRadius: "5px",
+                zIndex: 1000,
+                minWidth: "150px",
+              }}
+            >
+              <li>
+                <button
+                  onClick={handleLogout}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: "5px 10px",
+                    width: "100%",
+                    textAlign: "left",
+                  }}
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          )}
         </div>
       ) : (
         <Link to="/login">
