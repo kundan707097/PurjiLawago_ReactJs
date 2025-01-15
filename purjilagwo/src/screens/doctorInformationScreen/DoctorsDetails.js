@@ -185,14 +185,14 @@ export default function Doctor() {
 
       {loading ? <Loading /> : (
         <>
-          {doctorData !== null ? (
+          {doctorData === null ? (
 
             <>
 
-              <Box sx={{ bgcolor: { xs: "white", lg: "#F0F6FF" }, display: "flex", }}>
+              <Box className="container" sx={{ bgcolor: { xs: "white", lg: "#F0F6FF" }, display: "flex", }}>
 
                 {/* Left box */}
-                <Box sx={{ bgcolor: "white", border: { xs: 0, lg: "2px solid #64EBB666" }, width: "100%", borderRadius: { xs: 0, lg: "15px" }, my: { xs: 2, lg: 8 }, ml: { xs: 0, lg: 5 }, }}>
+                <Box sx={{display:"flex",  bgcolor: "white", border: { xs: 0, lg: "2px solid #64EBB666" }, width: "100%", borderRadius: { xs: 0, lg: "15px" }, my: { xs: 2, lg: 8 }, ml: { xs: 0, lg: 5 }, }}>
 
                   {/* Doctor name and image */}
 
@@ -200,42 +200,43 @@ export default function Doctor() {
 
                     {/* Doctor name and image */}
 
-                    <Box sx={{ display: "flex", justifyContent: { xs: "center", lg: "start" }, flexDirection: { xs: "column", lg: "row" }, pt: 4, alignItems: { xs: "center", lg: "start" } }} >
+                    <Box sx={{ display: "", justifyContent: { xs: "center", lg: "start" }, flexDirection: { xs: "column", lg: "row" }, pt: 4, alignItems: { xs: "center", lg: "start" } }} >
 
                       <Box>
                         <Avatar
                           alt="Remy Sharp"
-                          src={doctorData.profile_Picture} // Set the base64 encoded profile picture dynamically here
-                          sx={{ width: 130, height: 130, mx: 4, mb: { xs: 2, lg: 0 }, border: "1px solid #64EBB6" }}
+                          src="https://example.com/images/default-profile.png" // Set the base64 encoded profile picture dynamically here
+                          sx={{ width: 300, height: 400, mx: 4, borderRadius:"12px", mb: { xs: 2, lg: 0 } }}
                         />
                       </Box>
 
                       <Box sx={{ pl: { xs: 0, lg: 5 }, width: { xs: "70%", lg: "100%" } }}>
-                        <Typography sx={{ fontSize: "32px", fontWeight: 700, mb: 2, color: "#1C4188" }}>{doctorData?.user_Name} </Typography>
+                        <Typography sx={{ fontSize: "32px", fontWeight: 700, mb: 2, color: "#1C4188" }}>John Doe </Typography>
                         <Box sx={{ display: "flex", my: 1 }}>
                           <img src="../../images/DoctorList/location.svg" alt="" style={{ height: 20, marginTop: 1 }} />
-                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Education: {doctorData?.education}</Typography>
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Education: MBBS</Typography>
                         </Box>
                         <Box sx={{ display: "flex", my: 1 }}>
                           <img src="../../images/DoctorList/science.svg" alt="" style={{ height: 18, marginTop: 3 }} />
-                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Experience : {doctorData?.experience}</Typography>
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Experience : 1 Year</Typography>
                         </Box>
                         <Box sx={{ display: "flex", my: 1 }}>
                           <img src="../../images/DoctorList/ecg.svg" alt="" style={{ height: 18, marginTop: 4 }} />
-                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Specialities :{doctorData?.speciality}</Typography>
+                          <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Specialities : Eyes</Typography>
                         </Box>
                         {/* <Box sx={{ display: "flex", my: 1 }}>
                           <img src="../../images/DoctorList/language.svg" alt="" style={{ height: 18., marginTop: 3 }} />
                           <Typography sx={{ fontSize: { xs: "16px", lg: "18px" }, fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Language :{doctorData?.language}</Typography>
                         </Box> */}
 
-                        <Stack spacing={1} direction="row" useFlexGap flexWrap="wrap" maxWidth={"90%"} mt={"4px"}>
-                          {doctorData.keywords.split(',').map((keyword, index) => (
+                        {/* <Stack spacing={1} direction="row" useFlexGap flexWrap="wrap" maxWidth={"90%"} mt={"4px"}>
+                          {doctorData?.keywords.split(',').map((keyword, index) => (
                             <Box key={index} sx={{ backgroundColor: "white", textAlign: "center", p: 1, borderRadius: 2, fontWeight: 500, color: "#42A5F5", border: "1px solid #64EBB6CC", px: 2 }}>
                               <Typography sx={{ fontSize: "14px", }}>{keyword.trim()}</Typography>
                             </Box>
                           ))}
-                        </Stack>
+                          "dsda"
+                        </Stack> */}
 
                       </Box>
 
@@ -243,191 +244,15 @@ export default function Doctor() {
 
                     {/* Time and fee */}
 
-                    <Box sx={{ display: "flex", flexDirection: { xs: "column-reverse", lg: "column" }, justifyContent: "space-between", mx: 2 }}>
-                      <Box sx={{ mt: 2, display: "flex", flexDirection: { xs: "row", lg: "column" }, justifyContent: "space-between", alignItems: { xs: "center" } }}>
-                        <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#1C4188", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
-
-                          {doctorData?.doctorsTimeAvailability}
-                        </Box>
-
-
-                        <Box sx={{ backgroundColor: "white", width: "180px", textAlign: "center", p: 1, borderRadius: 2, fontSize: "15px", fontWeight: 500, color: "#42A5F5", border: "1px solid #42A5F5", my: 1, mx: 2 }}>
-                          {doctorData?.consultantFee} ₹
-                        </Box>
-
-                      </Box>
-                      <Box sx={{ display: "flex", justifyContent: "space-evenly", mt: 2 }}>
-                        <Box sx={{ padding: ".8rem", backgroundColor: "#F0F6FF", borderRadius: "100px", height: "60px", boxShadow: "4px 4px 10px #00000040" }}>
-                          <img src="../../images/DoctorDetails/image99.svg" style={{ height: "100%" }} alt="" />
-                        </Box>
-                        <Tooltip title="Coming soon.." placement="top" arrow>
-                          <Box sx={{ padding: ".8rem", backgroundColor: "#F0F6FF", borderRadius: "100px", height: "60px", boxShadow: "4px 4px 10px #00000040", cursor: "pointer" }}>
-                            <img src="../../images/DoctorDetails/image100.svg" style={{ height: "100%" }} alt="" />
-                          </Box>
-                        </Tooltip>
-                        <Box sx={{ padding: ".8rem", backgroundColor: "#F0F6FF", borderRadius: "100px", height: "60px", boxShadow: "4px 4px 10px #00000040" }}>
-
-                          <img src="../../images/DoctorDetails/image101.svg" style={{ height: "100%" }} alt="" />
-                        </Box>
-                      </Box>
-                    </Box>
+\
 
                   </Box>
 
                   {/* This slot is availbale in moblie view */}
-                  <Box sx={{ display: { xs: "block", md: "none", } }} >
-
-                    <Box sx={{ backgroundColor: "white" }}>
-                      <Typography sx={{ fontSize: "18px", fontWeight: 600, color: "#8E999A", mb: 1, textAlign: "center", mt: 2 }}>Pick a Time Slot</Typography>
-                      <Box
-                        sx={{
-                          flexGrow: 1,
-                          width: 400,
-                          bgcolor: 'background.paper',
-                          borderRadius: "15px",
-                          border: "2px solid #64EBB666",
-                          mx: "auto"
-
-                        }}
-                      >
-                        <Typography sx={{ textAlign: "center", py: 2, fontSize: "14px", color: "black" }}>Book an appointment for Consultation</Typography>
-
-                        <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: .6, borderRadius: "5px", fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", mx: "auto", mb: 2 }}>
-                          Clinic appointment 650₹
-                        </Box>
-
-                        {currentDate != null && timeSlots.length !== 0 ? (
-                          <Box sx={{ display: "flex", px: 1 }}>
-                            <TabScrollButton onClick={handleLeft} direction='left' orientation='horizontal'>
-                              <ChevronLeftIcon />
-                            </TabScrollButton>
-                            <Tabs
-                              value={value}
-                              onChange={handleChange}
-                              variant="scrollable"
-                              scrollButtons={false}
-                              aria-label="visible arrows tabs example"
-                              sx={{
-                                [`& .${tabsClasses.scrollButtons}`]: {
-                                  '&.Mui-disabled': { opacity: 0.3 },
-                                },
-                              }}
-
-                            >
-
-                              {timeSlots.map((items, index) => {
-                                return (
-
-                                  <Tab label={[
-                                    <>
-                                      {items.getDate() === currentDate.getDate() &&
-                                        items.getMonth() === currentDate.getMonth() &&
-                                        items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Today</div>}
-                                      {items.getDate() === currentDate.getDate() + 1 &&
-                                        items.getMonth() === currentDate.getMonth() &&
-                                        items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Tomorrow</div>}
-                                      {items.getDate() !== currentDate.getDate() && items.getDate() !== currentDate.getDate() + 1 && <div style={{ color: "black" }}>{items.toDateString().split(' ')[0]}, {items.toDateString().split(' ')[2]} {items.toDateString().split(' ')[1]}</div>}
-
-                                      <div style={{ marginTop: '5px', fontSize: "8px", fontWeight: 800, color: "#42A5F599", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
-                                    </>
-                                  ]} sx={{ fontSize: "10px", p: 0, width: "100px", fontWeight: 500, }} {...a11yProps(index)} />
-
-                                )
-                              })}
-
-                            </Tabs>
-                            <TabScrollButton onClick={handleRight} direction='right' orientation='horizontal'>
-                              <ChevronRightIcon />
-                            </TabScrollButton>
-                          </Box>
-                        ) : <>
-                          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", }}>
-                            <img src="../images/DoctorDetails/calender_cut.svg" alt="No Slot Available" width={50} />
-                            <Typography sx={{ mt: 2, fontSize: "10px" }}>No Data Available</Typography>
-                            <a href="tel:+" style={{ width: "50%", }}>
-                              <Button
-                                variant="contained"
-                                sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
-                              >
-                                <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
-                              </Button>
-                            </a>
-                          </Box>
-                        </>}
-
-                        {/* <Typography sx={{ mt: 2, fontSize: "15px", color: "black", ml: 3, fontWeight: 600 }}>Evening</Typography> */}
-
-
-                        {dateString.map((items, index) => {
-                          return (
-                            <>
-                              <CustomTabPanel value={value} index={index} key={index}>
-                                {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
-                                  <>
-                                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", pr: "24px" }}>
-                                      <img src="../images/DoctorDetails/calender_cut.svg" alt="No Slot Available" width={50} />
-                                      <Typography sx={{ mt: 2, fontSize: "10px" }}>No Slot Available</Typography>
-                                      <a href="tel:+" style={{ width: "50%", }}>
-                                        <Button
-                                          variant="contained"
-                                          sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
-                                        >
-                                          <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
-                                        </Button>
-                                      </a>
-                                    </Box>
-
-                                  </>
-                                )}
-                                <Box >
-                                  <Box sx={{ py: 1, px: 4, bgcolor: "#F0F6FF", borderRadius: "10px", mr: 3, mb: 3 }}>
-                                    <Typography sx={{ color: "#1C4188", textAlign: "center" }}>Total Availability {countSlot(index)} slot</Typography>
-                                  </Box>
-                                  <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll", justifyContent: "center", "::-webkit-scrollbar": { width: "15px", bgcolor: "#F0F6FF", borderRadius: "10px" }, "::-webkit-scrollbar-thumb": { bgcolor: "#64EBB6", borderRadius: "10px" } }}>
-                                    {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
-                                      return (
-                                        <>
-                                          <Box sx={{ fontSize: "12px", px: 1, py: 1, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index], doctorData?.consultantFee)} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
-
-                                          {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index], doctorData?.consultantFee)}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
-                                        </>
-                                      )
-                                    })}
-
-
-                                  </Box>
-
-
-                                </Box>
-
-                              </CustomTabPanel>
-                            </>
-                          )
-                        })}
-
-                        <Box sx={{ width: "90%", mx: "auto", backgroundColor: "#42A5F5", px: 1, py: 1.5, textAlign: "center", borderRadius: "4px", mb: 3, }}>
-                          <Typography sx={{ fontSize: "12px", color: "white", lineHeight: 1.4, }}>After you have submitted the appointment request, we might call to confirm the preferred appointment slot.</Typography>
-
-
-                        </Box>
-                        <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, textAlign: "center", borderRadius: "4px", pb: 1 }}>
-                          <Box sx={{ display: "flex", justifyContent: "space-between", }}><Typography sx={{ fontSize: "14px", fontWeight: 600 }}>Manipal Hospital</Typography></Box>
-                          <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}><Typography sx={{ fontSize: "12px" }}>Jayanagar 9 block</Typography><Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography></Box>
-
-                        </Box>
-
-                      </Box>
-                    </Box>
-
-                    <BookingExistingApplication />
-
-
-                  </Box>
-
 
 
                   {/* Info and consult Q & A */}
-
+                   <Box>
                   <Box sx={{ mx: { xs: 3, lg: 6 }, mt: 8, }}>
 
                     {/* Info and consult Q & A heading */}
@@ -493,7 +318,7 @@ export default function Doctor() {
                       {/* Content */}
 
                       <Box sx={{ my: 4 }}>
-                        <Typography sx={{ fontSize: { xs: "16px", lg: "17px" }, width: "90%", fontWeight: 500, mx: 2, color: "#5D6566", textAlign: "justify" }}>{doctorData.description}</Typography>
+                        <Typography sx={{ fontSize: { xs: "16px", lg: "17px" }, width: "90%", fontWeight: 500, mx: 2, color: "#5D6566", textAlign: "justify" }}>{doctorData?.description}</Typography>
                       </Box>
 
                     </Box>
@@ -543,10 +368,7 @@ export default function Doctor() {
 
                     {/* Experince heading */}
 
-                    <Box sx={{ display: "flex", mx: 2, borderBottom: "2px dashed #64EBB6", width: { xs: "70%", sm: "30%" } }}>
-                      <Typography sx={{ color: "#1492F7", fontSize: 16, fontWeight: 800, pb: 1, }}>FAQ</Typography>
-                      <Typography sx={{ color: "#64EBB6", fontSize: 16, fontWeight: 800, pb: 1, ml: 2 }}>QUESTION ASKED</Typography>
-                    </Box>
+
 
                     <Box sx={{ height: { xs: "100px", lg: "150px" }, position: "absolute", right: 0, top: { xs: "-4.5rem", lg: "-5.5rem" } }}>
                       <img src="../../images/DoctorDetails/image92.svg" alt="" height={"100%"} />
@@ -643,163 +465,13 @@ export default function Doctor() {
                       </Accordion>
 
                     </Box>
-
+                    </Box> 
                   </Box>
 
                 </Box>
 
                 {/* Box for book slot right box */}
 
-                <Box sx={{ mt: "30px", mr: 5, ml: 2, display: { xs: "none", md: "block" }, }}>
-
-                  <Box>
-                    <Typography sx={{ fontSize: "18px", fontWeight: 600, color: "#8E999A", mb: 1, }}>Pick a Time Slot</Typography>
-                    <Box
-                      sx={{
-                        flexGrow: 1,
-                        width: 400,
-                        bgcolor: 'background.paper',
-                        borderRadius: "15px",
-                        border: "2px solid #64EBB666",
-
-                      }}
-                    >
-                      <Typography sx={{ textAlign: "center", py: 2, fontSize: "14px", color: "black" }}>Book an appointment for Consultation</Typography>
-
-                      <Box sx={{ backgroundColor: "#42A5F5", width: { xs: "150px", lg: "250px" }, textAlign: "center", p: .6, borderRadius: "5px", fontSize: { xs: "12px", lg: "15px" }, fontWeight: 500, color: "white", border: "2px solid #42A5F5", mx: "auto", mb: 2 }}>
-                        Clinic appointment {doctorData?.consultantFee} ₹
-                      </Box>
-
-                      {currentDate != null && timeSlots.length !== 0 ? (
-                        <Box sx={{ display: "flex", px: 1 }}>
-                          <TabScrollButton onClick={handleLeft} direction='left' orientation='horizontal'>
-                            <ChevronLeftIcon />
-                          </TabScrollButton>
-                          <Tabs
-                            value={value}
-                            onChange={handleChange}
-                            variant="scrollable"
-                            scrollButtons={false}
-                            aria-label="visible arrows tabs example"
-                            sx={{
-                              [`& .${tabsClasses.scrollButtons}`]: {
-                                '&.Mui-disabled': { opacity: 0.3 },
-                              },
-                            }}
-
-                          >
-
-                            {timeSlots.map((items, index) => {
-                              return (
-
-                                <Tab label={[
-                                  <>
-                                    {items.getDate() === currentDate.getDate() &&
-                                      items.getMonth() === currentDate.getMonth() &&
-                                      items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Today</div>}
-                                    {items.getDate() === currentDate.getDate() + 1 &&
-                                      items.getMonth() === currentDate.getMonth() &&
-                                      items.getFullYear() === currentDate.getFullYear() && <div style={{ color: "black" }}>Tomorrow</div>}
-                                    {items.getDate() !== currentDate.getDate() && items.getDate() !== currentDate.getDate() + 1 && <div style={{ color: "black" }}>{items.toDateString().split(' ')[0]}, {items.toDateString().split(' ')[2]} {items.toDateString().split(' ')[1]}</div>}
-
-                                    <div style={{ marginTop: '5px', fontSize: "8px", fontWeight: 800, color: "#42A5F599", fontSmooth: "10px" }}>{countSlot(index)} slot available</div>
-                                  </>
-                                ]} sx={{ fontSize: "10px", p: 0, width: "100px", fontWeight: 500, }} {...a11yProps(index)} />
-
-                              )
-                            })}
-
-                          </Tabs>
-                          <TabScrollButton onClick={handleRight} direction='right' orientation='horizontal'>
-                            <ChevronRightIcon />
-                          </TabScrollButton>
-                        </Box>
-                      ) : <>
-                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", }}>
-                          <img src="../images/DoctorDetails/calender_cut.svg" alt="No Slot Available" width={50} />
-                          <Typography sx={{ mt: 2, fontSize: "10px" }}>No Data Available</Typography>
-                          <a href="tel:+" style={{ width: "50%", }}>
-                            <Button
-                              variant="contained"
-                              sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
-                            >
-                              <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
-                            </Button>
-                          </a>
-                        </Box>
-                      </>}
-
-                      {/* <Typography sx={{ mt: 2, fontSize: "15px", color: "black", ml: 3, fontWeight: 600 }}>Evening</Typography> */}
-
-
-                      {dateString.map((items, index) => {
-                        return (
-                          <>
-                            <CustomTabPanel value={value} index={index} key={index}>
-                              {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].length === 0 && (
-                                <>
-                                  <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "10rem", pr: "24px" }}>
-                                    <img src="../images/DoctorDetails/calender_cut.svg" alt="No Slot Available" width={50} />
-                                    <Typography sx={{ mt: 2, fontSize: "10px" }}>No Slot Available</Typography>
-                                    <a href="tel:+" style={{ width: "50%", }}>
-                                      <Button
-                                        variant="contained"
-                                        sx={{ width: "100%", background: "#42A5F5", mt: "20px", }}
-                                      >
-                                        <CallIcon sx={{ fontSize: "20px", mr: "5px" }} />Call Now
-                                      </Button>
-                                    </a>
-                                  </Box>
-
-                                </>
-                              )}
-                              <Box >
-                                <Box sx={{ py: 1, px: 4, bgcolor: "#F0F6FF", borderRadius: "10px", mr: 3, mb: 3 }}>
-                                  <Typography sx={{ color: "#1C4188", textAlign: "center" }}>Total Availability {countSlot(index)} slot</Typography>
-                                </Box>
-                                <Box sx={{ display: "flex", width: "100%", flexWrap: "wrap", maxHeight: "10rem", overflowY: "scroll", justifyContent: "center", "::-webkit-scrollbar": { width: "15px", bgcolor: "#F0F6FF", borderRadius: "10px" }, "::-webkit-scrollbar-thumb": { bgcolor: "#64EBB6", borderRadius: "10px" } }}>
-                                  {doctorData.timeSlots[dateString[index]] !== undefined && doctorData.timeSlots[dateString[index]].map((val, i) => {
-                                    return (
-                                      <>
-                                        <Box sx={{ fontSize: "12px", px: 1, py: 1, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={i} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.startTime, dateString[index], doctorData?.consultantFee)} >{`${val.startTime.split('T')[1].split(":")[0]}:${val.startTime.split('T')[1].split(":")[1]}`}</Box>
-
-                                        {i + 1 === doctorData.timeSlots[dateString[index]].length && (<Box sx={{ fontSize: "12px", px: 1, py: 0.8, border: val.isAvailable ? "2px solid #42A5F5" : "2px solid #bfbfbfa8", bgcolor: val.isAvailable ? "#F5F8FB" : "white", mr: 1, mb: 1, color: val.isAvailable ? "#199FD9" : "#bfbfbfa8", cursor: val.isAvailable ? "pointer" : "not-allowed", width: "100px", textAlign: "center", borderRadius: "10px" }} key={index} onClick={() => val.isAvailable && handleSlotOpen(doctorData?.user_Name, doctorData?.doctor_Address, val.endTime, dateString[index], doctorData?.consultantFee)}>{`${val.endTime.split('T')[1].split(":")[0]}:${val.endTime.split('T')[1].split(":")[1]}`}</Box>)}
-                                      </>
-                                    )
-                                  })}
-
-
-                                </Box>
-
-
-                              </Box>
-
-                            </CustomTabPanel>
-                          </>
-                        )
-                      })}
-
-                      <Box sx={{ width: "90%", mx: "auto", backgroundColor: "#42A5F5", px: 1, py: 1.5, textAlign: "center", borderRadius: "4px", mb: 3, }}>
-                        <Typography sx={{ fontSize: "12px", color: "white", lineHeight: 1.4, }}>After you have submitted the appointment request, we might call to confirm the preferred appointment slot.</Typography>
-
-                      </Box>
-                      <Box sx={{ width: "90%", mx: "auto", px: 1, fontSize: "12px", lineHeight: 1.4, borderRadius: "4px", pb: 1 }}>
-                        <Box sx={{ display: "flex", justifyContent: "space-between", }}>
-                          <Typography sx={{ fontSize: "14px", fontWeight: 600 }}>{doctorData?.remarkArea}</Typography>
-                        </Box>
-                        <Box sx={{ display: "flex", justifyContent: "space-between", py: .5 }}>
-                          <Typography sx={{ fontSize: "12px" }}>{doctorData?.doctor_Address}</Typography>
-                          <Typography sx={{ fontSize: "12px" }}>Max 30min wait time</Typography>
-                        </Box>
-
-                      </Box>
-
-                    </Box>
-                  </Box>
-
-                  <BookingExistingApplication />
-
-                </Box>
 
 
               </Box>
@@ -815,7 +487,7 @@ export default function Doctor() {
             </>
           )}
 
-          <MobileAppBanner />
+          {/* <MobileAppBanner /> */}
           <LiveCounter />
           <Footer />
         </>

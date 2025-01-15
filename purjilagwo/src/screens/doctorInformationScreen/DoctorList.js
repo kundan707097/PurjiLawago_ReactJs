@@ -12,11 +12,116 @@ import Loading from '../../components/Loading';
 import DataNotFound from '../../components/DataNotFound';
 import LiveCounter from '../../components/LiveCounter';
 
+const data = [
+    {
+      "id": 1,
+      "user_Name": "Dr. John Smith",
+      "profile_Picture": "https://example.com/images/doc-1.jpg",
+      "doctorsTimeAvailability": "10:00 AM - 4:00 PM",
+      "consultantFee": 500,
+      "doctor_Address": "123 Main St, New York, NY",
+      "experience": "10 years",
+      "speciality": "Cardiologist"
+    },
+    {
+      "id": 2,
+      "user_Name": "Dr. Emily Johnson",
+      "profile_Picture": "https://example.com/images/doc-2.jpg",
+      "doctorsTimeAvailability": "9:00 AM - 3:00 PM",
+      "consultantFee": 450,
+      "doctor_Address": "456 Elm St, Los Angeles, CA",
+      "experience": "8 years",
+      "speciality": "Dermatologist"
+    },
+    {
+      "id": 3,
+      "user_Name": "Dr. Michael Brown",
+      "profile_Picture": "https://example.com/images/doc-3.jpg",
+      "doctorsTimeAvailability": "11:00 AM - 5:00 PM",
+      "consultantFee": 400,
+      "doctor_Address": "789 Oak St, Chicago, IL",
+      "experience": "12 years",
+      "speciality": "Neurologist"
+    },
+    {
+      "id": 4,
+      "user_Name": "Dr. Sarah Davis",
+      "profile_Picture": "https://example.com/images/doc-4.jpg",
+      "doctorsTimeAvailability": "10:30 AM - 4:30 PM",
+      "consultantFee": 550,
+      "doctor_Address": "321 Pine St, Houston, TX",
+      "experience": "15 years",
+      "speciality": "Pediatrician"
+    },
+    {
+      "id": 5,
+      "user_Name": "Dr. James Wilson",
+      "profile_Picture": "https://example.com/images/doc-5.jpg",
+      "doctorsTimeAvailability": "8:00 AM - 2:00 PM",
+      "consultantFee": 350,
+      "doctor_Address": "654 Maple St, Phoenix, AZ",
+      "experience": "7 years",
+      "speciality": "Orthopedic Surgeon"
+    },
+    {
+      "id": 6,
+      "user_Name": "Dr. Linda Martinez",
+      "profile_Picture": "https://example.com/images/doc-6.jpg",
+      "doctorsTimeAvailability": "9:30 AM - 3:30 PM",
+      "consultantFee": 600,
+      "doctor_Address": "987 Birch St, Philadelphia, PA",
+      "experience": "20 years",
+      "speciality": "Gynecologist"
+    },
+    {
+      "id": 7,
+      "user_Name": "Dr. Robert Moore",
+      "profile_Picture": "https://example.com/images/doc-7.jpg",
+      "doctorsTimeAvailability": "10:00 AM - 4:00 PM",
+      "consultantFee": 500,
+      "doctor_Address": "123 Cedar St, Dallas, TX",
+      "experience": "10 years",
+      "speciality": "Oncologist"
+    },
+    {
+      "id": 8,
+      "user_Name": "Dr. Laura Taylor",
+      "profile_Picture": "https://example.com/images/doc-8.jpg",
+      "doctorsTimeAvailability": "7:00 AM - 1:00 PM",
+      "consultantFee": 300,
+      "doctor_Address": "456 Spruce St, San Diego, CA",
+      "experience": "5 years",
+      "speciality": "Psychiatrist"
+    },
+    {
+      "id": 9,
+      "user_Name": "Dr. William Lee",
+      "profile_Picture": "https://example.com/images/doc-9.jpg",
+      "doctorsTimeAvailability": "12:00 PM - 6:00 PM",
+      "consultantFee": 450,
+      "doctor_Address": "789 Willow St, Seattle, WA",
+      "experience": "9 years",
+      "speciality": "Endocrinologist"
+    },
+    {
+      "id": 10,
+      "user_Name": "Dr. Olivia Walker",
+      "profile_Picture": "https://example.com/images/doc-10.jpg",
+      "doctorsTimeAvailability": "8:30 AM - 2:30 PM",
+      "consultantFee": 400,
+      "doctor_Address": "321 Aspen St, Miami, FL",
+      "experience": "6 years",
+      "speciality": "General Physician"
+    }
+  ];
+  
+
 function Doctors() {
+    
     const { groupId } = useParams();
     const { location: routeLocation } = useParams();
     const [location, setLocation] = useState(routeLocation || ''); // Initialize with the route location if available
-    const [doctorInfo, setDoctorInfo] = useState(null);
+    const [doctorInfo, setDoctorInfo] = useState(data);
     const [doctorName, setDoctorName] = useState(groupId || '');
     const [loading, setLoading] = useState(false);
     const [isVisible, setIsVisible] = useState({
@@ -138,12 +243,11 @@ function Doctors() {
                 <Box sx={{ backgroundColor: "#F5F5F5", width: "100%", }}>
 
 
-                    <Container >
 
-                        <Box sx={{ position: "sticky", top: 0, backgroundColor: "#F5F5F5", }}>
-
-                            <Typography sx={{ fontSize: { xs: "16px", md: "30px" }, fontWeight: 700, color: "#1C4188", mb: 2, pt: 3 }}>
-                                GET POPULAR DOCTORS AND APPOINTMENT
+                        <Box  sx={{ position: "sticky", top: 0, backgroundColor: "#1c7cbd", }}>
+                           <div className="container">                            
+                            <Typography sx={{ fontSize: { xs: "16px", md: "30px" }, fontWeight: 700, color: "#fff", mb: 2, pt: 3 }}>
+                                GET DOCTORS
                             </Typography>
 
                             {/* Search box and filter */}
@@ -341,9 +445,9 @@ function Doctors() {
 
                                     </Box>
 
-                                    <Box sx={{ backgroundColor: "#64EBB6", borderRadius: "8px 12px 12px 8px", display: "flex", px: 2, alignItems: "center", color: "white", cursor: "pointer", width: "20%", justifyContent: "center", }}>
-                                        <Typography sx={{ ml: 1, fontSize: { xs: '10px', lg: "15px" }, mr: 1, }}>SEARCH </Typography>
-                                        <Box sx={{ display: { xs: "none", md: "block" } }}>
+                                    <Box sx={{ backgroundColor: "#3498db", borderRadius: "8px 12px 12px 8px", display: "flex", px: 2, alignItems: "center", color: "white", cursor: "pointer", width: "15%", justifyContent: "center", }}>
+                                        {/* <Typography sx={{ ml: 1, fontSize: { xs: '10px', lg: "15px" }, mr: 1, }}>SEARCH </Typography> */}
+                                        <Box sx={{ display: { md: "block" } }}>
                                             <img src="../../images/DoctorList/arrow_circle_left.svg" alt="" />
                                         </Box>
                                     </Box>
@@ -389,14 +493,16 @@ function Doctors() {
 
                             <Box sx={{ color: "black", mt: 3, pb: 1 }} >
                                 {/* <Typography >Location: <span>{location}</span> </Typography> */}
-                                <Typography sx={{ fontSize: "14px", fontWeight: 600, color: "#409FEC" }} >Total Doctor available: <span >{doctorInfo && doctorInfo.length > 0 ? (
+                                <Typography sx={{ fontSize: "14px", fontWeight: 600, color: "#fff" }} >Total Doctor available: <span >{doctorInfo && doctorInfo.length > 0 ? (
                                     doctorInfo.length) : (0)}</span> </Typography>
                                 <Box sx={{ height: "4px", width: "10%", backgroundColor: "#409FEC", mt: 1 }}>
 
                                 </Box>
                             </Box>
+                            </div>
 
                         </Box>
+                        <Container >
 
 
                         <Stack spacing={{ xs: 2, sm: 6 }} direction="row" useFlexGap flexWrap="wrap" sx={{ justifyContent: "center", py: "20px", }}>
@@ -404,13 +510,13 @@ function Doctors() {
                             {loading ? (<Loading />) : (
                                 <>
                                     {doctorInfo && doctorInfo.length > 0 ? (
-                                        doctorInfo.map((doctor) => (
-                                            <>
-                                                <Box sx={{ width: "350px", backgroundColor: "#F0F6FF", }}>
+                                        doctorInfo.map((doctor,index) => (
+                                            <Link to={`/doctorsdetails/${index}`}>
+                                                <Box sx={{ width: "350px", backgroundColor: "#F0F6FF", boxShadow:" rgba(0, 0, 0, 0.15) 0px 3px 12px 0px", borderRadius:"12px", overflow:"hidden"  }}>
 
                                                     {/* Avatar and price box */}
 
-                                                    <Box sx={{ display: "flex", backgroundColor: "#42A5F5", width: "100%", justifyContent: "start", alignItems: "center", }}>
+                                                    <Box sx={{ display: "flex", backgroundColor: "#3498db", width: "100%", justifyContent: "start", alignItems: "center", }}>
                                                         <Avatar
                                                             alt="Remy Sharp"
                                                             src={doctor?.profile_Picture} 
@@ -441,24 +547,14 @@ function Doctors() {
                                                             <img src="../../images/DoctorList/ecg.svg" alt="" style={{ height: 18 }} />
                                                             <Typography sx={{ fontSize: "16px", fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>{doctor?.speciality}</Typography>
                                                         </Box>
-                                                        {/* <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
+                                                        <Box sx={{ display: "flex", alignItems: "center", my: 1 }}>
                                                             <img src="../../images/DoctorList/language.svg" alt="" style={{ height: 18 }} />
                                                             <Typography sx={{ fontSize: "16px", fontWeight: 500, ml: 1, mr: 2, color: "#9099AB" }}>Language : Hindi , English</Typography>
-                                                        </Box> */}
-                                                    </Box>
-
-                                                    {/* Consult Now link button */}
-
-                                                    <Box sx={{ width: "200px", mx: "auto", my: 3 }}>
-                                                        <Link to={`/doctorsdetails/${doctor.id}`}>
-                                                            <Box sx={{ textAlign: "center", p: 1, borderRadius: 3, fontSize: "15px", fontWeight: 600, color: "#42A5F5", border: "2px solid #42A5F5", "&:hover": { backgroundColor: "#42A5F5", color: "white" }, }}>
-                                                                Book Now
-                                                            </Box>
-                                                        </Link>
+                                                        </Box>
                                                     </Box>
 
                                                 </Box>
-                                            </>
+                                            </Link>
                                         ))
 
                                     ) : (

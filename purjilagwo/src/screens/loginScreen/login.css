@@ -1,0 +1,103 @@
+.login__background{
+    background-image: url("../../../public/images/BackgroundImage.jpg");
+    min-height: 90vh;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: grid;
+    place-items: center;
+}
+.login__div{
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 12px 0px;
+    width: 30%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: grid;
+    place-items: center;
+    min-height: 420px;
+    padding: 10px;
+    border-radius: 12px;
+    background: rgba(226, 216, 216, 0.295);
+}
+.login__div h3{
+    font-size: 28px;
+    font-weight: 600;
+
+}
+.login__div h5{
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+.login__icon{
+    padding: 10px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 12px 0px;   
+}
+.login__div form {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+.login__div form label{
+    font-size: 18px;
+    color: #000;
+    font-weight: 550;
+}
+.login__div form input{
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid #222;
+    font-size: 18px;
+    height: 46px;
+    outline: none;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+.login__div form div > button{
+    background: #000;
+    color: #fff;
+    border: none;
+    outline: none;
+    width: 130px;
+    height: 50px;
+    font-size: 18px;
+    border-radius: 8px;
+    font-weight: 650;
+}
+.login__div form div > p{
+    color: #222;
+    font-weight: 650;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.login__div form div{
+    color: #000;
+    font-weight: 600;
+}
+.login__div form div a{
+    color: #000;
+    text-decoration: underline;
+    margin-left: 4px;
+}
+
+@media screen and (max-width: 1450px) { 
+    .login__div{
+        width: 60%;
+    }
+}
+@media screen and (max-width: 768px) { 
+    .login__div{
+        width: 80%;
+    }
+.login__div form{ 
+width: 95%;
+}
+.login__div form div > p{
+    font-size: 12px;
+}
+.login__div h5{
+    font-size: 16px;
+}
+}
